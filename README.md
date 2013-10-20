@@ -1,5 +1,1 @@
-## tocc
-##a Tool for Obsessive Compulsive Classifers
----
-
-
+##tocc, a Tool for Obsessive Compulsive Classifers
