@@ -15,3 +15,6 @@
 # build directories
 build/
 bin/
+
+# backup files
+*~
