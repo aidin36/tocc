@@ -1,0 +1,73 @@
+/*
+ * This file is part of TOCC. (see <http://www.github.com/aidin36/tocc>)
+ * Copyright (C) 2013, Aidin Gharibnavaz <tocc@aidihut.com>
+ *
+ * TOCC is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef FILE_MANAGER_H_INCLUDED
+#define FILE_MANAGER_H_INCLUDED
+
+/*
+ * Defines FileManager class.
+ */
+
+#include <string>
+
+namespace libtocc
+{
+
+  class FileManager
+  {
+  public:
+    /*
+     * Constructor.
+     * @param base_path: Path to work with. This is the root path of
+     *   where it keeps files.
+     */
+    FileManager(std::string base_path);
+
+    /*
+     * Creates a file with the specified ID, and returns a file
+     * descriptor.
+     */
+    int create(std::string file_id);
+
+  private:
+    std::string base_path;
+
+    /*
+     * Creates the specified path recursively.
+     */
+    void ensure_path_exists(std::string path);
+
+    /*
+     * Creates the specified path.
+     */
+    void create_dir(std::string path);
+
+    /*
+     * Converts the specified file_id to a directory path.
+     */
+    std::string id_to_dir_path(std::string id);
+
+    /*
+     * Converts the specified file_id to a file path.
+     */
+    std::string id_to_file_path(std::string id);
+  };
+
+};
+
+#endif /* FILE_MANAGER_H_INCLUDE */
