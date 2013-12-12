@@ -23,6 +23,7 @@
 #include <string>
 #include <iostream>
 
+#include "common/base_exception.h"
 #include "file_system/file_manager.h"
 
 const std::string GREEN = "\033[0;32m";
@@ -52,9 +53,11 @@ bool file_manager_basic_tests()
 
     return true;
   }
-  catch (...)
+  catch (libtocc::BaseException& error)
   {
     std::cout << RED << "    Failed." << DEFAULT << std::endl;
+    std::cout << "error was: " << error.what() << std::endl;
+    std::cout << "errno: " << error.errno << std::endl;
     return false;
   }
 }
