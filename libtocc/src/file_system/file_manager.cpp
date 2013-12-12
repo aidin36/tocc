@@ -22,6 +22,7 @@
 #include <fcntl.h>
 
 #include "file_system/file_manager.h"
+#include "file_system/helpers.cpp"
 
 namespace libtocc
 {
@@ -45,7 +46,7 @@ namespace libtocc
     int creat_result = creat(id_to_file_path(id).c_str(), NORMAL_MODE);
     if (creat_result < 0)
     {
-      // TODO: Raise exception
+      handle_errno(errno);
     }
 
     return creat_result; // Which is the file descriptor.
@@ -75,7 +76,7 @@ namespace libtocc
       {
 	// If error is something other than "path already exists"
 	// or "part of the path doesn't exists", throw an exception.
-	// TODO: Throw an exception.
+	handle_errno(errno);
       }
     }
 
@@ -99,7 +100,7 @@ namespace libtocc
     {
       if (mkdir_result != EEXIST)
       {
-	// TODO: Throw exception.
+	handle_errno(errno);
       }
     }
   }
