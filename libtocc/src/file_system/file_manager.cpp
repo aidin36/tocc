@@ -20,7 +20,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <iostream>
+#include "common/runtime_exceptions.h"
 #include "file_system/file_manager.h"
 #include "file_system/helpers.cpp"
 
@@ -50,6 +51,41 @@ namespace libtocc
     }
 
     return creat_result; // Which is the file descriptor.
+  }
+
+  int FileManager::open_file(std::string id, char mode)
+  {
+    std::string file_path = id_to_file_path(id);
+
+    std::cout << "- received mode: '" << mode << "'" << std::endl;
+
+    // Making flags for system's `open' method.
+    int open_flags;
+    if (mode == 'r')
+    {
+      open_flags = O_RDONLY;
+    }
+    else if (mode == 'w')
+    {
+      open_flags = O_WRONLY | O_TRUNC;
+    }
+    else if (mode == 'a')
+    {
+      open_flags = O_WRONLY;
+    }
+    else
+    {
+      throw InvalidArgumentError("Inavlid mode for openning file.");
+    }
+
+    int fd = open(file_path.c_str(), open_flags);
+
+    if (fd < 0)
+    {
+      handle_errno(errno);
+    }
+
+    return fd;
   }
 
   void FileManager::ensure_path_exists(std::string id)

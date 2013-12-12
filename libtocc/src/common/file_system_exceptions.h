@@ -132,7 +132,7 @@ namespace libtocc
     }
   };
 
-  class SizeOfBufferIsTooSmall : public BaseException
+  class SizeOfBufferIsTooSmallError : public BaseException
   {
     virtual const char* what() const throw()
     {

@@ -74,7 +74,7 @@ namespace libtocc
     }
     if (err_no == ERANGE)
     {
-      throw SizeOfBufferIsTooSmall();
+      throw SizeOfBufferIsTooSmallError();
     }
     // If it was none of the above.
     throw UnknownFileSystemError();

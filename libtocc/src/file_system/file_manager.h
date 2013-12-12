@@ -44,6 +44,12 @@ namespace libtocc
      */
     int create(std::string file_id);
 
+    /*
+     * Opens the file with the specified ID, and returns its
+     * file descriptor.
+     */
+    int open_file(std::string file_id, char mode);
+
   private:
     std::string base_path;
 

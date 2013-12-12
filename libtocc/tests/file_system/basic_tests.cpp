@@ -22,6 +22,7 @@
 
 #include <string>
 #include <iostream>
+#include <unistd.h>
 
 #include "common/base_exception.h"
 #include "file_system/file_manager.h"
@@ -39,6 +40,7 @@ bool file_manager_basic_tests()
 
   try
   {
+    // Testing file creation.
     std::cout << "creating first file..." << std::endl;
 
     int file_descriptor = file_manager.create(file_id);
@@ -50,6 +52,25 @@ bool file_manager_basic_tests()
     int file_descriptor_2 = file_manager.create("tc00f501");
 
     std::cout << GREEN << "    created. FD: " << file_descriptor_2 << DEFAULT << std::endl;
+
+    close(file_descriptor);
+    close(file_descriptor_2);
+
+    // Testing file open.
+    std::cout << "Openning file..." << std::endl;
+    file_descriptor = file_manager.open_file(file_id, 'a');
+    std::cout << GREEN << "    done. FD: " << file_descriptor << DEFAULT << std::endl;
+
+    std::cout << "Writing to openned file..." << std::endl;
+    int write_result = write(file_descriptor, "Hi there!", 9);
+    if (write_result < 0)
+    {
+      std::cout << RED << "    Failed." << DEFAULT << std::endl;
+      std::cout << "error number was: " << write_result << std::endl;
+      return false;
+    }
+    close(file_descriptor);
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;
   }
