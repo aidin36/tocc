@@ -25,14 +25,36 @@
 
 #include "file_system/file_manager.h"
 
-void file_manager_basic_tests()
+const std::string GREEN = "\033[0;32m";
+const std::string RED = "\033[0;31m";
+const std::string DEFAULT = "\033[0m";
+
+bool file_manager_basic_tests()
 {
   std::string base_path = "/tmp/";
   std::string file_id = "tc00f4ia";
   std::string equivalent_path = "/tmp/tc/00/fa/ia";
   libtocc::FileManager file_manager(base_path);
 
-  int file_descriptor = file_manager.create(file_id);
+  try
+  {
+    std::cout << "creating first file..." << std::endl;
 
-  std::cout << "file created. FD: " << file_descriptor << std::endl;
+    int file_descriptor = file_manager.create(file_id);
+
+    std::cout << GREEN << "    created. FD: " << file_descriptor << DEFAULT << std::endl;
+
+    std::cout << "creating second file..." << std::endl;
+
+    int file_descriptor_2 = file_manager.create("tc00f501");
+
+    std::cout << GREEN << "    created. FD: " << file_descriptor_2 << DEFAULT << std::endl;
+
+    return true;
+  }
+  catch (...)
+  {
+    std::cout << RED << "    Failed." << DEFAULT << std::endl;
+    return false;
+  }
 }
