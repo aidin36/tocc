@@ -20,7 +20,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <iostream>
+#include <cstdio>
+
 #include "common/runtime_exceptions.h"
 #include "file_system/file_manager.h"
 #include "file_system/helpers.cpp"
@@ -56,8 +57,6 @@ namespace libtocc
   int FileManager::open_file(std::string id, char mode)
   {
     std::string file_path = id_to_file_path(id);
-
-    std::cout << "- received mode: '" << mode << "'" << std::endl;
 
     // Making flags for system's `open' method.
     int open_flags;
@@ -102,6 +101,29 @@ namespace libtocc
 	handle_errno(errno);
       }
     }
+  }
+
+  void FileManager::copy(std::string source_path, std::string file_id)
+  {
+    // TODO: On a Linux platform, we should use `sendfile' system call, because
+    //   it's a lot faster.
+    // TODO: Maybe we should use `st_blksize' of the file attributes instead
+    //   of the BUFSIZ. That's the optimal value, but we need to read the
+    //   attribute from the file, before starting.
+
+    char buf[BUFSIZ]; // BUFSIZ is defined in <cstdio>.
+    size_t size;
+
+    int dest = create(file_id);
+    int source = open(source_path.c_str(), O_RDONLY);
+
+    while ((size = read(source, buf, BUFSIZ)) > 0)
+    {
+        write(dest, buf, size);
+    }
+
+    close(source);
+    close(dest);
   }
 
   void FileManager::ensure_path_exists(std::string id)

@@ -114,6 +114,14 @@ namespace libtocc
     }
   };
 
+  class MaxOpenFilesReachedError : public BaseException
+  {
+    virtual const char* what() const throw()
+    {
+      return "The system limit on the total number of open files has been reached.";
+    }
+  };
+
   class UnknownFileSystemError : public BaseException
   {
     virtual const char* what() const throw()

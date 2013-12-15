@@ -32,7 +32,7 @@ namespace libtocc
    * A class for managing files on a file system.
    *
    * @note: Methods like create and copy will replace the existing
-   *   file without any  notify or confirmation. It's because the
+   *   file without any notify or confirmation. It's because the
    *   engine should check for duplicated before calling these
    *   methods.
    */
@@ -49,6 +49,7 @@ namespace libtocc
     /*
      * Creates a file with the specified ID, and returns a file
      * descriptor.
+     * Note that it replace the existing file silently.
      */
     int create(std::string file_id);
 
@@ -63,6 +64,15 @@ namespace libtocc
      * It silently ignores "file does not exists".
      */
     void remove(std::string file_id);
+
+    /*
+     * Copies a file to the specified file ID.
+     * Note that It replaces the existing file silently.
+     *
+     * @param source_path: Absolute path of the file to copy.
+     * @param file_id: ID of the file to copy the source to.
+     */
+    void copy(std::string source_path, std::string file_id);
 
   private:
     std::string base_path;

@@ -32,6 +32,7 @@ namespace libtocc
    */
   void handle_errno(int err_no)
   {
+    // TODO: Use `strerror' instead of whole messy thing!
     if (err_no == ENOSPC || err_no == EDQUOT)
     {
       throw InsufficientSpaceError();
@@ -75,6 +76,10 @@ namespace libtocc
     if (err_no == ERANGE)
     {
       throw SizeOfBufferIsTooSmallError();
+    }
+    if (err_no == EMFILE)
+    {
+      throw MaxOpenFilesReachedError();
     }
     // If it was none of the above.
     throw UnknownFileSystemError();

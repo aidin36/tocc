@@ -22,7 +22,9 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
+#include <string.h> // For strerror function.
 
 #include "common/base_exception.h"
 #include "file_system/file_manager.h"
@@ -72,8 +74,21 @@ bool file_manager_basic_tests()
     close(file_descriptor);
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
+    // Tesing file remove.
     std::cout << "Removing a file..." << std::endl;
     file_manager.remove(file_id);
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    // Testing file copy.
+    std::cout << "Creating a test file to copy..." << std::endl;
+    std::ofstream file_stream;
+    file_stream.open("/tmp/tocc_test_file_to_copy");
+    file_stream << "some data...";
+    file_stream.close();
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    std::cout << "Coping a file..." << std::endl;
+    file_manager.copy("/tmp/tocc_test_file_to_copy", "tca59800");
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;
@@ -83,6 +98,7 @@ bool file_manager_basic_tests()
     std::cout << RED << "    Failed." << DEFAULT << std::endl;
     std::cout << "error was: " << error.what() << std::endl;
     std::cout << "errno: " << error.errno << std::endl;
+    std::cout << "errno description: " << strerror(error.errno) << std::endl;
     return false;
   }
 }
