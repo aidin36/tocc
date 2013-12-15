@@ -23,130 +23,146 @@
  * Defines exceptions related to file system layer.
  */
 
+#include <string>
+
 #include "base_exception.h"
 
 namespace libtocc
 {
 
-  class InsufficientSpaceError : public BaseException
+  /*
+   * Base class for all exceptions related to File System layer.
+   */
+  class BaseFileSystemException : public BaseException
   {
-    virtual const char* what() const throw()
-    {
-      return "No space left on device.";
-    }
+  public:
+    BaseFileSystemException(int err_no) throw();
+
+    ~BaseFileSystemException() throw();
+
+    virtual const char* what() const throw();
+
+    int get_errno();
+
+  protected:
+    /*
+     * If any system error happens, this field will be set
+     * to the `errno'. If not, it is zero.
+     */
+    int err_no;
   };
 
-  class XAttrsAreNotSupportedError : public BaseException
+  class InsufficientSpaceError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      return "Extended attributes are not supported.";
-    }
+    InsufficientSpaceError() throw();
   };
 
-  class AccessDeniedError : public BaseException
+  class XAttrsAreNotSupportedError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Access is denied.";
-    }
+    XAttrsAreNotSupportedError() throw();
+  };
+
+  class AccessDeniedError : public BaseFileSystemException
+  {
+  public:
+    AccessDeniedError(const char* file_path) throw();
+
+    ~AccessDeniedError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
  
-  class BadFDError : public BaseException
+  class BadFDError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Bad file descriptor.";
-    }
+  public:
+    BadFDError(const char* file_path) throw();
+
+    ~BadFDError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
 
-  class BadAddressError : public BaseException
+  class BadAddressError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Bad address.";
-    }
+  public:
+    BadAddressError(const char* file_path) throw();
+
+    ~BadAddressError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
 
-  class InfinitLinkLoopError : public BaseException
+  class InfinitLinkLoopError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Too many symbolic links encountered while traversing the path.";
-    }
+  public:
+    InfinitLinkLoopError(const char* file_path) throw();
+
+    ~InfinitLinkLoopError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
 
-  class TooLongPathError : public BaseException
+  class TooLongPathError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Path is too long.";
-    }
+    TooLongPathError() throw();
   };
 
-  class BadPathError : public BaseException
+  class BadPathError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "A component of path does not exist, or path is an empty string.";
-    }
+  public:
+    BadPathError(const char* file_path) throw();
+
+    ~BadPathError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
 
-  class OutOfMemoryError : public BaseException
+  class OutOfMemoryError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      return "Out of memory.";
-    }
+    OutOfMemoryError() throw();
   };
 
-  class NotADirectoryError : public BaseException
+  class NotADirectoryError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      return "A component of the path prefix of path is not a directory.";
-    }
+    NotADirectoryError() throw();
   };
 
-  class MaxOpenFilesReachedError : public BaseException
+  class MaxOpenFilesReachedError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      return "The system limit on the total number of open files has been reached.";
-    }
+    MaxOpenFilesReachedError() throw();
   };
 
-  class UnknownFileSystemError : public BaseException
+  class SizeOfBufferIsTooSmallError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: Add errno to exception message.
-      return "Unknown error.";
-    }
+  public:
+    SizeOfBufferIsTooSmallError(const char* file_path) throw();
+
+    ~SizeOfBufferIsTooSmallError() throw();
+
+    virtual const char* what() const throw();
+
+  private:
+    std::string file_path;
   };
 
-  class NoAttributeFoundError : public BaseException
+  class OtherFileSystemError : public BaseFileSystemException
   {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "No attribute found, or the application does not have access to it.";
-    }
-  };
-
-  class SizeOfBufferIsTooSmallError : public BaseException
-  {
-    virtual const char* what() const throw()
-    {
-      //TODO: add file path to exception message.
-      return "Size of the specified buffer is too small to hold the value.";
-    }
+    OtherFileSystemError(int err_no) throw();
   };
 
 }

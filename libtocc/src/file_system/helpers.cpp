@@ -32,7 +32,6 @@ namespace libtocc
    */
   void handle_errno(int err_no)
   {
-    // TODO: Use `strerror' instead of whole messy thing!
     if (err_no == ENOSPC || err_no == EDQUOT)
     {
       throw InsufficientSpaceError();

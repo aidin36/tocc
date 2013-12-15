@@ -29,12 +29,6 @@ namespace libtocc
    */
   class BaseException : public std::exception
   {
-  public:
-    /*
-     * If any system error happens, this field will be set
-     * to the `errno'. If not, it is zero.
-     */
-    int errno;
   };
 }
 
