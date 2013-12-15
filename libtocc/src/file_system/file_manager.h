@@ -28,6 +28,14 @@
 namespace libtocc
 {
 
+  /*
+   * A class for managing files on a file system.
+   *
+   * @note: Methods like create and copy will replace the existing
+   *   file without any  notify or confirmation. It's because the
+   *   engine should check for duplicated before calling these
+   *   methods.
+   */
   class FileManager
   {
   public:
@@ -49,6 +57,12 @@ namespace libtocc
      * file descriptor.
      */
     int open_file(std::string file_id, char mode);
+
+    /*
+     * Removes a file.
+     * It silently ignores "file does not exists".
+     */
+    void remove(std::string file_id);
 
   private:
     std::string base_path;

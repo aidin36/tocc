@@ -88,6 +88,22 @@ namespace libtocc
     return fd;
   }
 
+  void FileManager::remove(std::string file_id)
+  {
+    // I used "unlink" not "remove", because I'm sure path is
+    // refering to a file, not a directory or something.
+    int unlink_result = unlink(id_to_file_path(file_id).c_str());
+
+    if (unlink_result < 0)
+    {
+      if (errno != ENOENT)
+      {
+	// If error is something other than "path does not exists".
+	handle_errno(errno);
+      }
+    }
+  }
+
   void FileManager::ensure_path_exists(std::string id)
   {
     // There's a big chance that path is already exists or

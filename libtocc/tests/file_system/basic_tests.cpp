@@ -72,6 +72,10 @@ bool file_manager_basic_tests()
     close(file_descriptor);
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
+    std::cout << "Removing a file..." << std::endl;
+    file_manager.remove(file_id);
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
     return true;
   }
   catch (libtocc::BaseException& error)
