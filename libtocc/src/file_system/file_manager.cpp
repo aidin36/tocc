@@ -48,7 +48,7 @@ namespace libtocc
     int creat_result = creat(id_to_file_path(id).c_str(), NORMAL_MODE);
     if (creat_result < 0)
     {
-      handle_errno(errno);
+      handle_errno(errno, id);
     }
 
     return creat_result; // Which is the file descriptor.
@@ -81,7 +81,7 @@ namespace libtocc
 
     if (fd < 0)
     {
-      handle_errno(errno);
+      handle_errno(errno, file_path);
     }
 
     return fd;
@@ -98,7 +98,7 @@ namespace libtocc
       if (errno != ENOENT)
       {
 	// If error is something other than "path does not exists".
-	handle_errno(errno);
+	handle_errno(errno, file_id);
       }
     }
   }
@@ -150,7 +150,7 @@ namespace libtocc
       {
 	// If error is something other than "path already exists"
 	// or "part of the path doesn't exists", throw an exception.
-	handle_errno(errno);
+	handle_errno(errno, dir_path);
       }
     }
 
@@ -176,7 +176,7 @@ namespace libtocc
       {
 	// If error wasn't "path already exists" or "part of the path
 	// already exists", throw an exception.
-	handle_errno(errno);
+	handle_errno(errno, path);
       }
     }
   }
