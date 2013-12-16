@@ -3,11 +3,11 @@ BIN_OUTPUT = ../../bin/
 CC = g++
 COMPILE_FLAGS = -Wall -fPIC -I../src/ -L$(BIN_OUTPUT) -ltocc $(CFLAGS)
 
-tests: file_system/basic_tests.cpp main.cpp
+$(BIN_OUTPUT)/tests: file_system/basic_tests.cpp main.cpp
 	mkdir -p $(BIN_OUTPUT)
-	$(CC) $(COMPILE_FLAGS) main.cpp -o $(BIN_OUTPUT)/$@
+	$(CC) $(COMPILE_FLAGS) main.cpp -o $@
 
-runtests: tests
+runtests: $(BIN_OUTPUT)/tests
 	LD_LIBRARY_PATH=$(BIN_OUTPUT) $(BIN_OUTPUT)/tests
 
 clean:
