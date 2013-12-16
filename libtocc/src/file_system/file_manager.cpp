@@ -143,7 +143,7 @@ namespace libtocc
     {
       if (errno == EEXIST)
       {
-	// Path is already exists. It's ok.
+	// Path is already exists. Nothing else to do.
 	return;
       }
       if (errno != ENOENT)
@@ -172,8 +172,10 @@ namespace libtocc
     int mkdir_result = mkdir(path.c_str(), NORMAL_MODE);
     if (mkdir_result < 0)
     {
-      if (mkdir_result != EEXIST)
+      if (errno != EEXIST && errno != ENOENT)
       {
+	// If error wasn't "path already exists" or "part of the path
+	// already exists", throw an exception.
 	handle_errno(errno);
       }
     }

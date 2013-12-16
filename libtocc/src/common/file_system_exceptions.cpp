@@ -162,6 +162,11 @@ namespace libtocc
   {
   }
 
+  MaxOpenFilesReachedError::MaxOpenFilesReachedError() throw()
+    : BaseFileSystemException(EMFILE)
+  {
+  }
+
   SizeOfBufferIsTooSmallError::SizeOfBufferIsTooSmallError(const char* file_path) throw()
     : BaseFileSystemException(ERANGE)
   {

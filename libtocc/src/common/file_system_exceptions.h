@@ -54,11 +54,13 @@ namespace libtocc
 
   class InsufficientSpaceError : public BaseFileSystemException
   {
+  public:
     InsufficientSpaceError() throw();
   };
 
   class XAttrsAreNotSupportedError : public BaseFileSystemException
   {
+  public:
     XAttrsAreNotSupportedError() throw();
   };
 
@@ -116,6 +118,7 @@ namespace libtocc
 
   class TooLongPathError : public BaseFileSystemException
   {
+  public:
     TooLongPathError() throw();
   };
 
@@ -134,16 +137,19 @@ namespace libtocc
 
   class OutOfMemoryError : public BaseFileSystemException
   {
+  public:
     OutOfMemoryError() throw();
   };
 
   class NotADirectoryError : public BaseFileSystemException
   {
+  public:
     NotADirectoryError() throw();
   };
 
   class MaxOpenFilesReachedError : public BaseFileSystemException
   {
+  public:
     MaxOpenFilesReachedError() throw();
   };
 
@@ -162,6 +168,7 @@ namespace libtocc
 
   class OtherFileSystemError : public BaseFileSystemException
   {
+  public:
     OtherFileSystemError(int err_no) throw();
   };
 

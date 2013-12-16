@@ -97,8 +97,8 @@ bool file_manager_basic_tests()
   {
     std::cout << RED << "    Failed." << DEFAULT << std::endl;
     std::cout << "error was: " << error.what() << std::endl;
-    std::cout << "errno: " << error.errno << std::endl;
-    std::cout << "errno description: " << strerror(error.errno) << std::endl;
+    //std::cout << "errno: " << error.errno << std::endl;
+
     return false;
   }
 }

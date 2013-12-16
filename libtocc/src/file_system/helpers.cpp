@@ -28,9 +28,13 @@ namespace libtocc
 {
 
   /*
-   * Throws and exception according to the err_no.
+   * Throws and exception according to the errno.
+   *
+   * @param errno: System's errno.
+   * @param file_path: (optional) path of the file that this
+   *   error is happened for.
    */
-  void handle_errno(int err_no)
+  void handle_errno(int err_no, std::string file_path="")
   {
     if (err_no == ENOSPC || err_no == EDQUOT)
     {
@@ -42,19 +46,19 @@ namespace libtocc
     }
     if (err_no == EACCES)
     {
-      throw AccessDeniedError();
+      throw AccessDeniedError(file_path.c_str());
     }
     if (err_no == EBADF)
     {
-      throw BadFDError();
+      throw BadFDError(file_path.c_str());
     }
     if (err_no == EFAULT)
     {
-      throw BadAddressError();
+      throw BadAddressError(file_path.c_str());
     }
     if (err_no == ELOOP)
     {
-      throw InfinitLinkLoopError();
+      throw InfinitLinkLoopError(file_path.c_str());
     }
     if (err_no == ENAMETOOLONG)
     {
@@ -62,7 +66,7 @@ namespace libtocc
     }
     if (err_no == ENOENT)
     {
-      throw BadPathError();
+      throw BadPathError(file_path.c_str());
     }
     if (err_no == ENOMEM)
     {
@@ -74,14 +78,14 @@ namespace libtocc
     }
     if (err_no == ERANGE)
     {
-      throw SizeOfBufferIsTooSmallError();
+      throw SizeOfBufferIsTooSmallError(file_path.c_str());
     }
     if (err_no == EMFILE)
     {
       throw MaxOpenFilesReachedError();
     }
     // If it was none of the above.
-    throw UnknownFileSystemError();
+    throw OtherFileSystemError(err_no);
   }
 
 }
