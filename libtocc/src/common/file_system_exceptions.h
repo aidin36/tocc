@@ -166,6 +166,12 @@ namespace libtocc
     std::string file_path;
   };
 
+  class ReadOnlyFileSystemError : public BaseFileSystemException
+  {
+  public:
+    ReadOnlyFileSystemError() throw();
+  };
+
   class OtherFileSystemError : public BaseFileSystemException
   {
   public:

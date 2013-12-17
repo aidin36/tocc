@@ -80,6 +80,10 @@ namespace libtocc
     {
       throw SizeOfBufferIsTooSmallError(file_path.c_str());
     }
+    if (err_no == EROFS)
+    {
+      throw ReadOnlyFileSystemError();
+    }
     if (err_no == EMFILE)
     {
       throw MaxOpenFilesReachedError();

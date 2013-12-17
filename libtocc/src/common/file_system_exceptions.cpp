@@ -186,6 +186,11 @@ namespace libtocc
     return result.c_str();
   }
 
+  ReadOnlyFileSystemError::ReadOnlyFileSystemError() throw()
+    : BaseFileSystemException(EROFS)
+  {
+  }
+
   OtherFileSystemError::OtherFileSystemError(int err_no) throw()
     : BaseFileSystemException(err_no)
   {
