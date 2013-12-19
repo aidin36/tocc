@@ -36,8 +36,8 @@ const std::string DEFAULT = "\033[0m";
 bool file_manager_basic_tests()
 {
   std::string base_path = "/tmp/";
-  std::string file_id = "tc00f4ia";
-  std::string equivalent_path = "/tmp/tc/00/fa/ia";
+  std::string file_id = "t00f4ia";
+  std::string equivalent_path = "/tmp/t/00/fa/ia";
   libtocc::FileManager file_manager(base_path);
 
   try
@@ -51,7 +51,7 @@ bool file_manager_basic_tests()
 
     std::cout << "creating second file..." << std::endl;
 
-    int file_descriptor_2 = file_manager.create("tc00f501");
+    int file_descriptor_2 = file_manager.create("t00f501");
 
     std::cout << GREEN << "    created. FD: " << file_descriptor_2 << DEFAULT << std::endl;
 
@@ -88,7 +88,7 @@ bool file_manager_basic_tests()
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     std::cout << "Coping a file..." << std::endl;
-    file_manager.copy("/tmp/tocc_test_file_to_copy", "tca59800");
+    file_manager.copy("/tmp/tocc_test_file_to_copy", "ta59800");
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;

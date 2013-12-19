@@ -159,11 +159,11 @@ namespace libtocc
     // splitting the path.
     std::string path_to_create(this->base_path);
     path_to_create += "/";
-    path_to_create += id.substr(0, 2) + "/";
+    path_to_create += id.substr(0, 1) + "/";
     create_dir(path_to_create);
-    path_to_create += id.substr(2, 2) + "/";
+    path_to_create += id.substr(1, 2) + "/";
     create_dir(path_to_create);
-    path_to_create += id.substr(4, 2) + "/";
+    path_to_create += id.substr(3, 2) + "/";
     create_dir(path_to_create);
   }
 
@@ -188,11 +188,11 @@ namespace libtocc
     std::string result(this->base_path);
     
     result += "/";
-    result += id.substr(0, 2);
+    result += id.substr(0, 1);
     result += "/";
-    result += id.substr(2, 2);
+    result += id.substr(1, 2);
     result += "/";
-    result += id.substr(4, 2);
+    result += id.substr(3, 2);
     result += "/";
     
     return result;
@@ -202,7 +202,7 @@ namespace libtocc
   {
     std::string result(id_to_dir_path(id));
     
-    result += id.substr(6, 2);
+    result += id.substr(5, 2);
     
     return result;
   }
