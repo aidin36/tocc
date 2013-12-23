@@ -26,12 +26,10 @@
 #include <unistd.h>
 #include <string.h> // For strerror function.
 
+#include "constants.h"
 #include "common/base_exception.h"
 #include "file_system/file_manager.h"
 
-const std::string GREEN = "\033[0;32m";
-const std::string RED = "\033[0;31m";
-const std::string DEFAULT = "\033[0m";
 
 bool file_manager_basic_tests()
 {

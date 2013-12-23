@@ -16,18 +16,26 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#include <iostream>
 
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
+#include "constants.h"
+#include "common/base_exception.h"
+#include "database/database.h"
 
-int main(int argc, char* argv[])
+bool database_basic_tests()
 {
-  file_manager_basic_tests();
+  try
+  {
+    std::cout << "Creating datbase." << std::endl;
+    libtocc::Database db("/tmp/tocc.test.db");
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
-  database_basic_tests();
-
-  return 0;
+    return true;
+  }
+  catch (libtocc::BaseException &error)
+  {
+    std::cout << RED << "    Failed." << DEFAULT << std::endl;
+    std::cout << "error was: " << error.what() << std::endl;
+    return false;
+  }
 }

@@ -16,18 +16,15 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef CONSTANTS_H_INCLUDED
+#define CONSTANTS_H_INCLUDED
+
 /*
- * Defines main function, which starts all tests.
+ * Defines constants used in the tests functions.
  */
 
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
+const std::string GREEN = "\033[0;32m";
+const std::string RED = "\033[0;31m";
+const std::string DEFAULT = "\033[0m";
 
-int main(int argc, char* argv[])
-{
-  file_manager_basic_tests();
-
-  database_basic_tests();
-
-  return 0;
-}
+#endif /* CONSTANTS_H_INCLUDED */

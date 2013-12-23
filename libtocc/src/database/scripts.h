@@ -16,18 +16,16 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
-
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
-
-int main(int argc, char* argv[])
+namespace libtocc
 {
-  file_manager_basic_tests();
-
-  database_basic_tests();
-
-  return 0;
+  // TODO: Return the error in a variable instead of printing it.
+  const std::string COLLECTION_CREATION = \
+    "if (!db_exists('files'))"\
+    "{"\
+    "  $result = db_create('files');"\
+    "  if (!$result)"\
+    "  {"\
+    "    print db_errlog();"\
+    "  }"\
+    "}";
 }

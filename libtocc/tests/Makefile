@@ -1,7 +1,7 @@
 BUILD_OUTPUT = ../../build/libtocc_tests/
 BIN_OUTPUT = ../../bin/
 CC = g++
-COMPILE_FLAGS = -Wall -fPIC -I../src/ -L$(BIN_OUTPUT) -ltocc $(CFLAGS)
+COMPILE_FLAGS = -Wall -fPIC -I../src/ -I. -L$(BIN_OUTPUT) -lunqlite -ltocc $(CFLAGS)
 
 $(BIN_OUTPUT)/tests: file_system/basic_tests.cpp main.cpp
 	mkdir -p $(BIN_OUTPUT)

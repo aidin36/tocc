@@ -16,18 +16,37 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#include "common/database_exceptions.h"
 
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
-
-int main(int argc, char* argv[])
+namespace libtocc
 {
-  file_manager_basic_tests();
 
-  database_basic_tests();
+  BaseDatabaseException::BaseDatabaseException(std::string message) throw()
+  {
+    this->message = message;
+  }
 
-  return 0;
+  BaseDatabaseException::~BaseDatabaseException() throw()
+  {
+  }
+
+  const char* BaseDatabaseException::what() const throw()
+  {
+    return this->message.c_str();
+  }
+
+  DatabaseInitializationError::DatabaseInitializationError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
+
+  DatabaseScriptCompilationError::DatabaseScriptCompilationError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
+
+  DatabaseScriptExecutionError::DatabaseScriptExecutionError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
 }

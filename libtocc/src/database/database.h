@@ -16,18 +16,41 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#ifndef DATABASE_H_INCLUDED
+#define DATABASE_H_INCLUDED
 
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
+#include <string>
 
-int main(int argc, char* argv[])
+// Forward declaration of unqlite. So I don't have to include the
+// unqlite.h in my header, so it will be hidden from the others
+// who include this header.
+struct unqlite;
+
+namespace libtocc
 {
-  file_manager_basic_tests();
 
-  database_basic_tests();
+  class Database
+  {
+  public:
+    /*
+     * Constructor.
+     * @param database_file: database to work with.
+     */
+    Database(std::string database_file);
+    
+    /*
+     * Adds a file to the database.
+     */
+    void add_file(std::string file_id);
 
-  return 0;
-}
+  private:
+    /*
+     * Database handler.
+     */
+    unqlite* db_pointer;
+
+  };
+
+};
+
+#endif /* DATABASE_H_INCLUDED */

@@ -4,7 +4,7 @@ BIN_OUTPUT = ../../bin/
 CC = g++
 COMPILE_FLAGS = -fPIC -Wall -I. $(CFLAGS)
 
-$(BIN_OUTPUT)/libtocc.so: $(BUILD_OUTPUT)/file_system/file_manager.o $(BUILD_OUTPUT)/common/file_system_exceptions.o $(BUILD_OUTPUT)/database/base23.o
+$(BIN_OUTPUT)/libtocc.so: $(BUILD_OUTPUT)/file_system/file_manager.o $(BUILD_OUTPUT)/common/file_system_exceptions.o $(BUILD_OUTPUT)/common/database_exceptions.o $(BUILD_OUTPUT)/database/base23.o $(BUILD_OUTPUT)/database/database.o
 	mkdir -p $(BIN_OUTPUT)
 	$(CC) $(COMPILE_FLAGS) -shared $^ -o $@
 
@@ -16,7 +16,15 @@ $(BUILD_OUTPUT)/common/file_system_exceptions.o: common/file_system_exceptions.c
 	mkdir -p $(BUILD_OUTPUT)/common/
 	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
 
+$(BUILD_OUTPUT)/common/database_exceptions.o: common/database_exceptions.cpp
+	mkdir -p $(BUILD_OUTPUT)/common/
+	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
+
 $(BUILD_OUTPUT)/database/base23.o: database/base23.cpp
+	mkdir -p $(BUILD_OUTPUT)/database/
+	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
+
+$(BUILD_OUTPUT)/database/database.o: database/database.cpp
 	mkdir -p $(BUILD_OUTPUT)/database/
 	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
 
