@@ -63,7 +63,10 @@ namespace libtocc
     DatabaseScriptCompilationError(std::string message) throw();
   };
 
-  class DatabaseScriptExecutionError : BaseDatabaseException
+  /*
+   * Raises if error occurs when executing a database script.
+   */
+  class DatabaseScriptExecutionError : public BaseDatabaseException
   {
   public:
     DatabaseScriptExecutionError(std::string message) throw();

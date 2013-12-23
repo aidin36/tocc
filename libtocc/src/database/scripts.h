@@ -18,14 +18,17 @@
 
 namespace libtocc
 {
-  // TODO: Return the error in a variable instead of printing it.
+
+  /*
+   * Creates the `files' collection.
+   */
   const std::string COLLECTION_CREATION = \
     "if (!db_exists('files'))"\
     "{"\
     "  $result = db_create('files');"\
     "  if (!$result)"\
     "  {"\
-    "    print db_errlog();"\
+    "    $error = db_errlog();"\
     "  }"\
     "}";
 }

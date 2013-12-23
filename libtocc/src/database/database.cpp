@@ -64,8 +64,16 @@ namespace libtocc
     {
       throw DatabaseScriptExecutionError("Error executing the script.");
     }
-  }
 
+    // Checking if any error occured inside the script.
+    unqlite_value* execution_error = unqlite_vm_extract_variable(*vm, "error");
+    if (execution_error != NULL)
+    {
+      // Second variable is a pointer to int, which returns the length of the
+      // string. Since we don't need it, we passed null.
+      throw DatabaseScriptExecutionError(unqlite_value_to_string(execution_error, NULL));
+    }
+  }
 
   Database::Database(std::string database_file)
   {
