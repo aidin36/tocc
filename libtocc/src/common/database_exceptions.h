@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATABASE_EXCEPTIONS_H_INCLUDED
-#define DATABASE_EXCEPTIONS_H_INCLUDED
+#ifndef LIBTOCC_DATABASE_EXCEPTIONS_H_INCLUDED
+#define LIBTOCC_DATABASE_EXCEPTIONS_H_INCLUDED
 
 /*
  * Defines exceptions related to database layer.
@@ -73,4 +73,4 @@ namespace libtocc
   };
 }
 
-#endif /* DATABASE_EXCEPTIONS_H_INCLUDED */
+#endif /* LIBTOCC_DATABASE_EXCEPTIONS_H_INCLUDED */

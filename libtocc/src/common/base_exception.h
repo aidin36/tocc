@@ -17,8 +17,8 @@
  */
 
 
-#ifndef _BASE_EXCEPTION_H_INCLUDED
-#define _BASE_EXCEPTION_H_INCLUDED
+#ifndef LIBTOCC_BASE_EXCEPTION_H_INCLUDED
+#define LIBTOCC_BASE_EXCEPTION_H_INCLUDED
 
 #include <exception>
 
@@ -32,4 +32,4 @@ namespace libtocc
   };
 }
 
-#endif /* _BASE_EXCEPTION_H_INCLUDED */
+#endif /* LIBTOCC_BASE_EXCEPTION_H_INCLUDED */

@@ -16,8 +16,8 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INT_FILE_INFO_H_INCLUDED
-#define INT_FILE_INFO_H_INCLUDED
+#ifndef LIBTOCC_INT_FILE_INFO_H_INCLUDED
+#define LIBTOCC_INT_FILE_INFO_H_INCLUDED
 
 /*
  * Defines two classes: One is Internal File Info, and other one is
@@ -142,4 +142,4 @@ namespace libtocc
   };
 }
 
-#endif /* INT_FILE_INFO_H_INCLUDED */
+#endif /* LIBTOCC_INT_FILE_INFO_H_INCLUDED */

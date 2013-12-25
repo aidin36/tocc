@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATABASE_H_INCLUDED
-#define DATABASE_H_INCLUDED
+#ifndef LIBTOCC_DATABASE_H_INCLUDED
+#define LIBTOCC_DATABASE_H_INCLUDED
 
 #include <string>
 
@@ -53,4 +53,4 @@ namespace libtocc
 
 };
 
-#endif /* DATABASE_H_INCLUDED */
+#endif /* LIBTOCC_DATABASE_H_INCLUDED */

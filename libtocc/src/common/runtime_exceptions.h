@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RUNTIME_EXCEPTIONS_H_INCLUDED
-#define RUNTIME_EXCEPTIONS_H_INCLUDED
+#ifndef LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
+#define LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
 
 #include <string>
 
@@ -49,4 +49,4 @@ namespace libtocc
 }
 
 
-#endif /* RUNTIME_EXCEPTIONS_H_INCLUDED */
+#endif /* LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED */

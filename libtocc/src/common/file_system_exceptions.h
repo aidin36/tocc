@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILE_SYSTEM_EXCEPTIONS_H_INCLUDED
-#define FILE_SYSTEM_EXCEPTIONS_H_INCLUDED
+#ifndef LIBTOCC_FILE_SYSTEM_EXCEPTIONS_H_INCLUDED
+#define LIBTOCC_FILE_SYSTEM_EXCEPTIONS_H_INCLUDED
 
 /*
  * Defines exceptions related to file system layer.
@@ -180,4 +180,4 @@ namespace libtocc
 
 }
 
-#endif /* FILE_SYSTEM_EXCEPTIONS_H_INCLUDED */
+#endif /* LIBTOCC_FILE_SYSTEM_EXCEPTIONS_H_INCLUDED */

@@ -16,6 +16,9 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_SCRIPTS_H_INCLUDED
+#define LIBTOCC_SCRIPTS_H_INCLUDED
+
 namespace libtocc
 {
 
@@ -32,3 +35,5 @@ namespace libtocc
     "  }"\
     "}";
 }
+
+#endif /* LIBTOCC_SCRIPTS_H_INCLUDED */

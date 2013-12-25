@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BASE_23_H_INCLUDED
-#define BASE_23_H_INCLUDED
+#ifndef LIBTOCC_BASE_23_H_INCLUDED
+#define LIBTOCC_BASE_23_H_INCLUDED
 
 #include <string>
 
@@ -38,4 +38,4 @@ std::string to_base23(unsigned long num);
  */
 unsigned long from_base23(std::string num);
 
-#endif /* BASE_23_H_INCLUDED */
+#endif /* LIBTOCC_BASE_23_H_INCLUDED */

@@ -16,8 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILE_MANAGER_H_INCLUDED
-#define FILE_MANAGER_H_INCLUDED
+#ifndef LIBTOCC_FILE_MANAGER_H_INCLUDED
+#define LIBTOCC_FILE_MANAGER_H_INCLUDED
 
 /*
  * Defines FileManager class.
@@ -100,4 +100,4 @@ namespace libtocc
 
 };
 
-#endif /* FILE_MANAGER_H_INCLUDE */
+#endif /* LIBTOCC_FILE_MANAGER_H_INCLUDE */
