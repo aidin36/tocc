@@ -26,4 +26,8 @@ namespace libtocc
     return expr_type::FUNCTION;
   }
 
+  std::string FunctionExpr::compile(std::string base_arg)
+  {
+    return "Not Implemented";
+  }
 };

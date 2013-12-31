@@ -23,6 +23,7 @@
 
 #include "database/exprs/expr.h"
 #include "database/exprs/fields.h"
+#include "database/exprs/compiled_expr.h"
 
 namespace libtocc
 {
@@ -33,7 +34,16 @@ namespace libtocc
   class ConnectiveExpr : public Expr
   {
   public:
+    /*
+     * Returns the type of this expression.
+     */
     virtual expr_type::ExprType get_type();
+
+    /*
+     * Compiled the expression and the ones inside it.
+     * And returns list of compiled expressions.
+     */
+    virtual std::list<CompiledExpr> compile();
   };
 
   /*
@@ -89,6 +99,12 @@ namespace libtocc
      * Adds the specified expression.
      */
     void add(FieldExpr expression);
+
+    /*
+     * Compiled the expression and the ones inside it.
+     * And returns list of compiled expressions.
+     */
+    virtual std::list<CompiledExpr> compile();
 
   private:
     std::list<Expr> expressions;

@@ -23,7 +23,7 @@ namespace libtocc
 {
   namespace compiled_expr
   {
-    enum ExprType { CONNECTIVE, TAG, FIELD }
+    enum ExprType { CONNECTIVE, TAG, FIELD };
   };
 
   /*

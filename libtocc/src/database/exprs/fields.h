@@ -19,8 +19,12 @@
 #ifndef LIBTOCC_FIELD_H_INCLUDED
 #define LIBTOCC_FIELD_H_INCLUDED
 
+#include <string>
+
 #include "database/exprs/expr.h"
 #include "database/exprs/operands.h"
+#include "database/exprs/functions.h"
+#include "database/exprs/compiled_expr.h"
 
 namespace libtocc
 {
@@ -31,7 +35,61 @@ namespace libtocc
   class FieldExpr : public Expr
   {
   public:
+    /*
+     * Returns the type of this expression, which is
+     * expr_type::FIELD.
+     */
     virtual expr_type::ExprType get_type();
+
+    /*
+     * Represents a field that exactly matches the
+     * specified string.
+     */
+    FieldExpr(const char* tag);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(FunctionExpr expression);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(OperandExpr expression);
+
+    /*
+     * Compiles the expression.
+     */
+    virtual CompiledExpr compile();
+
+  protected:
+    /*
+     * this field determines which of the private fields are
+     * filled:
+     *   0: tag is filled.
+     *   1: function is filled.
+     *   2: operand is filled.
+     * This is here, because I can't know if function or operand
+     * is filled.
+     */
+    int internal_type;
+    std::string tag;
+    FunctionExpr function;
+    OperandExpr operand;
+
+    /*
+     * (Should be overrided by the subclass.)
+     * Returns name of this field that should be appear in the
+     * compiled string.
+     */
+    virtual std::string get_field_name();
+
+    /*
+     * Returns type of the compiled expression.
+     */
+    virtual compiled_expr::ExprType get_compiled_expr_type();
   };
 
   /*
@@ -44,16 +102,69 @@ namespace libtocc
      * Represents a tag that exactly matches the
      * specified string.
      */
-    Tag(const char* tag_name);
+    Tag(const char* tag);
 
     /*
-     * Represetns a tag that matches with the specified
+     * Represents a tag that matches with the specified
      * expression.
      *
      * Example of usage:
      *   Tag(Regex("..."))
      */
+    Tag(FunctionExpr expression);
+
+    /*
+     * Represents a tag that matches with the specified
+     * expression.
+     */
     Tag(OperandExpr expression);
+
+  protected:
+    /*
+     * Returns name of this field that should be appear in the
+     * compiled string.
+     */
+    virtual std::string get_field_name();
+
+    /*
+     * Returns type of the compiled expression.
+     */
+    virtual compiled_expr::ExprType get_compiled_expr_type();
+  };
+
+  /*
+   * Represents Title of a file.
+   */
+  class Title : FieldExpr
+  {
+  public:
+    /*
+     * Represents a tag that exactly matches the
+     * specified string.
+     */
+    Title(const char* tag);
+
+    /*
+     * Represents a tag that matches with the specified
+     * expression.
+     *
+     * Example of usage:
+     *   Title(Regex("..."))
+     */
+    Title(FunctionExpr expression);
+
+    /*
+     * Represents a tag that matches with the specified
+     * expression.
+     */
+    Title(OperandExpr expression);
+
+  protected:
+    /*
+     * Returns name of this field that should be appear in the
+     * compiled string.
+     */
+    virtual std::string get_field_name();
   };
 
 };

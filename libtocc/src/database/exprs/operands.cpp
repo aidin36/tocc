@@ -27,4 +27,9 @@ namespace libtocc
     return expr_type::OPERAND;
   }
 
+  std::string OperandExpr::compile()
+  {
+    return "Not Implemented";
+  }
+
 };

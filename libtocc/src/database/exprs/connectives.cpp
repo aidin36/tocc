@@ -70,4 +70,30 @@ namespace libtocc
     this->expressions.push_back(expression);
   }
 
+  std::list<CompiledExpr> And::compile()
+  {
+    std::list<CompiledExpr> result;
+
+    std::list<Expr>::iterator iterator = this->expressions.begin();
+    for(; iterator != this->expressions.end(); iterator++)
+    {
+      if (iterator->get_type() == expr_type::FIELD)
+      {
+	// Simply, compile and append to result.
+	result.push_back(((FieldExpr*)&*iterator)->compile());
+      }
+      else if (iterator->get_type() == expr_type::CONNECTIVE)
+      {
+	// Compiling the internal expr.
+	std::list<CompiledExpr> compile_result = ((ConnectiveExpr*)&*iterator)->compile();
+
+	// Appending two lists together.
+	// `splice' moved elements of `compile_result' to `result'. It's O(1).
+	result.splice(result.end(), compile_result);
+      }
+    }
+
+    return result;
+  }
+
 };

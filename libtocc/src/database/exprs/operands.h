@@ -20,6 +20,7 @@
 #ifndef LIBTOCC_OPERAND_H_INCLUDED
 #define LIBTOCC_OPERAND_H_INCLUDED
 
+#include <string>
 #include "database/exprs/expr.h"
 
 namespace libtocc
@@ -32,6 +33,8 @@ namespace libtocc
   {
   public:
     virtual expr_type::ExprType get_type();
+
+    virtual std::string compile();
   };
 
 };

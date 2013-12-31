@@ -19,6 +19,7 @@
 #ifndef LIBTOCC_FUNCTION_H_INCLUDED
 #define LIBTOCC_FUNCTION_H_INCLUDED
 
+#include <string>
 #include "database/exprs/expr.h"
 
 namespace libtocc
@@ -31,6 +32,16 @@ namespace libtocc
   {
   public:
     virtual expr_type::ExprType get_type();
+
+    /*
+     * Compiled the function.
+     *
+     * @param base_arg: This will be used as the first argument
+     *   that passes to the function.
+     *   for example:
+     *   compile("tag") -> "Regex("tag", "...")
+     */
+    virtual std::string compile(std::string base_arg);
   };
 
 };
