@@ -74,6 +74,10 @@ namespace libtocc
   {
     std::list<CompiledExpr> result;
 
+    // Adding an AND to the begining of the resutl.
+    result.push_back(CompiledExpr(compiled_expr::CONNECTIVE, "and"));
+
+    // Iterating over internal expressions, compiling and adding them to the result.
     std::list<Expr>::iterator iterator = this->expressions.begin();
     for(; iterator != this->expressions.end(); iterator++)
     {
