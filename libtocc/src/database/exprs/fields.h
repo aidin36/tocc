@@ -80,7 +80,7 @@ namespace libtocc
     OperandExpr operand;
 
     /*
-     * (Should be overrided by the subclass.)
+     * (Should be override by the subclass.)
      * Returns name of this field that should be appear in the
      * compiled string.
      */
@@ -93,7 +93,7 @@ namespace libtocc
   };
 
   /*
-   * Repersents a Tag.
+   * Represents a Tag.
    */
   class Tag : public FieldExpr
   {
@@ -135,7 +135,7 @@ namespace libtocc
   /*
    * Represents Title of a file.
    */
-  class Title : FieldExpr
+  class Title : public FieldExpr
   {
   public:
     /*

@@ -26,70 +26,53 @@ namespace libtocc
     return expr_type::CONNECTIVE;
   }
 
-  And::And(ConnectiveExpr expression)
+  void ConnectiveExpr::add(ConnectiveExpr* expression)
   {
     this->expressions.push_back(expression);
   }
 
-  And::And(FieldExpr expression)
+  void ConnectiveExpr::add(FieldExpr* expression)
   {
     this->expressions.push_back(expression);
   }
 
-  And::And(ConnectiveExpr expressions[], int length=0)
-  {
-    if (length <= 0)
-    {
-      // Length is not provided. Calculating it.
-      length = sizeof(expressions) / sizeof(expressions[0]);
-    }
-    
-    // Appending the array to the private list.
-    this->expressions.assign(expressions, expressions + length);
-  }
-
-  And::And(FieldExpr expressions[], int length=0)
-  {
-    if (length <= 0)
-    {
-      // Length is not provided. Calculating it.
-      length = sizeof(expressions) / sizeof(expressions[0]);
-    }
-    
-    // Appending the array to the private list.
-    this->expressions.assign(expressions, expressions + length);
-  }
-
-  void And::add(ConnectiveExpr expression)
+  ConnectiveExpr::ConnectiveExpr(Expr* expression)
   {
     this->expressions.push_back(expression);
   }
 
-  void And::add(FieldExpr expression)
+  ConnectiveExpr::~ConnectiveExpr()
   {
-    this->expressions.push_back(expression);
-  }
-
-  std::list<CompiledExpr> And::compile()
-  {
-    std::list<CompiledExpr> result;
-
-    // Adding an AND to the begining of the resutl.
-    result.push_back(CompiledExpr(compiled_expr::CONNECTIVE, "and"));
-
-    // Iterating over internal expressions, compiling and adding them to the result.
-    std::list<Expr>::iterator iterator = this->expressions.begin();
+    // Iterating over internal expressions, deleting each one.
+    std::list<Expr*>::iterator iterator = this->expressions.begin();
     for(; iterator != this->expressions.end(); iterator++)
     {
-      if (iterator->get_type() == expr_type::FIELD)
+      delete *iterator;
+    }
+  }
+
+  std::list<CompiledExpr> ConnectiveExpr::compile()
+  {
+    // TODO: sort the result list, and keep similar elements together.
+
+    std::list<CompiledExpr> result;
+
+    // Adding an AND to the begining of the result.
+    result.push_back(CompiledExpr(compiled_expr::CONNECTIVE, get_connective_string()));
+
+    // Iterating over internal expressions, compiling and adding them to the result.
+    std::list<Expr*>::iterator iterator = this->expressions.begin();
+    for(; iterator != this->expressions.end(); iterator++)
+    {
+      if ((*iterator)->get_type() == expr_type::FIELD)
       {
 	// Simply, compile and append to result.
-	result.push_back(((FieldExpr*)&*iterator)->compile());
+	result.push_back(((FieldExpr*)*iterator)->compile());
       }
-      else if (iterator->get_type() == expr_type::CONNECTIVE)
+      else if ((*iterator)->get_type() == expr_type::CONNECTIVE)
       {
 	// Compiling the internal expr.
-	std::list<CompiledExpr> compile_result = ((ConnectiveExpr*)&*iterator)->compile();
+	std::list<CompiledExpr> compile_result = ((ConnectiveExpr*)*iterator)->compile();
 
 	// Appending two lists together.
 	// `splice' moved elements of `compile_result' to `result'. It's O(1).
@@ -97,7 +80,30 @@ namespace libtocc
       }
     }
 
+    // Marking the end of the `and' group.
+    result.push_back(CompiledExpr(compiled_expr::END_CONNECTIVE_GROUP, ""));
+
     return result;
+  }
+
+  And* And::create(ConnectiveExpr* expression)
+  {
+    return new And(expression);
+  }
+
+  And* And::create(FieldExpr* expression)
+  {
+    return new And(expression);
+  }
+
+  std::string And::get_connective_string()
+  {
+    return "and";
+  }
+
+  And::And(Expr* expression)
+    : ConnectiveExpr(expression)
+  {
   }
 
 };

@@ -16,6 +16,8 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "database/exprs/compiled_expr.h"
+
 namespace libtocc
 {
   CompiledExpr::CompiledExpr(compiled_expr::ExprType type, std::string value)
@@ -24,7 +26,7 @@ namespace libtocc
     this->value = value;
   }
 
-  CompiledExpr::compiled_expr::ExprType get_type()
+  compiled_expr::ExprType CompiledExpr::get_type()
   {
     return this->type;
   }

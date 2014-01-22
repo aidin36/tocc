@@ -19,16 +19,23 @@
 #ifndef LIBTOCC_COMPILER_H_INCLUDED
 #define LIBTOCC_COMPILER_H_INCLUDED
 
-#include <queue>
+#include <string>
+#include "database/exprs/query.h"
 
 namespace libtocc
 {
   /*
-   * Compiler class of all the expressions.
+   * Compiler of queries.
    */
-  class ExprCompiler
+  class QueryCompiler
   {
-    
+
+  public:
+    /*
+     * Compiles a query object to a Jx9 script.
+     */
+    std::string compile(Query& query_to_compile);
+
   };
 };
 

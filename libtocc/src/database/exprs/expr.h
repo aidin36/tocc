@@ -39,13 +39,17 @@ namespace libtocc
    */
   class Expr
   {
+    // To allow these classes delete a pointer to Expr.
+    friend class ConnectiveExpr;
+
   public:
     /*
      * Returns the type of the expression.
      */
-    virtual expr_type::ExprType get_type();
+    virtual expr_type::ExprType get_type() = 0;
 
-    
+  protected:
+    virtual ~Expr() {}
   };
 
 };

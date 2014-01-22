@@ -16,6 +16,7 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -90,7 +91,7 @@ namespace libtocc
   void FileManager::remove(std::string file_id)
   {
     // I used "unlink" not "remove", because I'm sure path is
-    // refering to a file, not a directory or something.
+    // referring to a file, not a directory or something.
     int unlink_result = unlink(id_to_file_path(file_id).c_str());
 
     if (unlink_result < 0)

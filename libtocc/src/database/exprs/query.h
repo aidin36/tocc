@@ -16,49 +16,39 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_COMPILED_EXPR_INCLUDED
-#define LIBTOCC_COMPILED_EXPR_INCLUDED
+#ifndef LIBTOCC_QUERY_H_INCLUDED
+#define LIBTOCC_QUERY_H_INCLUDED
 
-#include <string>
+#include "database/exprs/connectives.h"
 
 namespace libtocc
 {
 
-  namespace compiled_expr
-  {
-    enum ExprType { CONNECTIVE, END_CONNECTIVE_GROUP, TAG, FIELD };
-  };
-
   /*
-   * When the expression compiles, it returns an instance
-   * of this class.
+   * Defines a Query object.
+   * To execute a query on database, use need
+   * an instance of this class.
    */
-  class CompiledExpr
+  class Query
   {
   public:
     /*
-     * Construct a compiled expression.
-     *
-     * @param type: type of the expression that is compiled.
-     * @param value: compiled expression.
+     * @param expression: Expression of this query.
+     *   i.e. the expression that will be executed when
+     *   this query object executes.
      */
-    CompiledExpr(compiled_expr::ExprType type, std::string value);
+    Query(ConnectiveExpr* expression);
+
+    ~Query();
 
     /*
-     * Returns the type of the compiled expression.
+     * Gets the internal expression.
      */
-    compiled_expr::ExprType get_type();
-
-    /*
-     * Returns the value of the compiled expression.
-     */
-    std::string get_value();
+    ConnectiveExpr* get_expr();
 
   private:
-    compiled_expr::ExprType type;
-    std::string value;
+    ConnectiveExpr* expr;
   };
+}
 
-};
-
-#endif /* LIBTOCC_COMPILED_EXPR_INCLUDED */
+#endif /* LIBTOCC_QUERY_H_INCLUDED */

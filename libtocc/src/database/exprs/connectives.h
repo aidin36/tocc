@@ -33,6 +33,9 @@ namespace libtocc
    */
   class ConnectiveExpr : public Expr
   {
+    // To allow this class to delete a pointer to ConnectiveExpr.
+    friend class Query;
+
   public:
     /*
      * Returns the type of this expression.
@@ -40,74 +43,94 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     /*
+     * Adds the specified expression.
+     */
+    void add(ConnectiveExpr* expression);
+
+    /*
+     * Adds the specified expression.
+     */
+    void add(FieldExpr* expression);
+
+    /*
      * Compiled the expression and the ones inside it.
      * And returns list of compiled expressions.
      */
     virtual std::list<CompiledExpr> compile();
+
+  protected:
+    /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: an instance of one of the
+     *   ConnectiveExpr or FieldExpr.
+     */
+    ConnectiveExpr(Expr* expression);
+
+    virtual ~ConnectiveExpr();
+
+    /*
+     * Returns the equivalent string of this connective expression.
+     */
+    virtual std::string get_connective_string() = 0;
+
+    /*
+     * Keeps list of expressions inside this connective expression.
+     */
+    std::list<Expr*> expressions;
   };
 
   /*
    * Ands expressions together.
+   *
+   * @note: Note that you cannot directly create instances of this class.
+   * use `create' method instead.
    */
   class And : public ConnectiveExpr
   {
   public:
     /*
-     * Creates new instance of the And expr.
+     * Creates an instance of the And Expression. With another
+     * connective expression inside it.
      *
-     * @param expression: an instance of one of the
-     *   connective expression.
-     */
-    And(ConnectiveExpr expression);
-
-    /*
-     * Creates new instance of the And expr.
+     * @param expression: A pointer to a ConnectiveExpr.
      *
-     * @param expression: an instance of one of the
-     *   field expression.
-     */
-    And(FieldExpr expression);
-
-    /*
-     * Creates new instance of the And expr.
+     * @return: A pointer to the newly created expression.
      *
-     * @param expressions[]: array of expressions to and
-     *   together.
-     * @param length: length of the arrary. If not provided
-     *   or passes as zero or negative number, the method
-     *   itself will determine the length.
+     * @note: You cannot free the pointer you received. It's a
+     *   smart pointer and will be freed automatically.
      */
-    And(ConnectiveExpr expressions[], int length/*=0*/);
+    static And* create(ConnectiveExpr* expression);
 
     /*
-     * Creates new instance of the And expr.
+     * Creates an instance of the And Expression. With a
+     * field expression inside it.
      *
-     * @param expressions[]: array of expressions to and
-     *   together.
-     * @param length: length of the arrary. If not provided
-     *   or passes as zero or negative number, the method
-     *   itself will determine the length.
+     * @param expression: A pointer to a FieldExpr.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases.
      */
-    And(FieldExpr expressions[], int length/*=0*/);
+    static And* create(FieldExpr* expression);
 
+  protected:
     /*
-     * Adds the specified expression.
+     * Returns the equivalent string of this connective expression.
      */
-    void add(ConnectiveExpr expression);
-
-    /*
-     * Adds the specified expression.
-     */
-    void add(FieldExpr expression);
-
-    /*
-     * Compiled the expression and the ones inside it.
-     * And returns list of compiled expressions.
-     */
-    virtual std::list<CompiledExpr> compile();
+    virtual std::string get_connective_string();
 
   private:
-    std::list<Expr> expressions;
+    /*
+     * Creates new instance of the And expr.
+     *
+     * @param expression: an instance of one of the
+     *   ConnectiveExpr or FieldExpr.
+     */
+    And(Expr* expression);
+
   };
 
 };

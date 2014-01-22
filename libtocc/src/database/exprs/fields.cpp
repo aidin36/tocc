@@ -48,7 +48,7 @@ namespace libtocc
   {
     if (this->internal_type == 0)
     {
-      std::string compiled_value(get_field_name() + " == " + this->tag);
+      std::string compiled_value(get_field_name() + " == '" + this->tag + "'");
       return CompiledExpr(get_compiled_expr_type(), compiled_value.c_str());
     }
     else if (this->internal_type == 1)
@@ -96,7 +96,7 @@ namespace libtocc
 
   std::string Tag::get_field_name()
   {
-    return "tag";
+    return "$tag";
   }
 
   Title::Title(const char* tag)
@@ -116,7 +116,7 @@ namespace libtocc
 
   std::string Title::get_field_name()
   {
-    return "title";
+    return "$title";
   }
 
 };

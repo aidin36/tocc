@@ -16,21 +16,24 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#include "database/exprs/query.h"
 
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
-#include "database/expr_tests.cpp"
-
-int main(int argc, char* argv[])
+namespace libtocc
 {
-  file_manager_basic_tests();
 
-  database_basic_tests();
+  Query::Query(ConnectiveExpr* expression)
+  {
+    this->expr = expression;
+  }
 
-  expr_tests();
+  Query::~Query()
+  {
+    delete this->expr;
+  }
 
-  return 0;
+  ConnectiveExpr* Query::get_expr()
+  {
+    return this->expr;
+  }
+
 }
