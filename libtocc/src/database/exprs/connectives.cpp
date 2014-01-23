@@ -106,4 +106,24 @@ namespace libtocc
   {
   }
 
+  Or* Or::create(ConnectiveExpr* expression)
+  {
+    return new Or(expression);
+  }
+
+  Or* Or::create(FieldExpr* expression)
+  {
+    return new Or(expression);
+  }
+
+  std::string Or::get_connective_string()
+  {
+    return "or";
+  }
+
+  Or::Or(Expr* expression)
+    : ConnectiveExpr(expression)
+  {
+  }
+
 };

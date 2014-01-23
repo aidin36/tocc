@@ -97,8 +97,9 @@ namespace libtocc
      *
      * @return: A pointer to the newly created expression.
      *
-     * @note: You cannot free the pointer you received. It's a
-     *   smart pointer and will be freed automatically.
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
      */
     static And* create(ConnectiveExpr* expression);
 
@@ -112,7 +113,7 @@ namespace libtocc
      *
      * @note: You cannot free the pointer you received. It
      *   will be freed as soon as its related Query object
-     *   releases.
+     *   releases. (see the documentation)
      */
     static And* create(FieldExpr* expression);
 
@@ -130,6 +131,61 @@ namespace libtocc
      *   ConnectiveExpr or FieldExpr.
      */
     And(Expr* expression);
+
+  };
+
+
+  /*
+   * Or expressions together.
+   *
+   * @note: Note that you cannot directly create instances of this class.
+   * use `create' method instead.
+   */
+  class Or : public ConnectiveExpr
+  {
+  public:
+    /*
+     * Creates an instance of the Or Expression. With another
+     * connective expression inside it.
+     *
+     * @param expression: A pointer to a ConnectiveExpr.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Or* create(ConnectiveExpr* expression);
+
+    /*
+     * Creates an instance of the And Expression. With a
+     * field expression inside it.
+     *
+     * @param expression: A pointer to a FieldExpr.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Or* create(FieldExpr* expression);
+
+  protected:
+    /*
+     * Returns the equivalent string of this connective expression.
+     */
+    virtual std::string get_connective_string();
+
+  private:
+    /*
+     * Creates new instance of the Or expr.
+     *
+     * @param expression: an instance of one of the
+     *   ConnectiveExpr or FieldExpr.
+     */
+    Or(Expr* expression);
 
   };
 
