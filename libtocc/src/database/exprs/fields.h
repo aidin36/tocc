@@ -45,7 +45,7 @@ namespace libtocc
      * Represents a field that exactly matches the
      * specified string.
      */
-    FieldExpr(const char* tag);
+    FieldExpr(const char* value);
 
     /*
      * Represents a field that matches with the specified
@@ -68,14 +68,15 @@ namespace libtocc
     /*
      * this field determines which of the private fields are
      * filled:
-     *   0: tag is filled.
+     *   0: value is filled.
      *   1: function is filled.
      *   2: operand is filled.
      * This is here, because I can't know if function or operand
      * is filled.
      */
     int internal_type;
-    std::string tag;
+
+    std::string value;
     FunctionExpr function;
     OperandExpr operand;
 

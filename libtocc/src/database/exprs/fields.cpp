@@ -23,7 +23,7 @@ namespace libtocc
 
   FieldExpr::FieldExpr(const char* tag)
   {
-    this->tag = tag;
+    this->value = tag;
     this->internal_type = 0;
   }
 
@@ -48,7 +48,7 @@ namespace libtocc
   {
     if (this->internal_type == 0)
     {
-      std::string compiled_value(get_field_name() + " == '" + this->tag + "'");
+      std::string compiled_value(get_field_name() + " == '" + this->value + "'");
       return CompiledExpr(get_compiled_expr_type(), compiled_value.c_str());
     }
     else if (this->internal_type == 1)
@@ -116,7 +116,7 @@ namespace libtocc
 
   std::string Title::get_field_name()
   {
-    return "$title";
+    return "$record.$title";
   }
 
 };
