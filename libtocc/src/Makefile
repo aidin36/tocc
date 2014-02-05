@@ -10,7 +10,7 @@ ifneq ($(strip $(BOOST_PATH)),)
 BOOST_FLAG = -I $(BOOST_PATH)
 endif
 
-$(BIN_OUTPUT)/libtocc.so: $(BUILD_OUTPUT)/file_system/file_manager.o $(BUILD_OUTPUT)/common/file_system_exceptions.o $(BUILD_OUTPUT)/common/database_exceptions.o $(BUILD_OUTPUT)/database/base23.o $(BUILD_OUTPUT)/database/database.o $(BUILD_OUTPUT)/database/exprs/connectives.o $(BUILD_OUTPUT)/database/exprs/functions.o $(BUILD_OUTPUT)/database/exprs/operands.o $(BUILD_OUTPUT)/database/exprs/fields.o $(BUILD_OUTPUT)/database/exprs/compiled_expr.o $(BUILD_OUTPUT)/database/exprs/compier.o $(BUILD_OUTPUT)/database/exprs/query.o
+$(BIN_OUTPUT)/libtocc.so: $(BUILD_OUTPUT)/file_system/file_manager.o $(BUILD_OUTPUT)/common/file_system_exceptions.o $(BUILD_OUTPUT)/common/database_exceptions.o $(BUILD_OUTPUT)/common/expr_exceptions.o $(BUILD_OUTPUT)/database/base23.o $(BUILD_OUTPUT)/database/database.o $(BUILD_OUTPUT)/database/exprs/connectives.o $(BUILD_OUTPUT)/database/exprs/functions.o $(BUILD_OUTPUT)/database/exprs/operands.o $(BUILD_OUTPUT)/database/exprs/fields.o $(BUILD_OUTPUT)/database/exprs/compiled_expr.o $(BUILD_OUTPUT)/database/exprs/compier.o $(BUILD_OUTPUT)/database/exprs/query.o
 	mkdir -p $(BIN_OUTPUT)
 	$(CC) $(COMPILE_FLAGS) -shared $^ -o $@
 
@@ -23,6 +23,10 @@ $(BUILD_OUTPUT)/common/file_system_exceptions.o: common/file_system_exceptions.c
 	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
 
 $(BUILD_OUTPUT)/common/database_exceptions.o: common/database_exceptions.cpp
+	mkdir -p $(BUILD_OUTPUT)/common/
+	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
+
+$(BUILD_OUTPUT)/common/expr_exceptions.o: common/expr_exceptions.cpp
 	mkdir -p $(BUILD_OUTPUT)/common/
 	$(CC) $(COMPILE_FLAGS) -c $^ -o $@
 

@@ -30,6 +30,9 @@ bool expr_tests()
 {
   try
   {
+    // TODO: Give compiled Jx9 algorithms to Unqlite, to check if their
+    //       syntactically correct.
+
     std::cout << "Compiling a simple expression..." << std::endl;
 
     libtocc::And* all_expressions = libtocc::And::create(new libtocc::Tag("book"));
@@ -45,6 +48,26 @@ bool expr_tests()
     std::cout << compiled_expression << std::endl;
 
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    std::cout << "Compiling a little more complex expression..." << std::endl;
+
+    // And(Tag("photo"), And(Or(Tag("b&w"), Tag("abstract")), Or(Tag("hdr"), Tag("landscape"))))
+    libtocc::And* main_and = libtocc::And::create(new libtocc::Tag("photo"));
+    libtocc::Or* first_or = libtocc::Or::create(new libtocc::Tag("b&w"));
+    first_or->add(new libtocc::Tag("abstract"));
+    libtocc::Or* second_or = libtocc::Or::create(new libtocc::Tag("hdr"));
+    second_or->add(new libtocc::Tag("landscape"));
+    libtocc::And* internal_and = libtocc::And::create(first_or);
+    internal_and->add(second_or);
+    main_and->add(internal_and);
+
+    libtocc::Query complex_query_object(main_and);
+
+    std::string complex_result = compiler.compile(complex_query_object);
+
+    std::cout << complex_result << std::endl;
+
+    std::cout << GREEN << "   done." << DEFAULT << std::endl;
 
     return true;
   }

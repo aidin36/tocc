@@ -44,10 +44,9 @@ namespace libtocc
   ConnectiveExpr::~ConnectiveExpr()
   {
     // Iterating over internal expressions, deleting each one.
-    std::list<Expr*>::iterator iterator = this->expressions.begin();
-    for(; iterator != this->expressions.end(); iterator++)
+    while (!this->expressions.empty())
     {
-      delete *iterator;
+      this->expressions.pop_back();
     }
   }
 
@@ -98,7 +97,7 @@ namespace libtocc
 
   std::string And::get_connective_string()
   {
-    return "and";
+    return "&&";
   }
 
   And::And(Expr* expression)
@@ -118,7 +117,7 @@ namespace libtocc
 
   std::string Or::get_connective_string()
   {
-    return "or";
+    return "||";
   }
 
   Or::Or(Expr* expression)
