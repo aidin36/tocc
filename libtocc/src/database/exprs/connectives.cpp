@@ -52,8 +52,6 @@ namespace libtocc
 
   std::list<CompiledExpr> ConnectiveExpr::compile()
   {
-    // TODO: sort the result list, and keep similar elements together.
-
     std::list<CompiledExpr> result;
 
     // Adding an AND to the begining of the result.
