@@ -26,8 +26,8 @@
 namespace libtocc
 {
   /*
-   * For detail about how the compilation works, take a look at development
-   * documents.
+   * For detail about how the compilation works, take a look at the
+   * `CompilerStateMachine' diagram in the documentation.
    */
 
   /*
@@ -167,7 +167,7 @@ namespace libtocc
 
     if (data.next_expr->get_type() == compiled_expr::CONNECTIVE)
     {
-      return compile_states::GROUP;
+      return compile_states::GROUP_AFTER_GROUP;
     }
     if (data.next_expr->get_type() == compiled_expr::END_CONNECTIVE_GROUP)
     {
