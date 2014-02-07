@@ -39,6 +39,10 @@ namespace libtocc
     this->internal_type = 2;
   }
 
+  FieldExpr::~FieldExpr()
+  {
+  }
+
   expr_type::ExprType FieldExpr::get_type()
   {
     return expr_type::FIELD;
@@ -74,6 +78,21 @@ namespace libtocc
     return compiled_expr::FIELD;
   }
 
+  Tag* Tag::create(const char* tag)
+  {
+    return new Tag(tag);
+  }
+
+  Tag* Tag::create(FunctionExpr expression)
+  {
+    return new Tag(expression);
+  }
+
+  Tag* Tag::create(OperandExpr expression)
+  {
+    return new Tag(expression);
+  }
+
   Tag::Tag(const char* tag)
     : FieldExpr(tag)
   {
@@ -97,6 +116,21 @@ namespace libtocc
   std::string Tag::get_field_name()
   {
     return "$tag";
+  }
+
+  Title* Title::create(const char* tag)
+  {
+    return new Title(tag);
+  }
+
+  Title* Title::create(FunctionExpr expression)
+  {
+    return new Title(expression);
+  }
+
+  Title* Title::create(OperandExpr expression)
+  {
+    return new Title(expression);
   }
 
   Title::Title(const char* tag)

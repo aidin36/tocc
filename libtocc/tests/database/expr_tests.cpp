@@ -35,9 +35,9 @@ bool expr_tests()
 
     std::cout << "Compiling a simple expression..." << std::endl;
 
-    libtocc::And* all_expressions = libtocc::And::create(new libtocc::Tag("book"));
-    all_expressions->add(new libtocc::Tag("2010"));
-    all_expressions->add(new libtocc::Title("Programming"));
+    libtocc::And* all_expressions = libtocc::And::create(libtocc::Tag::create("book"));
+    all_expressions->add(libtocc::Tag::create("2010"));
+    all_expressions->add(libtocc::Title::create("Programming"));
 
     libtocc::Query query_object(all_expressions);
 
@@ -52,11 +52,11 @@ bool expr_tests()
     std::cout << "Compiling a little more complex expression..." << std::endl;
 
     // And(Tag("photo"), And(Or(Tag("b&w"), Tag("abstract")), Or(Tag("hdr"), Tag("landscape"))))
-    libtocc::And* main_and = libtocc::And::create(new libtocc::Tag("photo"));
-    libtocc::Or* first_or = libtocc::Or::create(new libtocc::Tag("b&w"));
-    first_or->add(new libtocc::Tag("abstract"));
-    libtocc::Or* second_or = libtocc::Or::create(new libtocc::Tag("hdr"));
-    second_or->add(new libtocc::Tag("landscape"));
+    libtocc::And* main_and = libtocc::And::create(libtocc::Tag::create("photo"));
+    libtocc::Or* first_or = libtocc::Or::create(libtocc::Tag::create("b&w"));
+    first_or->add(libtocc::Tag::create("abstract"));
+    libtocc::Or* second_or = libtocc::Or::create(libtocc::Tag::create("hdr"));
+    second_or->add(libtocc::Tag::create("landscape"));
     libtocc::And* internal_and = libtocc::And::create(first_or);
     internal_and->add(second_or);
     main_and->add(internal_and);

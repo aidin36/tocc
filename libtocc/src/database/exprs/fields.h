@@ -42,24 +42,6 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     /*
-     * Represents a field that exactly matches the
-     * specified string.
-     */
-    FieldExpr(const char* value);
-
-    /*
-     * Represents a field that matches with the specified
-     * expression.
-     */
-    FieldExpr(FunctionExpr expression);
-
-    /*
-     * Represents a field that matches with the specified
-     * expression.
-     */
-    FieldExpr(OperandExpr expression);
-
-    /*
      * Compiles the expression.
      */
     virtual CompiledExpr compile();
@@ -81,6 +63,26 @@ namespace libtocc
     OperandExpr operand;
 
     /*
+     * Represents a field that exactly matches the
+     * specified string.
+     */
+    FieldExpr(const char* value);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(FunctionExpr expression);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(OperandExpr expression);
+
+    virtual ~FieldExpr();
+
+    /*
      * (Should be override by the subclass.)
      * Returns name of this field that should be appear in the
      * compiled string.
@@ -100,27 +102,72 @@ namespace libtocc
   {
   public:
     /*
-     * Represents a tag that exactly matches the
-     * specified string.
+     * Creates an instance of Tag expression, which matches
+     * exactly with the specified string.
+     *
+     * @param tag: Tag to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
      */
-    Tag(const char* tag);
+    static Tag* create(const char* tag);
 
     /*
-     * Represents a tag that matches with the specified
-     * expression.
+     * Creates an instance of a tag that matches with the
+     * specified expression.
      *
      * Example of usage:
      *   Tag(Regex("..."))
+     *
+     * @param expression: Expression to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Tag* create(FunctionExpr expression);
+
+    /*
+     * Creates an instance of a tag that matches with the
+     * specified expression.
+     *
+     * Example of usage:
+     *   Tag(Regex("..."))
+     *
+     * @param expression: Expression to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Tag* create(OperandExpr expression);
+
+  protected:
+    /*
+     * Represents a Tag that exactly matches the
+     * specified string.
+     */
+    Tag(const char* value);
+
+    /*
+     * Represents a Tag that matches with the specified
+     * expression.
      */
     Tag(FunctionExpr expression);
 
     /*
-     * Represents a tag that matches with the specified
+     * Represents a Tag that matches with the specified
      * expression.
      */
     Tag(OperandExpr expression);
 
-  protected:
     /*
      * Returns name of this field that should be appear in the
      * compiled string.
@@ -140,27 +187,70 @@ namespace libtocc
   {
   public:
     /*
-     * Represents a tag that exactly matches the
+     * Creates an instance of a Title that exactly matches
+     * the specified string.
+     *
+     * @param expression: Expression to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Title* create(const char* tag);
+
+    /*
+     * Creates an instance of a Title that matches with the
+     * specified expression.
+     *
+     * Example of usage:
+     *   Title(Regex("..."))
+     *
+     * @param expression: Expression to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Title* create(FunctionExpr expression);
+
+    /*
+     * Creates an instance of a Title that matches with the
+     * specified expression.
+     *
+     * @param expression: Expression to match.
+     *
+     * @return: A pointer to the newly created expression.
+     *
+     * @note: You cannot free the pointer you received. It
+     *   will be freed as soon as its related Query object
+     *   releases. (see the documentation)
+     */
+    static Title* create(OperandExpr expression);
+
+  protected:
+    /*
+     * Represents a Title that exactly matches the
      * specified string.
      */
     Title(const char* tag);
 
     /*
-     * Represents a tag that matches with the specified
+     * Represents a Title that matches with the specified
      * expression.
-     *
-     * Example of usage:
-     *   Title(Regex("..."))
      */
     Title(FunctionExpr expression);
 
     /*
-     * Represents a tag that matches with the specified
+     * Represents a Title that matches with the specified
      * expression.
      */
     Title(OperandExpr expression);
 
-  protected:
+
     /*
      * Returns name of this field that should be appear in the
      * compiled string.
