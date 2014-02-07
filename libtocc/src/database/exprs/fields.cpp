@@ -25,22 +25,36 @@ namespace libtocc
   {
     this->value = tag;
     this->internal_type = 0;
+    this->operand = NULL;
+    this->function = NULL;
   }
 
-  FieldExpr::FieldExpr(FunctionExpr expression)
+  FieldExpr::FieldExpr(FunctionExpr* expression)
   {
     this->function = expression;
     this->internal_type = 1;
+    this->operand = NULL;
   }
 
-  FieldExpr::FieldExpr(OperandExpr expression)
+  FieldExpr::FieldExpr(OperandExpr* expression)
   {
     this->operand = expression;
     this->internal_type = 2;
+    this->function = NULL;
   }
 
   FieldExpr::~FieldExpr()
   {
+    if (this->internal_type == 1)
+    {
+      delete this->function;
+      this->function = NULL;
+    }
+    else if (this->internal_type == 2)
+    {
+      delete this->operand;
+      this->operand = NULL;
+    }
   }
 
   expr_type::ExprType FieldExpr::get_type()
@@ -58,11 +72,11 @@ namespace libtocc
     else if (this->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-			  this->function.compile(get_field_name()).c_str());
+			  this->function->compile(get_field_name()).c_str());
     }
     else
     {
-      std::string result(get_field_name() + this->operand.compile());
+      std::string result(get_field_name() + this->operand->compile());
       return CompiledExpr(get_compiled_expr_type(),
 			  result.c_str());
     }
@@ -83,12 +97,12 @@ namespace libtocc
     return new Tag(tag);
   }
 
-  Tag* Tag::create(FunctionExpr expression)
+  Tag* Tag::create(FunctionExpr* expression)
   {
     return new Tag(expression);
   }
 
-  Tag* Tag::create(OperandExpr expression)
+  Tag* Tag::create(OperandExpr* expression)
   {
     return new Tag(expression);
   }
@@ -98,12 +112,12 @@ namespace libtocc
   {
   }
 
-  Tag::Tag(FunctionExpr expression)
+  Tag::Tag(FunctionExpr* expression)
     : FieldExpr(expression)
   {
   }
 
-  Tag::Tag(OperandExpr expression)
+  Tag::Tag(OperandExpr* expression)
     : FieldExpr(expression)
   {
   }
@@ -123,12 +137,12 @@ namespace libtocc
     return new Title(tag);
   }
 
-  Title* Title::create(FunctionExpr expression)
+  Title* Title::create(FunctionExpr* expression)
   {
     return new Title(expression);
   }
 
-  Title* Title::create(OperandExpr expression)
+  Title* Title::create(OperandExpr* expression)
   {
     return new Title(expression);
   }
@@ -138,12 +152,12 @@ namespace libtocc
   {
   }
 
-  Title::Title(FunctionExpr expression)
+  Title::Title(FunctionExpr* expression)
     : FieldExpr(expression)
   {
   }
 
-  Title::Title(OperandExpr expression)
+  Title::Title(OperandExpr* expression)
     : FieldExpr(expression)
   {
   }

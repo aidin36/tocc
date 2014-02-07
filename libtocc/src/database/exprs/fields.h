@@ -59,8 +59,8 @@ namespace libtocc
     int internal_type;
 
     std::string value;
-    FunctionExpr function;
-    OperandExpr operand;
+    FunctionExpr* function;
+    OperandExpr* operand;
 
     /*
      * Represents a field that exactly matches the
@@ -72,13 +72,13 @@ namespace libtocc
      * Represents a field that matches with the specified
      * expression.
      */
-    FieldExpr(FunctionExpr expression);
+    FieldExpr(FunctionExpr* expression);
 
     /*
      * Represents a field that matches with the specified
      * expression.
      */
-    FieldExpr(OperandExpr expression);
+    FieldExpr(OperandExpr* expression);
 
     virtual ~FieldExpr();
 
@@ -130,7 +130,7 @@ namespace libtocc
      *   will be freed as soon as its related Query object
      *   releases. (see the documentation)
      */
-    static Tag* create(FunctionExpr expression);
+    static Tag* create(FunctionExpr* expression);
 
     /*
      * Creates an instance of a tag that matches with the
@@ -147,7 +147,7 @@ namespace libtocc
      *   will be freed as soon as its related Query object
      *   releases. (see the documentation)
      */
-    static Tag* create(OperandExpr expression);
+    static Tag* create(OperandExpr* expression);
 
   protected:
     /*
@@ -160,13 +160,13 @@ namespace libtocc
      * Represents a Tag that matches with the specified
      * expression.
      */
-    Tag(FunctionExpr expression);
+    Tag(FunctionExpr* expression);
 
     /*
      * Represents a Tag that matches with the specified
      * expression.
      */
-    Tag(OperandExpr expression);
+    Tag(OperandExpr* expression);
 
     /*
      * Returns name of this field that should be appear in the
@@ -215,7 +215,7 @@ namespace libtocc
      *   will be freed as soon as its related Query object
      *   releases. (see the documentation)
      */
-    static Title* create(FunctionExpr expression);
+    static Title* create(FunctionExpr* expression);
 
     /*
      * Creates an instance of a Title that matches with the
@@ -229,7 +229,7 @@ namespace libtocc
      *   will be freed as soon as its related Query object
      *   releases. (see the documentation)
      */
-    static Title* create(OperandExpr expression);
+    static Title* create(OperandExpr* expression);
 
   protected:
     /*
@@ -242,13 +242,13 @@ namespace libtocc
      * Represents a Title that matches with the specified
      * expression.
      */
-    Title(FunctionExpr expression);
+    Title(FunctionExpr* expression);
 
     /*
      * Represents a Title that matches with the specified
      * expression.
      */
-    Title(OperandExpr expression);
+    Title(OperandExpr* expression);
 
 
     /*
