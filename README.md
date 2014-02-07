@@ -10,15 +10,15 @@ tree of files and directories.
 For more information about why TOCC is created, do you need it, its vision and
 what it can be used for, take a look at its wiki page:
 
-   <https://github.com/aidin36/tocc/wiki>
+   https://github.com/aidin36/tocc/wiki
 
 ##Contact
 Currently, TOCC is maintain by Aidin Gharibnavaz. You can contact him by the
 following e-mail address:
 
-   <tocc (at) aidinhut dot com>
+   tocc (at) aidinhut dot com
 
 You can find the development team by visiting TOCC's Github page:
 
-   <https://github.com/aidin36/>
+   https://github.com/aidin36/
 
