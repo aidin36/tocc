@@ -19,15 +19,16 @@
 #include <iostream>
 
 #include "constants.h"
-#include "common/base_exception.h"
 #include "database/database.h"
 
-bool database_basic_tests()
+bool tag_operation_tests()
 {
   try
   {
-    std::cout << "Creating database." << std::endl;
     libtocc::Database db("/tmp/tocc.test.db");
+
+    std::cout << "Assigning a single tag..." << std::endl;
+    db.assign_tag("0000001", "book");
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;

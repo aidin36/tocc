@@ -20,6 +20,7 @@
 #define LIBTOCC_DATABASE_H_INCLUDED
 
 #include <string>
+#include <list>
 
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others
@@ -29,6 +30,12 @@ struct unqlite;
 namespace libtocc
 {
 
+  /*
+   * NOTE: Each instance of this class holds a handler of the database file
+   * specified in constructor. So, you can't have two instances of this
+   * class with the same database file. (Unqlite locks the database file
+   * and will raise an exception if file opens twice.)
+   */
   class Database
   {
   public:
@@ -38,10 +45,34 @@ namespace libtocc
      */
     Database(std::string database_file);
     
+    ~Database();
+
     /*
      * Adds a file to the database.
      */
     void add_file(std::string file_id);
+
+    /*
+     * Assigns specified tags to each specified file.
+     */
+    void assign_tag(std::list<std::string> file_ids,
+                    std::list<std::string> tags);
+
+    /*
+     * Assigns specified tags to the file.
+     */
+    void assign_tag(std::string file_id,
+                    std::list<std::string> tags);
+
+    /*
+     * Assigns a tag to a file.
+     */
+    void assign_tag(std::string file_id, std::string tag);
+
+    /*
+     * Unassign a tag from a file.
+     */
+    void unassign_tag(std::string file_id, std::string tag);
 
   private:
     /*

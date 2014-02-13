@@ -23,6 +23,7 @@
 #include "file_system/basic_tests.cpp"
 #include "database/basic_tests.cpp"
 #include "database/expr_tests.cpp"
+#include "database/tag_operation_tests.cpp"
 
 int main(int argc, char* argv[])
 {
@@ -31,6 +32,8 @@ int main(int argc, char* argv[])
   database_basic_tests();
 
   expr_tests();
+
+  tag_operation_tests();
 
   return 0;
 }
