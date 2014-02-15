@@ -20,6 +20,7 @@
 
 #include "database/database.h"
 #include "database/scripts.h"
+#include "database/base23.h"
 #include "common/database_exceptions.h"
 
 extern "C"
@@ -230,7 +231,57 @@ namespace libtocc
       if (result != UNQLITE_OK)
       {
         std::ostringstream message_stream;
-        message_stream << "Error reseting setting string to scalar. ";
+        message_stream << "Error setting string to scalar. ";
+        message_stream << " Error No: " << result;
+        message_stream << ", Value: " << *iterator;
+
+        throw DatabaseScriptExecutionError(message_stream.str());
+      }
+
+      // Append scalar to the array.
+      result = unqlite_array_add_elem(array, NULL, scalar);
+      if (result != UNQLITE_OK)
+      {
+        std::ostringstream message_stream;
+        message_stream << "Error appending value to array. ";
+        message_stream << " Error No: " << result;
+        message_stream << ", Value: " << *iterator;
+
+        throw DatabaseScriptExecutionError(message_stream.str());
+      }
+    }
+  }
+
+  /*
+   * Registers an array in the Jx9 script.
+   *
+   * @param vm: pointer to VM to register value in.
+   * @param variable_name: Name of the variable to register.
+   * @param value: Value of the variable.
+   */
+  void register_array(unqlite_vm* vm,
+                      std::string variable_name,
+                      std::vector<unsigned long> value)
+  {
+    // Creating a new array.
+    unqlite_value* array = unqlite_vm_new_array(vm);
+    // Auto release the array.
+    UnqliteValueHolder array_holder(array, vm);
+    // Creating a new scalar.
+    unqlite_value* scalar = unqlite_vm_new_scalar(vm);
+    // Auto release the value.
+    UnqliteValueHolder scalar_holder(scalar, vm);
+
+    int result = 0;
+
+    std::vector<unsigned long>::iterator iterator = value.begin();
+    for (; iterator != value.end(); ++iterator)
+    {
+      result = unqlite_value_int64(scalar, *iterator);
+      if (result != UNQLITE_OK)
+      {
+        std::ostringstream message_stream;
+        message_stream << "Error setting unsigned long to scalar. ";
         message_stream << " Error No: " << result;
         message_stream << ", Value: " << *iterator;
 
@@ -324,8 +375,16 @@ namespace libtocc
     // Compiling the script (Which fills VM)
     compile_jx9(this->db_pointer, ASSIGN_TAGS_SCRIPT, &vm);
 
+    // Converting IDs.
+    std::vector<unsigned long> converted_ids;
+    std::vector<std::string>::iterator iterator = file_ids.begin();
+    for(; iterator != file_ids.end(); ++iterator)
+    {
+      converted_ids.push_back(from_base23(*iterator));
+    }
+
     // Registering variables in VM
-    register_array(vm, "file_ids", file_ids);
+    register_array(vm, "file_ids", converted_ids);
     register_array(vm, "tags_to_assign", tags);
 
     // Executing VM
