@@ -25,6 +25,7 @@
 
 const std::string GREEN = "\033[0;32m";
 const std::string RED = "\033[0;31m";
+const std::string CYAN = "\033[0;36m";
 const std::string DEFAULT = "\033[0m";
 
 #endif /* CONSTANTS_H_INCLUDED */

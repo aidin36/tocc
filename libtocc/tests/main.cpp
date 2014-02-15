@@ -20,6 +20,9 @@
  * Defines main function, which starts all tests.
  */
 
+#include <iostream>
+
+#include "constants.h"
 #include "file_system/basic_tests.cpp"
 #include "database/basic_tests.cpp"
 #include "database/expr_tests.cpp"
@@ -29,16 +32,22 @@
 
 int main(int argc, char* argv[])
 {
+  std::cout << CYAN << "File Manager Basic Tests" << DEFAULT << std::endl;
   file_manager_basic_tests();
 
+  std::cout << CYAN << "Database Basic Tests" << DEFAULT << std::endl;
   database_basic_tests();
 
+  std::cout << CYAN << "Expr Tests" << DEFAULT << std::endl;
   expr_tests();
 
+  std::cout << CYAN << "Tag Operation Tests" << DEFAULT << std::endl;
   tag_operation_tests();
 
+  std::cout << CYAN << "Tags Engine Tests" << DEFAULT << std::endl;
   tags_engine_tests();
 
+  std::cout << CYAN << "Files Engine Tests" << DEFAULT << std::endl;
   files_engine_tests();
 
   return 0;
