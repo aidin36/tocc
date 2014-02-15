@@ -199,7 +199,7 @@ namespace libtocc
    */
   void register_array(unqlite_vm* vm,
                       std::string variable_name,
-                      std::list<std::string> value)
+                      std::vector<std::string> value)
   {
     // Creating a new array.
     unqlite_value* array = unqlite_vm_new_array(vm);
@@ -212,7 +212,7 @@ namespace libtocc
 
     int result = 0;
 
-    std::list<std::string>::iterator iterator = value.begin();
+    std::vector<std::string>::iterator iterator = value.begin();
     for (; iterator != value.end(); ++iterator)
     {
       // re-fill the scalar with new value.
@@ -282,31 +282,40 @@ namespace libtocc
     unqlite_close(this->db_pointer);
   }
 
-  void Database::add_file(std::string file_id)
+  std::string Database::create_file(std::string title,
+                                    std::string traditional_path)
   {
+    return "f00001";
+  }
+
+  std::string Database::create_file(std::vector<std::string> tags,
+                                    std::string title,
+                                    std::string traditional_path)
+  {
+    return "f00002";
   }
 
   void Database::assign_tag(std::string file_id, std::string tag)
   {
-    std::list<std::string> file_ids;
+    std::vector<std::string> file_ids;
     file_ids.push_back(file_id);
-    std::list<std::string> tags;
+    std::vector<std::string> tags;
     tags.push_back(tag);
 
     assign_tag(file_ids, tags);
   }
 
   void Database::assign_tag(std::string file_id,
-                            std::list<std::string> tags)
+                            std::vector<std::string> tags)
   {
-    std::list<std::string> file_ids;
+    std::vector<std::string> file_ids;
     file_ids.push_back(file_id);
 
     assign_tag(file_ids, tags);
   }
 
-  void Database::assign_tag(std::list<std::string> file_ids,
-                            std::list<std::string> tags)
+  void Database::assign_tag(std::vector<std::string> file_ids,
+                            std::vector<std::string> tags)
   {
     unqlite_vm* vm;
     // Auto release the pointer.

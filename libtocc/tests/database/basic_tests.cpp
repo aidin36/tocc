@@ -30,6 +30,10 @@ bool database_basic_tests()
     libtocc::Database db("/tmp/tocc.test.db");
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
+    std::cout << "Creating a file..." << std::endl;
+    db.create_file("0000001", "/old/file/path");
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
     return true;
   }
   catch (libtocc::BaseException &error)

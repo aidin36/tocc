@@ -20,7 +20,7 @@
 #define LIBTOCC_DATABASE_H_INCLUDED
 
 #include <string>
-#include <list>
+#include <vector>
 
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others
@@ -48,21 +48,40 @@ namespace libtocc
     ~Database();
 
     /*
-     * Adds a file to the database.
+     * Creates a new file in database.
+     *
+     * @param title: title of the file.
+     * @param traditional_path: traditional path of the file.
+     *
+     * @return: ID of the newly created file.
      */
-    void add_file(std::string file_id);
+    std::string create_file(std::string title="",
+                            std::string traditional_path="");
+
+    /*
+     * Creates a new file in database.
+     *
+     * @param tags: tags to assign to file.
+     * @param title: title of the file.
+     * @param traditional_path: traditional path of the file.
+     *
+     * @return: ID of the newly created file.
+     */
+    std::string create_file(std::vector<std::string> tags,
+                            std::string title="",
+                            std::string traditional_path="");
 
     /*
      * Assigns specified tags to each specified file.
      */
-    void assign_tag(std::list<std::string> file_ids,
-                    std::list<std::string> tags);
+    void assign_tag(std::vector<std::string> file_ids,
+                    std::vector<std::string> tags);
 
     /*
      * Assigns specified tags to the file.
      */
     void assign_tag(std::string file_id,
-                    std::list<std::string> tags);
+                    std::vector<std::string> tags);
 
     /*
      * Assigns a tag to a file.

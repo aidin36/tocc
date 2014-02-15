@@ -24,6 +24,8 @@
 #include "database/basic_tests.cpp"
 #include "database/expr_tests.cpp"
 #include "database/tag_operation_tests.cpp"
+#include "engine/tags_engine_tests.cpp"
+#include "engine/files_engine_tests.cpp"
 
 int main(int argc, char* argv[])
 {
@@ -34,6 +36,10 @@ int main(int argc, char* argv[])
   expr_tests();
 
   tag_operation_tests();
+
+  tags_engine_tests();
+
+  files_engine_tests();
 
   return 0;
 }
