@@ -135,6 +135,9 @@ namespace libtocc
 
     // Checking if any error occurred inside the script.
     unqlite_value* execution_error = unqlite_vm_extract_variable(vm, "error");
+    // Auto release value.
+    UnqliteValueHolder holder(execution_error, vm);
+
     if (execution_error != NULL)
     {
       // Second variable is a pointer to int, which returns the length of the
@@ -142,6 +145,56 @@ namespace libtocc
       throw DatabaseScriptExecutionError(
           unqlite_value_to_string(execution_error, NULL));
     }
+  }
+
+  /*
+   * Extracts a variable from the specified VM.
+   *
+   * @param vm: pointer to VM.
+   * @param variable_name: Name of the variable to extract.
+   *
+   * @return: Extracted variable. It will return an empty string
+   *   if variable does not exists.
+   */
+  std::string extract_string_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    unqlite_value* value = unqlite_vm_extract_variable(vm,
+                                                       variable_name.c_str());
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
+
+    if (value == NULL)
+    {
+      return "";
+    }
+
+    std::string result(unqlite_value_to_string(value, NULL));
+
+    return result;
+  }
+
+  /*
+   * Extracts a variable from the specified VM.
+   *
+   * @param vm: pointer to VM.
+   * @param variable_name: Name of the variable to extract.
+   *
+   * @return: Extracted variable. It will return zero
+   *   if variable does not exists.
+   */
+  unsigned long extract_long_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    unqlite_value* value = unqlite_vm_extract_variable(vm,
+                                                       variable_name.c_str());
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
+
+    if (value == NULL)
+    {
+      return 0;
+    }
+
+    return unqlite_value_to_int64(value);
   }
 
   /*
@@ -336,14 +389,33 @@ namespace libtocc
   std::string Database::create_file(std::string title,
                                     std::string traditional_path)
   {
-    return "f00001";
+    // Empty tag list.
+    std::vector<std::string> empty_tags;
+    return this->create_file(empty_tags,
+                             title,
+                             traditional_path);
   }
 
   std::string Database::create_file(std::vector<std::string> tags,
                                     std::string title,
                                     std::string traditional_path)
   {
-    return "f00002";
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    VMPointerHolder holder(&vm);
+
+    // Compiling the script (Which fills VM)
+    compile_jx9(this->db_pointer, CREATE_FILE_SCRIPT, &vm);
+
+    register_array(vm, "tags", tags);
+    register_string(vm, "title", title);
+    register_string(vm, "traditional_path", traditional_path);
+
+    execute_vm(vm);
+
+    unsigned long new_file_id = extract_long_from_vm(vm, "result");
+
+    return to_base23(new_file_id);
   }
 
   void Database::assign_tag(std::string file_id, std::string tag)

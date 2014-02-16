@@ -36,12 +36,6 @@ namespace libtocc
     "}";
 
   /*
-   * Defines a function that finds a file by its ID.
-   */
-  const std::string GET_FILE_SCRIPT_FUNCTION = \
-      "";
-
-  /*
    * Appends a tag to the list of tags of a file.
    */
   // TODO: Stop when the record found. (Seems we should use db_fetch)
@@ -73,6 +67,30 @@ namespace libtocc
   //       element from an array. Wait until then, or find a workaround.
   const std::string UNASSIGN_TAGS_SCRIPT =  \
       "";
+
+  const std::string CREATE_FILE_SCRIPT = \
+      // TODO: Find an empty ID instead of max one.
+      "/* First we find the maximum file ID, then adds a file with an ID"\
+      " after that. */ "\
+      "$max_id = 0; "\
+      "$filter_func = function($record) "\
+      "{"\
+      "  uplink $max_id;"\
+      "  if ($record.file_id > $max_id)"\
+      "  {"\
+      "    $max_id = $record.file_id;"\
+      "  }"\
+      "};"\
+      "db_fetch_all('files', $filter_func); "\
+      "$new_file = "\
+      "{"\
+      "  file_id: $max_id + 1,"\
+      "  title: $title,"\
+      "  traditional_path: $traditional_path,"\
+      "  tags: $tags"\
+      "}; "\
+      "db_store('files', $new_file); "\
+      "$result = $max_id;";
 
 }
 

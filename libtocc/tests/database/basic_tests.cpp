@@ -17,6 +17,8 @@
  */
 
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include "constants.h"
 #include "common/base_exception.h"
@@ -31,7 +33,22 @@ bool database_basic_tests()
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     std::cout << "Creating a file..." << std::endl;
-    db.create_file("0000001", "/old/file/path");
+    std::string new_file_id = db.create_file();
+    std::cout << "new file: " << new_file_id << std::endl;
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    std::cout << "Creating another file..." << std::endl;
+    new_file_id = db.create_file("Title of the second file", "/old/path/");
+    std::cout << "new file: " << new_file_id << std::endl;
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    std::cout << "Creating a file with tags..." << std::endl;
+    std::vector<std::string> tags;
+    tags.push_back("photo");
+    tags.push_back("abstract");
+    tags.push_back("b&w");
+    new_file_id = db.create_file(tags, "First Photo");
+    std::cout << "new file: " << new_file_id << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;
