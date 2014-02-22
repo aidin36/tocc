@@ -43,7 +43,7 @@ namespace libtocc
     /*
      * Gets ID of the file.
      */
-    std::string get_id();
+    std::string get_id() const;
 
     /*
      * Sets a list of tags to file.
@@ -59,7 +59,7 @@ namespace libtocc
     /*
      * Gets all the tags of this file.
      */
-    std::vector<std::string> get_tags();
+    std::vector<std::string> get_tags() const;
 
     /*
      * Sets a title for the file.
@@ -69,7 +69,7 @@ namespace libtocc
     /*
      * Gets title of the file.
      */
-    std::string get_title();
+    std::string get_title() const;
 
     /*
      * Sets traditional path for the file.
@@ -79,7 +79,19 @@ namespace libtocc
     /*
      * Gets traditional path of the file.
      */
-    std::string get_traditional_path();
+    std::string get_traditional_path() const;
+
+    /*
+     * Returns a string representation of the file.
+     */
+    std::string to_string() const;
+
+    /*
+     * Overrided operator for std::ostream.
+     * So it can be used like:
+     *   std::cout << file_info;
+     */
+    friend std::ostream& operator<<(std::ostream& stream, const IntFileInfo& file_info);
 
   private:
     std::string id;
