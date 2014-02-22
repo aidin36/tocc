@@ -51,17 +51,12 @@ namespace libtocc
   {
     // TODO: Start a new database transaction and at the end commit it.
 
-    std::string new_file_id = this->database->create_file(tags, title,
-                                                          traditional_path);
+    IntFileInfo new_file = this->database->create_file(tags, title,
+                                                       traditional_path);
 
-    this->file_manager->copy(source_path, new_file_id);
+    this->file_manager->copy(source_path, new_file.get_id());
 
-    IntFileInfo result(new_file_id);
-    result.set_tags(tags);
-    result.set_title(title);
-    result.set_traditional_path(traditional_path);
-
-    return result;
+    return new_file;
   }
 
 }

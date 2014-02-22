@@ -68,8 +68,8 @@ namespace libtocc
   const std::string UNASSIGN_TAGS_SCRIPT =  \
       "";
 
+  // TODO: Find an empty ID instead of max one.
   const std::string CREATE_FILE_SCRIPT = \
-      // TODO: Find an empty ID instead of max one.
       "/* First we find the maximum file ID, then adds a file with an ID"\
       " after that. */ "\
       "$max_id = 0; "\
@@ -80,6 +80,7 @@ namespace libtocc
       "  {"\
       "    $max_id = $record.file_id;"\
       "  }"\
+      "  return false; "\
       "};"\
       "db_fetch_all('files', $filter_func); "\
       "$new_file = "\
@@ -87,11 +88,37 @@ namespace libtocc
       "  file_id: $max_id + 1,"\
       "  title: $title,"\
       "  traditional_path: $traditional_path,"\
-      "  tags: $tags"\
+      "  tags: $tags "\
       "}; "\
-      "db_store('files', $new_file); "\
-      "$result = $max_id;";
+      "$store_result = db_store('files', $new_file); "\
+      "if (!$store_result) "\
+      "{"\
+      "  $error = db_errlog(); "\
+      "} "\
+      "else "\
+      "{"\
+      "  $result = $new_file; "\
+      "}";
 
+  const std::string GET_FILE_SCRIPT = \
+      "/* Manually looping over records, so we can break the loop"\
+      " When the file found. */ "\
+      "$result = NULL; "\
+      "$record = db_fetch('files'); "\
+      "while($record != NULL) "\
+      "{"\
+      "  if ($record.file_id == $file_id)"\
+      "  {"\
+      "    $result = $record;"\
+      "    break;"\
+      "  }"\
+      "  $record = db_fetch('files'); "\
+      "} "\
+      "/* If $result does not set, it means file not found. */ "\
+      "if ($result == NULL) "\
+      "{"\
+      "   $error = 'file '..$file_id..' does not exists.'; "\
+      "}";
 }
 
 #endif /* LIBTOCC_SCRIPTS_H_INCLUDED */

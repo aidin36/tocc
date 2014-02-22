@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include "common/int_file_info.h"
+
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others
 // who include this header.
@@ -53,9 +55,9 @@ namespace libtocc
      * @param title: title of the file.
      * @param traditional_path: traditional path of the file.
      *
-     * @return: ID of the newly created file.
+     * @return: newly created file.
      */
-    std::string create_file(std::string title="",
+    IntFileInfo create_file(std::string title="",
                             std::string traditional_path="");
 
     /*
@@ -65,11 +67,21 @@ namespace libtocc
      * @param title: title of the file.
      * @param traditional_path: traditional path of the file.
      *
-     * @return: ID of the newly created file.
+     * @return: newly created file.
      */
-    std::string create_file(std::vector<std::string> tags,
+    IntFileInfo create_file(std::vector<std::string> tags,
                             std::string title="",
                             std::string traditional_path="");
+
+    /*
+     * Gets a file by its ID.
+     * Raises exception if file not found.
+     *
+     * @param file_id: ID of the file to get.
+     *
+     * @return: Information of the founded file.
+     */
+    IntFileInfo get(std::string file_id);
 
     /*
      * Assigns specified tags to each specified file.

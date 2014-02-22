@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <cstring>
 
 #include "database/database.h"
 #include "database/scripts.h"
@@ -160,13 +161,14 @@ namespace libtocc
   {
     unqlite_value* value = unqlite_vm_extract_variable(vm,
                                                        variable_name.c_str());
-    // Auto release value.
-    UnqliteValueHolder holder(value, vm);
 
     if (value == NULL)
     {
       return "";
     }
+
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
 
     std::string result(unqlite_value_to_string(value, NULL));
 
@@ -186,15 +188,98 @@ namespace libtocc
   {
     unqlite_value* value = unqlite_vm_extract_variable(vm,
                                                        variable_name.c_str());
-    // Auto release value.
-    UnqliteValueHolder holder(value, vm);
 
     if (value == NULL)
     {
       return 0;
     }
 
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
+
     return unqlite_value_to_int64(value);
+  }
+
+  /*
+   * Call back for unqlite_array_walk.
+   *
+   * @param key: key of the array element.
+   * @param value: value of the array element.
+   * @param vector_to_fill: a pointer to a vector of strings.
+   *   Each value will be push to this vector.
+   */
+  int string_array_walk_callback(unqlite_value* key, unqlite_value* value,
+                                 void* vector_to_fill)
+  {
+    std::string string_value(unqlite_value_to_string(value, NULL));
+    ((std::vector<std::string>*)vector_to_fill)->push_back(string_value);
+
+    return UNQLITE_OK;
+  }
+
+  /*
+   * Extracts a file object from the VM.
+   * It raises exception if specified variable name does not exists
+   * in the VM.
+   *
+   * @param vm: VM to extract variable from.
+   * @param variable_name: name of the variable to extract.
+   *
+   * @return: Instance of IntFileInfo.
+   */
+  IntFileInfo extract_file_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    // Extracting variable from VM.
+    unqlite_value* file_object =
+        unqlite_vm_extract_variable(vm, variable_name.c_str());
+
+    if (file_object == NULL)
+    {
+      std::stringstream message_stream;
+      message_stream << "Error when extracting file object from VM: ";
+      message_stream << "Variable \"" << variable_name << "\" does not exists.";
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(file_object, vm);
+
+    // Extracting keys from object.
+    unqlite_value* value_pointer;
+
+    value_pointer = unqlite_array_fetch(file_object, "file_id", -1);
+    if (value_pointer == NULL)
+    {
+      throw DatabaseScriptExecutionError("I found a file object that does not have a 'file_id'! Probably corrupted data.");
+    }
+
+    unsigned long file_id = unqlite_value_to_int64(value_pointer);
+    IntFileInfo result(to_base23(file_id));
+
+    value_pointer = unqlite_array_fetch(file_object, "title", -1);
+    if (value_pointer != NULL)
+    {
+      result.set_title(unqlite_value_to_string(value_pointer, NULL));
+    }
+
+    value_pointer = unqlite_array_fetch(file_object, "traditional_path", -1);
+    if (value_pointer != NULL)
+    {
+      result.set_traditional_path(unqlite_value_to_string(value_pointer, NULL));
+    }
+
+    value_pointer = unqlite_array_fetch(file_object, "tags", -1);
+    if (value_pointer != NULL)
+    {
+      // Walking over this array and creating a vector of tags.
+      std::vector<std::string> tags_vector;
+      unqlite_array_walk(value_pointer,
+                         string_array_walk_callback,
+                         &tags_vector);
+      result.set_tags(tags_vector);
+    }
+
+    return result;
   }
 
   /*
@@ -204,12 +289,18 @@ namespace libtocc
    * @param variable_name: Name of the variable to register.
    * @param value: Value of the variable.
    */
-  void register_string(unqlite_vm* vm,
-                       std::string variable_name,
-                       std::string value)
+  void register_variable_in_vm(unqlite_vm* vm,
+                               std::string variable_name,
+                               std::string value)
   {
     // Creating a new scalar.
     unqlite_value* scalar = unqlite_vm_new_scalar(vm);
+
+    if (scalar == NULL)
+    {
+      throw DatabaseScriptExecutionError("Error creating a Scalar for VM");
+    }
+
     // Auto release the value.
     UnqliteValueHolder holder(scalar, vm);
 
@@ -226,10 +317,77 @@ namespace libtocc
       throw DatabaseScriptExecutionError(message_stream.str());
     }
 
+    // FIXME: Memory leak here.
+    // Seems that unqlite_vm_config doesn't copy the variable name. So,
+    // If we pass c_str or we free `vname', it breaks.
+    char* vname = new char[variable_name.length() + 1];
+    std::strcpy(vname, variable_name.c_str());
+
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               variable_name.c_str(),
+                               //variable_name.c_str(),
+                               vname,
+                               scalar);
+
+    if (result != UNQLITE_OK)
+    {
+      std::ostringstream message_stream;
+      message_stream << "Error while registering a variable in script.";
+      message_stream << "Error No: " << result;
+      message_stream << " Variable Name: " << variable_name;
+      message_stream << " Variable Value: " << value;
+
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+  }
+
+  /*
+   * Registers an unsigned long in the Jx9 script.
+   *
+   * @param vm: pointer to VM to register value in.
+   * @param variable_name: Name of the variable to register.
+   * @param value: Value of the variable.
+   */
+  void register_variable_in_vm(unqlite_vm* vm,
+                               std::string variable_name,
+                               unsigned long value)
+  {
+    // Creating a new scalar.
+    unqlite_value* scalar = unqlite_vm_new_scalar(vm);
+
+    if (scalar == NULL)
+    {
+      throw DatabaseScriptExecutionError("Error creating a Scalar for VM");
+    }
+
+    // Auto release the value.
+    UnqliteValueHolder holder(scalar, vm);
+
+    // Fill the scalar.
+    int result = unqlite_value_int64(scalar, value);
+
+    if (result != UNQLITE_OK)
+    {
+      std::ostringstream message_stream;
+      message_stream << "Error filling a Scalar with unsigned long value. ";
+      message_stream << " Error No: " << result;
+      message_stream << " Value: " << value;
+
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+
+    // FIXME: Memory leak here.
+    // Seems that unqlite_vm_config doesn't copy the variable name. So,
+    // If we pass c_str or we free `vname', it breaks.
+    char* vname = new char[variable_name.length() + 1];
+    std::strcpy(vname, variable_name.c_str());
+
+    // Registering the variable.
+    result = unqlite_vm_config(vm,
+                               UNQLITE_VM_CONFIG_CREATE_VAR,
+                               //variable_name.c_str(),
+                               vname,
                                scalar);
 
     if (result != UNQLITE_OK)
@@ -251,16 +409,23 @@ namespace libtocc
    * @param variable_name: Name of the variable to register.
    * @param value: Value of the variable.
    */
-  void register_array(unqlite_vm* vm,
-                      std::string variable_name,
-                      std::vector<std::string> value)
+  void register_variable_in_vm(unqlite_vm* vm,
+                               std::string variable_name,
+                               std::vector<std::string> value)
   {
     // Creating a new array.
     unqlite_value* array = unqlite_vm_new_array(vm);
     // Auto release the array.
     UnqliteValueHolder array_holder(array, vm);
+
     // Creating a new scalar.
     unqlite_value* scalar = unqlite_vm_new_scalar(vm);
+
+    if (scalar == NULL)
+    {
+      throw DatabaseScriptExecutionError("Error creating a Scalar for VM");
+    }
+
     // Auto release the value.
     UnqliteValueHolder scalar_holder(scalar, vm);
 
@@ -302,6 +467,31 @@ namespace libtocc
 
         throw DatabaseScriptExecutionError(message_stream.str());
       }
+
+      // FIXME: Memory leak here.
+      // Seems that unqlite_vm_config doesn't copy the variable name. So,
+      // If we pass c_str or we free `vname', it breaks.
+      char* vname = new char[variable_name.length() + 1];
+      std::strcpy(vname, variable_name.c_str());
+
+      // Registering the variable.
+      result = unqlite_vm_config(vm,
+                                 UNQLITE_VM_CONFIG_CREATE_VAR,
+                                 //variable_name.c_str(),
+                                 vname,
+                                 array);
+
+      if (result != UNQLITE_OK)
+      {
+        std::ostringstream message_stream;
+        message_stream << "Error while registering an array in script.";
+        message_stream << "Error No: " << result;
+        message_stream << " Variable Name: " << variable_name;
+        message_stream << " Variable Value: " << array;
+
+        throw DatabaseScriptExecutionError(message_stream.str());
+      }
+
     }
   }
 
@@ -312,16 +502,23 @@ namespace libtocc
    * @param variable_name: Name of the variable to register.
    * @param value: Value of the variable.
    */
-  void register_array(unqlite_vm* vm,
-                      std::string variable_name,
-                      std::vector<unsigned long> value)
+  void register_variable_in_vm(unqlite_vm* vm,
+                               std::string variable_name,
+                               std::vector<unsigned long> value)
   {
     // Creating a new array.
     unqlite_value* array = unqlite_vm_new_array(vm);
     // Auto release the array.
     UnqliteValueHolder array_holder(array, vm);
+
     // Creating a new scalar.
     unqlite_value* scalar = unqlite_vm_new_scalar(vm);
+
+    if (scalar == NULL)
+    {
+      throw DatabaseScriptExecutionError("Error creating a Scalar for VM");
+    }
+
     // Auto release the value.
     UnqliteValueHolder scalar_holder(scalar, vm);
 
@@ -353,6 +550,30 @@ namespace libtocc
         throw DatabaseScriptExecutionError(message_stream.str());
       }
     }
+
+    // FIXME: Memory leak here.
+    // Seems that unqlite_vm_config doesn't copy the variable name. So,
+    // If we pass c_str or we free `vname', it breaks.
+    char* vname = new char[variable_name.length() + 1];
+    std::strcpy(vname, variable_name.c_str());
+
+    // Registering the variable.
+    result = unqlite_vm_config(vm,
+                               UNQLITE_VM_CONFIG_CREATE_VAR,
+                               //variable_name.c_str(),
+                               vname,
+                               array);
+
+    if (result != UNQLITE_OK)
+    {
+      std::ostringstream message_stream;
+      message_stream << "Error while registering an array in script.";
+      message_stream << "Error No: " << result;
+      message_stream << " Variable Name: " << variable_name;
+      message_stream << " Variable Value: " << array;
+
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
   }
 
   Database::Database(std::string database_file)
@@ -364,7 +585,7 @@ namespace libtocc
 
     if (result != UNQLITE_OK)
     {
-      std::string message = "Error openning database file: [";
+      std::string message = "Error opening database file: [";
       message += database_file;
       message += "]";
       throw DatabaseInitializationError(message);
@@ -386,7 +607,7 @@ namespace libtocc
     unqlite_close(this->db_pointer);
   }
 
-  std::string Database::create_file(std::string title,
+  IntFileInfo Database::create_file(std::string title,
                                     std::string traditional_path)
   {
     // Empty tag list.
@@ -396,26 +617,40 @@ namespace libtocc
                              traditional_path);
   }
 
-  std::string Database::create_file(std::vector<std::string> tags,
+  IntFileInfo Database::create_file(std::vector<std::string> tags,
                                     std::string title,
                                     std::string traditional_path)
   {
     unqlite_vm* vm;
     // Auto release the pointer.
-    VMPointerHolder holder(&vm);
+    //VMPointerHolder holder(&vm);
 
     // Compiling the script (Which fills VM)
     compile_jx9(this->db_pointer, CREATE_FILE_SCRIPT, &vm);
 
-    register_array(vm, "tags", tags);
-    register_string(vm, "title", title);
-    register_string(vm, "traditional_path", traditional_path);
+    register_variable_in_vm(vm, "tags", tags);
+    register_variable_in_vm(vm, "title", title);
+    register_variable_in_vm(vm, "traditional_path", traditional_path);
 
     execute_vm(vm);
 
-    unsigned long new_file_id = extract_long_from_vm(vm, "result");
+    return extract_file_from_vm(vm, "result");
+  }
 
-    return to_base23(new_file_id);
+  IntFileInfo Database::get(std::string file_id)
+  {
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    VMPointerHolder holder(&vm);
+
+    // Executing script.
+    compile_jx9(this->db_pointer, GET_FILE_SCRIPT, &vm);
+
+    register_variable_in_vm(vm, "file_id", from_base23(file_id));
+
+    execute_vm(vm);
+
+    return extract_file_from_vm(vm, "result");
   }
 
   void Database::assign_tag(std::string file_id, std::string tag)
@@ -456,8 +691,8 @@ namespace libtocc
     }
 
     // Registering variables in VM
-    register_array(vm, "file_ids", converted_ids);
-    register_array(vm, "tags_to_assign", tags);
+    register_variable_in_vm(vm, "file_ids", converted_ids);
+    register_variable_in_vm(vm, "tags_to_assign", tags);
 
     // Executing VM
     execute_vm(vm);
@@ -473,8 +708,8 @@ namespace libtocc
     compile_jx9(this->db_pointer, UNASSIGN_TAGS_SCRIPT, &vm);
 
     // Registering variables in VM
-    register_string(vm, "file_id", file_id);
-    register_string(vm, "tag_to_unassign", tag);
+    register_variable_in_vm(vm, "file_id", file_id);
+    register_variable_in_vm(vm, "tag_to_unassign", tag);
 
     // Executing VM
     execute_vm(vm);

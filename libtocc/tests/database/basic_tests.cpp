@@ -22,24 +22,29 @@
 
 #include "constants.h"
 #include "common/base_exception.h"
+#include "common/int_file_info.h"
 #include "database/database.h"
 
 bool database_basic_tests()
 {
   try
   {
+    // TODO: After fetching each created file, check if all its properties
+    // (title, tags, etc) is correct.
+
     std::cout << "Creating database." << std::endl;
     libtocc::Database db("/tmp/tocc.test.db");
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     std::cout << "Creating a file..." << std::endl;
-    std::string new_file_id = db.create_file();
-    std::cout << "new file: " << new_file_id << std::endl;
+    libtocc::IntFileInfo new_file_1 = db.create_file();
+    std::cout << "new file: " << new_file_1 << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     std::cout << "Creating another file..." << std::endl;
-    new_file_id = db.create_file("Title of the second file", "/old/path/");
-    std::cout << "new file: " << new_file_id << std::endl;
+    libtocc::IntFileInfo new_file_2 =
+        db.create_file("Title of the second file", "/old/path/");
+    std::cout << "new file: " << new_file_2 << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     std::cout << "Creating a file with tags..." << std::endl;
@@ -47,9 +52,21 @@ bool database_basic_tests()
     tags.push_back("photo");
     tags.push_back("abstract");
     tags.push_back("b&w");
-    new_file_id = db.create_file(tags, "First Photo");
-    std::cout << "new file: " << new_file_id << std::endl;
+    libtocc::IntFileInfo new_file_3 = db.create_file(tags, "First Photo");
+    std::cout << "new file: " << new_file_3 << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    std::cout << "Fetching first file..." << std::endl;
+    libtocc::IntFileInfo file_info = db.get(new_file_1.get_id());
+    std::cout << file_info << std::endl;
+
+    std::cout << "Fetching second file..." << std::endl;
+    file_info = db.get(new_file_2.get_id());
+    std::cout << file_info << std::endl;
+
+    std::cout << "Fetching third file..." << std::endl;
+    file_info = db.get(new_file_3.get_id());
+    std::cout << file_info << std::endl;
 
     return true;
   }
