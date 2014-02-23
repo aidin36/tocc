@@ -32,6 +32,11 @@ namespace libtocc
     this->tags_engine = tags_engine;
   }
 
+  IntFileInfo FilesEngine::get(std::string file_id)
+  {
+    return this->database->get(file_id);
+  }
+
   IntFileInfo FilesEngine::copy_file(std::string source_path,
                                      std::string title,
                                      std::string traditional_path)

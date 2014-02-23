@@ -42,6 +42,16 @@ namespace libtocc
                 TagsEngine* tags_engine);
 
     /*
+     * Gets information of a file.
+     * It raises exception if file does not exists.
+     *
+     * @param file_id: ID of the file to get its information.
+     *
+     * @return: Information of the file.
+     */
+    IntFileInfo get(std::string file_id);
+
+    /*
      * Copies a file from the path to the file system.
      *
      * @param source_path: Path to the source file.

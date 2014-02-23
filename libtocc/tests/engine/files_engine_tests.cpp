@@ -28,12 +28,16 @@ bool files_engine_tests()
 {
   try
   {
+    //TODO: When copying/getting file, check if its data is correct.
+
     libtocc::Database db("/tmp/tocc.test.db");
     libtocc::FileManager file_manager("/tmp/");
     libtocc::TagsEngine tags_engine(&db);
     libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
 
-    // Testing file copy.
+    /*
+     * Testing file copy.
+     */
     std::cout << "Creating a test file to copy..." << std::endl;
     std::ofstream file_stream;
     file_stream.open("/tmp/tocc_a_file_to_copy");
@@ -44,6 +48,14 @@ bool files_engine_tests()
     std::cout << "Copying the file..." << std::endl;
     libtocc::IntFileInfo result = files_engine.copy_file("/tmp/tocc_a_file_to_copy");
     std::cout << "file id is: " << result.get_id() << std::endl;
+    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+
+    /*
+     * Testing `get'.
+     */
+    std::cout << "Getting newly copied file..." << std::endl;
+    libtocc::IntFileInfo copied_file = files_engine.get(result.get_id());
+    std::cout << copied_file << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;
