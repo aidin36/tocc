@@ -68,16 +68,17 @@ namespace libtocc
      * Copies a file from the path to the file system.
      *
      * @param source_path: Path to the source file.
+     * @param title: title of the file.
+     * @param traditional_path: traditional path of the file.
+     *   (Can be empty string.)
      * @param tags: Tags to assign to the file.
-     * @param title: (optional) title of the file.
-     * @param traditional_path: (optional) traditional path of the file.
      *
      * @return: Information of the newly created file.
      */
     IntFileInfo copy_file(std::string source_path,
-                          std::vector<std::string> tags,
-                          std::string title="",
-                          std::string traditional_path="");
+                          std::string title,
+                          std::string traditional_path,
+                          std::vector<std::string> tags);
 
   private:
     Database* database;

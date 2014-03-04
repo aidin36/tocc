@@ -44,15 +44,15 @@ namespace libtocc
     std::vector<std::string> empty_tags_list;
 
     return this->copy_file(source_path,
-                           empty_tags_list,
                            title,
-                           traditional_path);
+                           traditional_path,
+                           empty_tags_list);
   }
 
   IntFileInfo FilesEngine::copy_file(std::string source_path,
-                                     std::vector<std::string> tags,
                                      std::string title,
-                                     std::string traditional_path)
+                                     std::string traditional_path,
+                                     std::vector<std::string> tags)
   {
     // TODO: Start a new database transaction and at the end commit it.
 

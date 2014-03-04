@@ -269,7 +269,11 @@ namespace libtocc
     }
 
     value_pointer = unqlite_array_fetch(file_object, "tags", -1);
-    if (value_pointer != NULL)
+    // Note: If we trying to loop over an empty array, strange things may
+    // happen. That's why all these checking exists.
+    if (value_pointer != NULL &&
+        unqlite_value_is_json_array(value_pointer) &&
+        unqlite_array_count(value_pointer) > 0)
     {
       // Walking over this array and creating a vector of tags.
       std::vector<std::string> tags_vector;
@@ -467,31 +471,30 @@ namespace libtocc
 
         throw DatabaseScriptExecutionError(message_stream.str());
       }
+    }
 
-      // FIXME: Memory leak here.
-      // Seems that unqlite_vm_config doesn't copy the variable name. So,
-      // If we pass c_str or we free `vname', it breaks.
-      char* vname = new char[variable_name.length() + 1];
-      std::strcpy(vname, variable_name.c_str());
+    // FIXME: Memory leak here.
+    // Seems that unqlite_vm_config doesn't copy the variable name. So,
+    // If we pass c_str or we free `vname', it breaks.
+    char* vname = new char[variable_name.length() + 1];
+    std::strcpy(vname, variable_name.c_str());
 
-      // Registering the variable.
-      result = unqlite_vm_config(vm,
-                                 UNQLITE_VM_CONFIG_CREATE_VAR,
-                                 //variable_name.c_str(),
-                                 vname,
-                                 array);
+    // Registering the variable.
+    result = unqlite_vm_config(vm,
+                               UNQLITE_VM_CONFIG_CREATE_VAR,
+                               //variable_name.c_str(),
+                               vname,
+                               array);
 
-      if (result != UNQLITE_OK)
-      {
-        std::ostringstream message_stream;
-        message_stream << "Error while registering an array in script.";
-        message_stream << "Error No: " << result;
-        message_stream << " Variable Name: " << variable_name;
-        message_stream << " Variable Value: " << array;
+    if (result != UNQLITE_OK)
+    {
+      std::ostringstream message_stream;
+      message_stream << "Error while registering an array in script.";
+      message_stream << "Error No: " << result;
+      message_stream << " Variable Name: " << variable_name;
+      message_stream << " Variable Value: " << array;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
-      }
-
+      throw DatabaseScriptExecutionError(message_stream.str());
     }
   }
 

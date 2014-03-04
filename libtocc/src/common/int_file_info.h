@@ -40,6 +40,11 @@ namespace libtocc
   public:
     IntFileInfo(std::string file_id);
 
+    IntFileInfo(std::string file_id,
+                std::string title,
+                std::string traditional_path,
+                std::vector<std::string> tags);
+
     /*
      * Gets ID of the file.
      */

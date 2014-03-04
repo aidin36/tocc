@@ -28,6 +28,18 @@ namespace libtocc
     this->id = file_id;
   }
 
+  IntFileInfo::IntFileInfo(std::string file_id,
+                           std::string title,
+                           std::string traditional_path,
+                           std::vector<std::string> tags)
+  {
+    this->id = file_id;
+    this->title = title;
+    this->traditional_path = traditional_path;
+    this->tags = tags;
+  }
+
+
   std::string IntFileInfo::get_id() const
   {
     return this->id;

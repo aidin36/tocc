@@ -17,45 +17,38 @@
  */
 
 #include <iostream>
+#include "constants.h"
+#include "libtocc.h"
 
-#include "common/int_file_info.h"
-#include "database/database.h"
-#include "engine/tags_engine.h"
-#include "engine/files_engine.h"
-#include "engine/files_engine.h"
-
-bool files_engine_tests()
+bool front_end_basic_tests()
 {
   try
   {
-    //TODO: When copying/getting file, check if its data is correct.
+    libtocc::Manager manager("/tmp/");
 
-    libtocc::Database db("/tmp/tocc.test.db");
-    libtocc::FileManager file_manager("/tmp/");
-    libtocc::TagsEngine tags_engine(&db);
-    libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
-
-    /*
-     * Testing file copy.
-     */
+    // Testing file copy.
     std::cout << "Creating a test file to copy..." << std::endl;
     std::ofstream file_stream;
-    file_stream.open("/tmp/tocc_a_file_to_copy");
+    file_stream.open("/tmp/tocc_test_file_to_copy_2");
     file_stream << "some data...";
     file_stream.close();
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
-    std::cout << "Copying the file..." << std::endl;
-    libtocc::IntFileInfo result = files_engine.copy_file("/tmp/tocc_a_file_to_copy");
-    std::cout << "Copied file: " << result << std::endl;
+    std::cout << "Coping the file..." << std::endl;
+    libtocc::FileInfo new_file = manager.copy_file("/tmp/tocc_test_file_to_copy_2");
+    std::cout << new_file << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
-    /*
-     * Testing `get'.
-     */
-    std::cout << "Getting newly copied file..." << std::endl;
-    libtocc::IntFileInfo copied_file = files_engine.get(result.get_id());
-    std::cout << copied_file << std::endl;
+    std::cout << "Coping the file with info..." << std::endl;
+    libtocc::TagsCollection tags;
+    tags.add_tag("test");
+    tags.add_tag("temporary");
+    libtocc::FileInfo new_file_2 =
+        manager.copy_file("/tmp/tocc_test_file_to_copy_2",
+                          "Test File 2",
+                          "/home/tocc/test_2",
+                          &tags);
+    std::cout << new_file_2 << std::endl;
     std::cout << GREEN << "    done." << DEFAULT << std::endl;
 
     return true;
