@@ -292,6 +292,8 @@ namespace libtocc
 
     stream << "]" << std::endl;
 
+    stream << "}";
+
     return stream;
   }
 
