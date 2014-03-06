@@ -38,7 +38,6 @@ namespace libtocc
   /*
    * Appends a tag to the list of tags of a file.
    */
-  // TODO: Stop when the record found. (Seems we should use db_fetch)
   const std::string ASSIGN_TAGS_SCRIPT =  \
       "$filter_func = function($record) "\
       "{"\
@@ -46,19 +45,28 @@ namespace libtocc
       "  {"\
       "    if ($record.file_id == $file_id)"\
       "    {"\
-      "      foreach ($tags_to_assign as $tag_to_assign)"
-      "      {"\
-      "        /* Checking if the tag already exists. */"\
-      "        if (!in_array($tag_to_assign, $record.$tags))"\
-      "        {"\
-      "          /* Adding tag to array. */"
-      "          array_push($record.$tags, $tag_to_assign);"
-      "        }"\
-      "      }"\
+      "      return TRUE;"\
       "    }"\
       "  }"\
+      "  return FALSE;"\
       "};"\
-      "$updated_records = db_fetch_all('files', $filter_func);";
+      "/* Finding records that should  be updated */"\
+      "$records_to_update = db_fetch_all('files', $filter_func); "\
+      "foreach ($records_to_update as $record) "\
+      "{"\
+      "  foreach ($tags_to_assign as $tag_to_assign)"\
+      "  {"\
+      "    /* Checking if the tag already exists. */"\
+      "    if (!in_array($tag_to_assign, $record.tags))"\
+      "    {"\
+      "      /* Adding tag to array. */"\
+      "      array_push($record.tags, $tag_to_assign);"\
+      "      /* Updating the record (removing and adding it again). */"\
+      "      db_drop_record('files', $record.__id);"\
+      "      db_store('files', $record);"\
+      "    }"\
+      "  }"\
+      "}";
 
   /*
    * Removes a tag from the list of tags of a file.

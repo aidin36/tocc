@@ -20,7 +20,7 @@
 #include "constants.h"
 #include "libtocc.h"
 
-bool front_end_basic_tests()
+bool front_end_copy_file_tests()
 {
   try
   {

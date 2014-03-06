@@ -118,4 +118,53 @@ namespace libtocc
 
     return to_external_file_info(&new_file_info);
   }
+
+  void Manager::assign_tags(const char* file_ids[],
+                            int file_ids_size,
+                            const TagsCollection* tags)
+  {
+    if (file_ids_size <= 0)
+    {
+      file_ids_size = sizeof(file_ids) / sizeof(file_ids[0]);
+    }
+
+    // Converting file_ids to vector.
+    std::vector<std::string> file_ids_vector;
+    for (int i = 0; i < file_ids_size; ++i)
+    {
+      file_ids_vector.push_back(file_ids[i]);
+    }
+
+    // Converting tags to vector.
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+
+    // Calling the engine to do the job.
+    this->private_data->tags_engine->assign_tags(file_ids_vector, tags_vector);
+  }
+
+  /*
+   * Assigns tags to a file.
+   *
+   * @param file_id: File to assign tags to.
+   * @param tags: Tags to assign to file.
+   */
+  void Manager::assign_tags(const char* file_id, const TagsCollection* tags)
+  {
+    // Converting tags to vector.
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+
+    this->private_data->tags_engine->assign_tags(file_id, tags_vector);
+  }
+
+  /*
+   * Assigns a tag to a file.
+   *
+   * @param file_id: File to assign tags to.
+   * @param tag: Tag to assign to file.
+   */
+  void Manager::assign_tags(const char* file_id, const char* tag)
+  {
+    this->private_data->tags_engine->assign_tags(file_id, tag);
+  }
+
 }

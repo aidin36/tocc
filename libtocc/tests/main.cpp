@@ -29,8 +29,8 @@
 #include "database/tag_operation_tests.cpp"
 #include "engine/tags_engine_tests.cpp"
 #include "engine/files_engine_tests.cpp"
-#include "front_end/front_end_basic_tests.cpp"
-
+#include "front_end/front_end_copy_file_tests.cpp"
+#include "front_end/front_end_assign_tag_tests.cpp"
 
 int main(int argc, char* argv[])
 {
@@ -52,8 +52,11 @@ int main(int argc, char* argv[])
   std::cout << CYAN << "Files Engine Tests" << DEFAULT << std::endl;
   files_engine_tests();
 
-  std::cout << CYAN << "Front End Tests" << DEFAULT << std::endl;
-  front_end_basic_tests();
+  std::cout << CYAN << "Front End copy_file Tests" << DEFAULT << std::endl;
+  front_end_copy_file_tests();
+
+  std::cout << CYAN << "Front End assign_tag Tests" << DEFAULT << std::endl;
+  front_end_assign_tag_tests();
 
   return 0;
 }

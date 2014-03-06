@@ -264,6 +264,35 @@ namespace libtocc
                        const char* traditional_path,
                        const TagsCollection* tags);
 
+    /*
+     * Assigns specified tags to all files in the specified list of files.
+     *
+     * @param file_ids: Files to assign tags to.
+     * @param file_ids_size: size of the `file_ids' array. If set to
+     *   zero or less, it will calculated automatically.
+     * @param tags: Tags to assign to file.
+     */
+    void assign_tags(const char* file_ids[],
+                     int file_ids_size,
+                     const TagsCollection* tags);
+
+    /*
+     * Assigns tags to a file.
+     *
+     * @param file_id: File to assign tags to.
+     * @param tags: Tags to assign to file.
+     */
+    void assign_tags(const char* file_id, const TagsCollection* tags);
+
+    /*
+     * Assigns a tag to a file.
+     *
+     * @param file_id: File to assign tags to.
+     * @param tag: Tag to assign to file.
+     */
+    void assign_tags(const char* file_id, const char* tag);
+
+
   private:
     /*
      * Keeps the private data, and hides it from the client.
