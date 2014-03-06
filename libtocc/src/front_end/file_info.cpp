@@ -287,7 +287,7 @@ namespace libtocc
 
     for (; iterator != file_info.private_data->tags.end(); ++iterator)
     {
-      stream << *iterator << " ,";
+      stream << *iterator << ", ";
     }
 
     stream << "]" << std::endl;
