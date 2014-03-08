@@ -16,22 +16,15 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#include <catch.hpp>
 
-// The following define causes the Catch to generate a main fucntion here.
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "database/database.h"
 
-/*
- * Including Test Cases.
- */
-#include "file_system/basic_tests.cpp"
-#include "database/basic_tests.cpp"
-#include "database/expr_tests.cpp"
-#include "database/get_file_tests.cpp"
-#include "database/tag_operation_tests.cpp"
-#include "engine/files_engine_tests.cpp"
-#include "engine/tags_engine_tests.cpp"
-#include "front_end/front_end_copy_file_tests.cpp"
+TEST_CASE("database: get file tests")
+{
+  // Creating the database.
+  libtocc::Database db("/tmp/tocc.test.db");
+
+  // Getting a not-existed file.
+  REQUIRE_THROWS(db.get("ffr98a0"));
+}

@@ -16,7 +16,7 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include <catch.hpp>
 
 #include "common/int_file_info.h"
 #include "database/database.h"
@@ -24,46 +24,40 @@
 #include "engine/files_engine.h"
 #include "engine/files_engine.h"
 
-bool files_engine_tests()
+
+TEST_CASE("engine: files engine tests")
 {
-  try
-  {
-    //TODO: When copying/getting file, check if its data is correct.
+  /*
+   * Creating instance of files engine.
+   */
+  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::FileManager file_manager("/tmp/");
+  libtocc::TagsEngine tags_engine(&db);
+  libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
 
-    libtocc::Database db("/tmp/tocc.test.db");
-    libtocc::FileManager file_manager("/tmp/");
-    libtocc::TagsEngine tags_engine(&db);
-    libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
+  /*
+   * Testing file copy.
+   */
+  // Creating a test file to copy.
+  std::ofstream file_stream;
+  file_stream.open("/tmp/tocc_a_file_to_copy");
+  file_stream << "some data...";
+  file_stream.close();
 
-    /*
-     * Testing file copy.
-     */
-    std::cout << "Creating a test file to copy..." << std::endl;
-    std::ofstream file_stream;
-    file_stream.open("/tmp/tocc_a_file_to_copy");
-    file_stream << "some data...";
-    file_stream.close();
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Copying the file.
+  libtocc::IntFileInfo first_file = files_engine.copy_file("/tmp/tocc_a_file_to_copy");
+  // Checking if it's OK.
+  REQUIRE(first_file.get_title() == "");
+  REQUIRE(first_file.get_traditional_path() == "");
+  REQUIRE(first_file.get_tags().size() == 0);
 
-    std::cout << "Copying the file..." << std::endl;
-    libtocc::IntFileInfo result = files_engine.copy_file("/tmp/tocc_a_file_to_copy");
-    std::cout << "Copied file: " << result << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  /*
+   * Getting the same file.
+   */
+  libtocc::IntFileInfo fetched_first_file = files_engine.get(first_file.get_id());
+  // Checking if it's OK.
+  REQUIRE(fetched_first_file.get_title() == "");
+  REQUIRE(fetched_first_file.get_traditional_path() == "");
+  REQUIRE(fetched_first_file.get_tags().size() == 0);
 
-    /*
-     * Testing `get'.
-     */
-    std::cout << "Getting newly copied file..." << std::endl;
-    libtocc::IntFileInfo copied_file = files_engine.get(result.get_id());
-    std::cout << copied_file << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
-
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
 }

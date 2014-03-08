@@ -16,64 +16,80 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include "catch.hpp"
 #include <string>
 #include <vector>
 
-#include "constants.h"
-#include "common/base_exception.h"
 #include "common/int_file_info.h"
 #include "database/database.h"
 
-bool database_basic_tests()
+
+TEST_CASE("database: basic tests")
 {
-  try
-  {
-    // TODO: After fetching each created file, check if all its properties
-    // (title, tags, etc) is correct.
+  // Creating the database.
+  libtocc::Database db("/tmp/tocc.test.db");
 
-    std::cout << "Creating database." << std::endl;
-    libtocc::Database db("/tmp/tocc.test.db");
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Creating a file with no property.
+  libtocc::IntFileInfo new_file_1 = db.create_file();
+  // Checking if it's OK.
+  REQUIRE(new_file_1.get_title() == "");
+  REQUIRE(new_file_1.get_traditional_path() == "");
+  REQUIRE(new_file_1.get_tags().size() == 0);
 
-    std::cout << "Creating a file..." << std::endl;
-    libtocc::IntFileInfo new_file_1 = db.create_file();
-    std::cout << "new file: " << new_file_1 << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Creating a file with title and traditional path.
+  libtocc::IntFileInfo new_file_2 =
+      db.create_file("Title of the second file", "/old/path/");
+  // Checking if it's OK.
+  REQUIRE(new_file_2.get_title() == "Title of the second file");
+  REQUIRE(new_file_2.get_traditional_path() == "/old/path/");
+  REQUIRE(new_file_2.get_tags().size() == 0);
 
-    std::cout << "Creating another file..." << std::endl;
-    libtocc::IntFileInfo new_file_2 =
-        db.create_file("Title of the second file", "/old/path/");
-    std::cout << "new file: " << new_file_2 << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Creating a file with tags.
+  std::vector<std::string> tags;
+  tags.push_back("photo");
+  tags.push_back("abstract");
+  tags.push_back("b&w");
+  libtocc::IntFileInfo new_file_3 = db.create_file(tags, "First Photo");
+  // Checking if it's OK.
+  REQUIRE(new_file_3.get_title() == "First Photo");
+  REQUIRE(new_file_3.get_traditional_path() == "");
 
-    std::cout << "Creating a file with tags..." << std::endl;
-    std::vector<std::string> tags;
-    tags.push_back("photo");
-    tags.push_back("abstract");
-    tags.push_back("b&w");
-    libtocc::IntFileInfo new_file_3 = db.create_file(tags, "First Photo");
-    std::cout << "new file: " << new_file_3 << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  std::vector<std::string> file_3_tags = new_file_3.get_tags();
+  REQUIRE(file_3_tags.size() == 3);
+  std::vector<std::string>::iterator file_3_tags_iterator = file_3_tags.begin();
+  REQUIRE((*file_3_tags_iterator) == "photo");
+  ++file_3_tags_iterator;
+  REQUIRE((*file_3_tags_iterator) == "abstract");
+  ++file_3_tags_iterator;
+  REQUIRE((*file_3_tags_iterator) == "b&w");
 
-    std::cout << "Fetching first file..." << std::endl;
-    libtocc::IntFileInfo file_info = db.get(new_file_1.get_id());
-    std::cout << file_info << std::endl;
+  // Fetching first file.
+  libtocc::IntFileInfo fetched_file_1 = db.get(new_file_1.get_id());
+  // Checking if it's OK.
+  REQUIRE(fetched_file_1.get_title() == "");
+  REQUIRE(fetched_file_1.get_traditional_path() == "");
+  REQUIRE(fetched_file_1.get_tags().size() == 0);
 
-    std::cout << "Fetching second file..." << std::endl;
-    file_info = db.get(new_file_2.get_id());
-    std::cout << file_info << std::endl;
+  // Fetching second file.
+  libtocc::IntFileInfo fetched_file_2 = db.get(new_file_2.get_id());
+  // Checking if it's OK.
+  REQUIRE(fetched_file_2.get_title() == "Title of the second file");
+  REQUIRE(fetched_file_2.get_traditional_path() == "/old/path/");
+  REQUIRE(fetched_file_2.get_tags().size() == 0);
 
-    std::cout << "Fetching third file..." << std::endl;
-    file_info = db.get(new_file_3.get_id());
-    std::cout << file_info << std::endl;
+  // Fetching third file.
+  libtocc::IntFileInfo fetched_file_3 = db.get(new_file_3.get_id());
+  // Checking if it's OK.
+  REQUIRE(fetched_file_3.get_title() == "First Photo");
+  REQUIRE(fetched_file_3.get_traditional_path() == "");
 
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
+  std::vector<std::string> fetched_tags = fetched_file_3.get_tags();
+  REQUIRE(fetched_tags.size() == 3);
+  std::vector<std::string>::iterator fetched_tags_iterator = fetched_tags.begin();
+  REQUIRE((*fetched_tags_iterator) == "photo");
+  ++fetched_tags_iterator;
+  REQUIRE((*fetched_tags_iterator) == "abstract");
+  ++fetched_tags_iterator;
+  REQUIRE((*fetched_tags_iterator) == "b&w");
+
 }

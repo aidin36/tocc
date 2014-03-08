@@ -20,83 +20,63 @@
  * Defines functions for testing FileManager class.
  */
 
+#include <catch.hpp>
 #include <string>
-#include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include <string.h> // For strerror function.
 
 #include "constants.h"
 #include "common/base_exception.h"
 #include "file_system/file_manager.h"
 
-
-bool file_manager_basic_tests()
+TEST_CASE("file_system: basic tests")
 {
   std::string base_path = "/tmp/";
   std::string file_id = "t00f4ia";
   std::string equivalent_path = "/tmp/t/00/fa/ia";
   libtocc::FileManager file_manager(base_path);
 
-  try
-  {
-    // Testing file creation.
-    std::cout << "creating first file..." << std::endl;
+  /*
+   * Testing file creation.
+   */
+  // Creating first file.
+  int file_descriptor = file_manager.create(file_id);
+  REQUIRE(file_descriptor > 0);
 
-    int file_descriptor = file_manager.create(file_id);
+  // Creating second file.
+  int file_descriptor_2 = file_manager.create("t00f501");
+  REQUIRE(file_descriptor_2 > 0);
 
-    std::cout << GREEN << "    created. FD: " << file_descriptor << DEFAULT << std::endl;
+  close(file_descriptor);
+  close(file_descriptor_2);
 
-    std::cout << "creating second file..." << std::endl;
+  /*
+   * Testing file open.
+   */
+  // Openning file.
+  file_descriptor = file_manager.open_file(file_id, 'a');
+  REQUIRE(file_descriptor > 0);
 
-    int file_descriptor_2 = file_manager.create("t00f501");
+  // Writing to openned file.
+  int write_result = write(file_descriptor, "Hi there!", 9);
+  REQUIRE(write_result >= 0);
+  close(file_descriptor);
 
-    std::cout << GREEN << "    created. FD: " << file_descriptor_2 << DEFAULT << std::endl;
+  /*
+   * Tesing file remove.
+   */
+  // Removing a file.
+  file_manager.remove(file_id);
 
-    close(file_descriptor);
-    close(file_descriptor_2);
+  /*
+   * Testing file copy.
+   */
+  // Creating a test file to copy.
+  std::ofstream file_stream;
+  file_stream.open("/tmp/tocc_test_file_to_copy");
+  file_stream << "some data...";
+  file_stream.close();
 
-    // Testing file open.
-    std::cout << "Openning file..." << std::endl;
-    file_descriptor = file_manager.open_file(file_id, 'a');
-    std::cout << GREEN << "    done. FD: " << file_descriptor << DEFAULT << std::endl;
-
-    std::cout << "Writing to openned file..." << std::endl;
-    int write_result = write(file_descriptor, "Hi there!", 9);
-    if (write_result < 0)
-    {
-      std::cout << RED << "    Failed." << DEFAULT << std::endl;
-      std::cout << "error number was: " << write_result << std::endl;
-      return false;
-    }
-    close(file_descriptor);
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
-
-    // Tesing file remove.
-    std::cout << "Removing a file..." << std::endl;
-    file_manager.remove(file_id);
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
-
-    // Testing file copy.
-    std::cout << "Creating a test file to copy..." << std::endl;
-    std::ofstream file_stream;
-    file_stream.open("/tmp/tocc_test_file_to_copy");
-    file_stream << "some data...";
-    file_stream.close();
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
-
-    std::cout << "Coping a file..." << std::endl;
-    file_manager.copy("/tmp/tocc_test_file_to_copy", "ta59800");
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
-
-    return true;
-  }
-  catch (libtocc::BaseException& error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    //std::cout << "errno: " << error.errno << std::endl;
-
-    return false;
-  }
+  // Coping the file.
+  file_manager.copy("/tmp/tocc_test_file_to_copy", "ta59800");
 }

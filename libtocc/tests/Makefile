@@ -3,7 +3,7 @@ BIN_OUTPUT = ../../bin/
 CC = g++
 COMPILE_FLAGS = -Wall -fPIC -I../src/ -I. -L$(BIN_OUTPUT) -ltocc -lunqlite $(CFLAGS)
 
-$(BIN_OUTPUT)/tests: file_system/basic_tests.cpp main.cpp
+$(BIN_OUTPUT)/tests: main.cpp
 	mkdir -p $(BIN_OUTPUT)
 	$(CC) main.cpp $(COMPILE_FLAGS) -o $@
 

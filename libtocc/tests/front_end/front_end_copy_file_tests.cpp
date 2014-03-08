@@ -16,47 +16,91 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "constants.h"
+#include <catch.hpp>
+#include <fstream>
+#include <cstring>
+
 #include "libtocc.h"
 
-bool front_end_copy_file_tests()
+TEST_CASE("front_end: file copy")
 {
-  try
-  {
-    libtocc::Manager manager("/tmp/");
+  // Creating a file to copy.
+  std::ofstream file_stream;
+  file_stream.open("/tmp/tocc_test_file_to_copy_2");
+  file_stream << "some data...";
+  file_stream.close();
 
-    // Testing file copy.
-    std::cout << "Creating a test file to copy..." << std::endl;
-    std::ofstream file_stream;
-    file_stream.open("/tmp/tocc_test_file_to_copy_2");
-    file_stream << "some data...";
-    file_stream.close();
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Creating an instance of the manager.
+  libtocc::Manager manager("/tmp/");
 
-    std::cout << "Coping the file..." << std::endl;
-    libtocc::FileInfo new_file = manager.copy_file("/tmp/tocc_test_file_to_copy_2");
-    std::cout << new_file << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Copying the file with no property.
+  libtocc::FileInfo test_file =
+      manager.copy_file("/tmp/tocc_test_file_to_copy_2");
+  // Checking if it's OK.
+  REQUIRE(strcmp(test_file.get_title(), "") == 0);
+  REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
+  REQUIRE(test_file.get_tags().size() == 0);
 
-    std::cout << "Coping the file with info..." << std::endl;
-    libtocc::TagsCollection tags;
-    tags.add_tag("test");
-    tags.add_tag("temporary");
-    libtocc::FileInfo new_file_2 =
-        manager.copy_file("/tmp/tocc_test_file_to_copy_2",
-                          "Test File 2",
-                          "/home/tocc/test_2",
-                          &tags);
-    std::cout << new_file_2 << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Copying the file with Title and Traditional Path.
+  libtocc::FileInfo test_file_2 =
+      manager.copy_file("/tmp/tocc_test_file_to_copy_2",
+                        "Title of the test file",
+                        "/home/not_well_organized/test");
+  // Checking if it's OK.
+  REQUIRE(strcmp(test_file_2.get_title(), "Title of the test file") == 0);
+  REQUIRE(strcmp(test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
+  REQUIRE(test_file_2.get_tags().size() == 0);
 
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
+  // Copying the file with some tags.
+  libtocc::TagsCollection tags;
+  tags.add_tag("test");
+  tags.add_tag("safe-to-remove");
+  libtocc::FileInfo test_file_3 =
+      manager.copy_file("/tmp/tocc_test_file_to_copy_2",
+                        "Third copy",
+                        "/home/not_well_organized/test3",
+                        &tags);
+
+  // Checking if it's OK.
+  REQUIRE(strcmp(test_file_3.get_title(), "Third copy") == 0);
+  REQUIRE(strcmp(test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
+
+  libtocc::TagsCollection file_tags = test_file_3.get_tags();
+
+  REQUIRE(file_tags.size() == 2);
+
+  libtocc::TagsCollection::Iterator iterator(&file_tags);
+  REQUIRE(strcmp(iterator.get(), "test") == 0);
+  iterator.next();
+  REQUIRE(strcmp(iterator.get(), "safe-to-remove") == 0);
+
+  // Getting first file.
+  libtocc::FileInfo fetched_test_file = manager.get_file_info(test_file.get_id());
+  // Checking if it's OK.
+  REQUIRE(strcmp(fetched_test_file.get_title(), "") == 0);
+  REQUIRE(strcmp(fetched_test_file.get_traditional_path(), "") == 0);
+  REQUIRE(fetched_test_file.get_tags().size() == 0);
+
+  // Getting second file.
+  libtocc::FileInfo fetched_test_file_2 = manager.get_file_info(test_file_2.get_id());
+  // Checking if it's OK.
+  REQUIRE(strcmp(fetched_test_file_2.get_title(), "Title of the test file") == 0);
+  REQUIRE(strcmp(fetched_test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
+  REQUIRE(fetched_test_file_2.get_tags().size() == 0);
+
+  // Getting third file.
+  libtocc::FileInfo fetched_test_file_3 = manager.get_file_info(test_file_3.get_id());
+  // Checking if it's OK.
+  REQUIRE(strcmp(fetched_test_file_3.get_title(), "Third copy") == 0);
+  REQUIRE(strcmp(fetched_test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
+
+  libtocc::TagsCollection fetched_file_tags = fetched_test_file_3.get_tags();
+
+  REQUIRE(fetched_file_tags.size() == 2);
+
+  libtocc::TagsCollection::Iterator tags_iterator(&fetched_file_tags);
+  REQUIRE(strcmp(tags_iterator.get(), "test") == 0);
+  tags_iterator.next();
+  REQUIRE(strcmp(tags_iterator.get(), "safe-to-remove") == 0);
+
 }

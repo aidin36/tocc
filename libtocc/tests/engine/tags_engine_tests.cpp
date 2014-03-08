@@ -16,34 +16,23 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include <catch.hpp>
 #include <vector>
 #include <string>
 
 #include "database/database.h"
 #include "engine/tags_engine.h"
 
-bool tags_engine_tests()
+TEST_CASE("engine: tags engine tests")
 {
-  try
-  {
-    libtocc::Database db("/tmp/tocc.test.db");
-    libtocc::TagsEngine tags_engine(&db);
+  // Creating instance of engine.
+  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::TagsEngine tags_engine(&db);
 
-    std::cout << "Assigning some tags..." << std::endl;
-    std::vector<std::string> new_tags;
-    new_tags.push_back("author: Mr.Pen");
-    new_tags.push_back("type: PDF");
-    tags_engine.assign_tags("0000001", new_tags);
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Assigning some tags.
+  std::vector<std::string> new_tags;
+  new_tags.push_back("author: Mr.Pen");
+  new_tags.push_back("type: pdf");
+  tags_engine.assign_tags("0000001", new_tags);
 
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
 }
-

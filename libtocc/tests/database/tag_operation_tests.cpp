@@ -16,27 +16,20 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include <catch.hpp>
 
-#include "constants.h"
+#include "common/int_file_info.h"
 #include "database/database.h"
 
-bool tag_operation_tests()
+TEST_CASE("database: tag operation tests")
 {
-  try
-  {
-    libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::Database db("/tmp/tocc.test.db");
 
-    std::cout << "Assigning a single tag..." << std::endl;
-    db.assign_tag("0000001", "book");
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  // Assigning a single tag.
+  db.assign_tag("0000001", "unique_book");
 
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
+  // Checking if it's OK.
+  libtocc::IntFileInfo file_info = db.get("0000001");
+  REQUIRE(file_info.get_tags().size() >= 1);
+  REQUIRE(file_info.get_tags().back() == "unique_book");
 }
