@@ -187,8 +187,6 @@ namespace libtocc
 
     /*
      * Gets all the tags of this file.
-     *
-     * @note: It may return NULL if there's no tags.
      */
     TagsCollection get_tags() const;
 
