@@ -25,7 +25,6 @@
 #include <fstream>
 #include <unistd.h>
 
-#include "constants.h"
 #include "common/base_exception.h"
 #include "file_system/file_manager.h"
 

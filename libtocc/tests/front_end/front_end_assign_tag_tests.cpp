@@ -18,26 +18,15 @@
 
 
 #include <iostream>
-#include "constants.h"
+
+#include <catch.hpp>
+
 #include "libtocc.h"
 
-bool front_end_assign_tag_tests()
+TEST_CASE("fron end: assign tag")
 {
-  try
-  {
-    libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/");
 
-    std::cout << "Assigning a tag to a file..." << std::endl;
-    manager.assign_tags("0000001", "type:pdf");
-    std::cout << manager.get_file_info("0000001") << std::endl;
-    std::cout << GREEN << "    done." << DEFAULT << std::endl;
+  manager.assign_tags("0000001", "author:Unknown");
 
-    return true;
-  }
-  catch (libtocc::BaseException &error)
-  {
-    std::cout << RED << "    Failed." << DEFAULT << std::endl;
-    std::cout << "error was: " << error.what() << std::endl;
-    return false;
-  }
 }

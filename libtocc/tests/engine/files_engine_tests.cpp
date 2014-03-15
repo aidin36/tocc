@@ -16,6 +16,7 @@
  *  along with TOCC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fstream>
 #include <catch.hpp>
 
 #include "common/int_file_info.h"
