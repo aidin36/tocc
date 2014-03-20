@@ -17,8 +17,6 @@ AM_INIT_AUTOMAKE([foreign])
 AC_PROG_CXX
 #AC_PROG_CC
 
-# Checks for libraries.
-
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h string.h unistd.h])
 
@@ -32,8 +30,8 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_CHECK_FUNCS([mkdir pow strerror])
 
 # Checking for UnQlite
-AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refere to INSTALL file fore more info.])])
-AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. refer to INSTALL file for more info.])])
+AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to INSTALL file for more info.])])
+AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to INSTALL file for more info.])])
 
 # Output files.
 AC_CONFIG_FILES([Makefile])
