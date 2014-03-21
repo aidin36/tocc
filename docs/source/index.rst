@@ -72,6 +72,7 @@ You can also get the latest under-develop source from Github::
 Documentation
 =============
 
+ * :doc:`manual/index`
  * `libtocc (API) <libtocc/index.html>`_
 
 Contribution

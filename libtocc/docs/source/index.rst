@@ -115,8 +115,8 @@ its title is "A Beautiful Portrate".
 Where to go from here
 =====================
 
+* :doc:`overview`
 * :doc:`api_reference`
-
 
 Indices and tables
 ==================
