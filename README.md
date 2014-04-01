@@ -33,6 +33,18 @@ Now run ``configure`` script, then ``make`` and ``make install``.
 
 Now, do these steps on ``cli`` and ``toccfs`` directories.
 
+Building Documents
+------------------
+If you get the source code from Github repository, only the source of the
+documents is available. To build them, you need *Sphinx*. You can either
+install it from your distro's packages, or get it from its website:
+
+   http://sphinx-doc.org/
+
+Then, go to `docs` directory, in the root and inside each directory of the
+repository, and run `make html`. Then, you can find the documentation as HTML
+files, in the `build\html` directory inside the `docs`.
+
 Contact
 -------
 Currently, Tocc is maintain by Aidin Gharibnavaz. You can contact him by the
