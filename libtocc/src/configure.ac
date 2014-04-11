@@ -30,9 +30,9 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_CHECK_FUNCS([mkdir pow strerror])
 
 # Checking for UnQlite
-AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to INSTALL file for more info.])])
-AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to INSTALL file for more info.])])
+AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to documentation for more info.])])
+AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to documentation for more info.])])
 
 # Output files.
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile libtocc.pc])
 AC_OUTPUT

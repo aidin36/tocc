@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libtocc
+Description: Library of Tocc project.
+URL: http://www.tocc-project.com
+Version: @VERSION@
+Requires: libunqlite.so
+Libs: -L${libdir} -ltocc
+Cflags: -I${includedir}
