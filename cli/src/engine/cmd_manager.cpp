@@ -57,7 +57,8 @@ namespace tocccli
     this->libtocc_manager = NULL;
   }
 
-  void CmdManager::execute(int argc, char* argv[])
+  void CmdManager::execute(std::vector<std::vector<std::string> > cmd_parameters)
   {
+
   }
 }

@@ -30,14 +30,28 @@
 namespace tocccli
 {
 
+  /*
+   * Manages command line.
+   */
   class CmdManager
   {
   public:
+    /*
+     * @param base_path: Absolute path to where Tocc files are stored.
+     */
     CmdManager(std::string base_path);
 
     ~CmdManager();
 
-    void execute(int argc, char* argv[]);
+    /*
+     * Parses command line arguments and executes the required actions.
+     *
+     * @param cmd_parameters: A vector of parameters passed to command line.
+     *   The first element of the internal vector is an option, and the
+     *   second one is the value of that option, which is empty string
+     *   if no value is passed.
+     */
+    void execute(std::vector<std::vector<std::string> > cmd_parameters);
 
   private:
     libtocc::Manager* libtocc_manager;

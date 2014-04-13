@@ -18,13 +18,54 @@
 
 #include <string>
 #include <vector>
+#include <unistd.h> // getcwd
+#include <cstdio> // FILENAME_MAX
+#include <iostream>
+#include <errno.h>
 
 #include "utilities/cmd_parser.h"
+#include "utilities/errno_translator.h"
+#include "engine/cmd_manager.h"
+
 
 using namespace tocccli;
 
 int main(int argc, char* argv[])
 {
 
+  // Parsing passed parameters.
   std::vector<std::vector<std::string> > cmd_parameters = parse_cmd(argc, argv);
+
+  // Finding the current directory (default of Base Path).
+  char path_buffer[FILENAME_MAX];
+  if (!getcwd(path_buffer, FILENAME_MAX))
+  {
+    std::cout << translate_errno(errno) << std::endl;
+    return 201;
+  }
+  std::string base_path(path_buffer);
+
+  // Checking if user specified base path option.
+  std::vector<std::vector<std::string> >::iterator iterator =
+      cmd_parameters.begin();
+  for (; iterator != cmd_parameters.end(); ++iterator)
+  {
+    if ((*iterator).front() == "-p" ||
+        (*iterator).front() == "--base-path")
+    {
+      base_path = (*iterator).back();
+      if (base_path == "")
+      {
+        std::cout << "-p or --base-path must have a value." << std::endl;
+        return -101;
+      }
+      break;
+    }
+  }
+
+  std::cout << "Base Path: " << base_path << std::endl;
+
+  // Executing.
+  CmdManager cmd_manager(base_path);
+  cmd_manager.execute(cmd_parameters);
 }

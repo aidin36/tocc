@@ -16,10 +16,10 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 
 #include "utilities/cmd_parser.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
+
 
 namespace tocccli
 {
