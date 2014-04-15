@@ -136,11 +136,12 @@ namespace libtocc
 
     // Checking if any error occurred inside the script.
     unqlite_value* execution_error = unqlite_vm_extract_variable(vm, "error");
-    // Auto release value.
-    UnqliteValueHolder holder(execution_error, vm);
 
     if (execution_error != NULL)
     {
+      // Auto release value.
+      UnqliteValueHolder holder(execution_error, vm);
+
       // Second variable is a pointer to int, which returns the length of the
       // string. Since we don't need it, we passed null.
       throw DatabaseScriptExecutionError(
