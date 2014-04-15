@@ -16,7 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
+
+#include <libtocc.h>
+
 #include "engine/cmd_manager.h"
+#include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
 #include "actions/print_action.h"
 
@@ -41,13 +46,13 @@ namespace tocccli
 
   CmdManager::~CmdManager()
   {
-    std::list<Selector*>::iterator selector_iterator = this->selectors.begin();
+    std::vector<Selector*>::iterator selector_iterator = this->selectors.begin();
     for (; selector_iterator != this->selectors.end(); ++selector_iterator)
     {
       delete *selector_iterator;
     }
 
-    std::list<Action*>::iterator action_iterator = this->actions.begin();
+    std::vector<Action*>::iterator action_iterator = this->actions.begin();
     for (; action_iterator != this->actions.end(); ++action_iterator)
     {
       delete *action_iterator;
@@ -57,7 +62,111 @@ namespace tocccli
     this->libtocc_manager = NULL;
   }
 
-  void CmdManager::execute(std::vector<std::vector<std::string> > cmd_parameters)
+  void CmdManager::execute(std::vector<std::pair<std::string, std::string> > cmd_parameters)
+  {
+    // Keeps files that are selected by Selectors.
+    std::vector<libtocc::FileInfo> selected_files;
+
+    // Keeps actions that should be executed later.
+    // First element of pair is the action, and second one is the argument
+    // passed in the command line.
+    std::vector<std::pair<Action*, std::string> > actions_to_execute;
+
+    std::vector<std::pair<std::string, std::string> >::iterator params_iterator =
+        cmd_parameters.begin();
+    for (; params_iterator < cmd_parameters.end(); ++params_iterator)
+    {
+      if ((*params_iterator).first == "-h" ||
+          (*params_iterator).first == "--help")
+      {
+        if ((*params_iterator).second == "")
+        {
+          throw InvalidParametersError("-h or --help don't accept an argument.");
+        }
+
+        // Print usage and end.
+        print_usage();
+        return;
+      }
+      if ((*params_iterator).first == "-v" ||
+          (*params_iterator).first == "--version")
+      {
+        if ((*params_iterator).second == "")
+        {
+          throw InvalidParametersError("-v or --version don't accept an argument.");
+        }
+
+        // Print version and end.
+        print_version();
+        return;
+      }
+
+      // Will set to true if any Selector or Action found for this option.
+      bool option_handler_found = false;
+
+      // Looking for Selectors and Actions among parameters.
+      std::vector<Selector*>::iterator selectors_iterator =
+          this->selectors.begin();
+      for (; selectors_iterator < this->selectors.end(); ++selectors_iterator)
+      {
+        if ((*params_iterator).first == (*selectors_iterator)->get_short_form() ||
+            (*params_iterator).first == (*selectors_iterator)->get_long_form())
+        {
+          // Executing the selector.
+          std::vector<libtocc::FileInfo> files =
+              (*selectors_iterator)->execute((*params_iterator).second);
+          // Appending elements of `files' to `selected_files'.
+          selected_files.insert(selected_files.end(), files.begin(), files.end());
+
+          option_handler_found = true;
+          break;
+        }
+      }
+
+      if (option_handler_found)
+      {
+        // No need to check actions.
+        continue;
+      }
+
+      std::vector<Action*>::iterator actions_iterator =
+          this->actions.begin();
+      for (; actions_iterator < this->actions.end(); ++actions_iterator)
+      {
+        if ((*params_iterator).first == (*actions_iterator)->get_short_form() ||
+            (*params_iterator).first == (*actions_iterator)->get_long_form())
+        {
+          actions_to_execute.push_back(
+              std::make_pair(*actions_iterator, (*params_iterator).second));
+
+          option_handler_found = true;
+          break;
+        }
+      }
+
+      if (!option_handler_found)
+      {
+        // It means that this parameter didn't match any of the known ones.
+        throw InvalidParametersError("Unknown option: " + (*params_iterator).first);
+      }
+    }
+
+    // Now that all selectors executed and we have all the selected files,
+    // we're going to run actions on them.
+    std::vector<std::pair<Action*, std::string> >::iterator actions_iterator =
+        actions_to_execute.begin();
+    for (; actions_iterator < actions_to_execute.end(); ++actions_iterator)
+    {
+      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second);
+    }
+  }
+
+  void CmdManager::print_usage()
+  {
+
+  }
+
+  void CmdManager::print_version()
   {
 
   }

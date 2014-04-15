@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include <unistd.h> // getcwd
 #include <cstdio> // FILENAME_MAX
 #include <iostream>
@@ -34,7 +35,7 @@ int main(int argc, char* argv[])
 {
 
   // Parsing passed parameters.
-  std::vector<std::vector<std::string> > cmd_parameters = parse_cmd(argc, argv);
+  std::vector<std::pair<std::string, std::string> > cmd_parameters = parse_cmd(argc, argv);
 
   // Finding the current directory (default of Base Path).
   char path_buffer[FILENAME_MAX];
@@ -46,24 +47,22 @@ int main(int argc, char* argv[])
   std::string base_path(path_buffer);
 
   // Checking if user specified base path option.
-  std::vector<std::vector<std::string> >::iterator iterator =
+  std::vector<std::pair<std::string, std::string> >::iterator iterator =
       cmd_parameters.begin();
   for (; iterator != cmd_parameters.end(); ++iterator)
   {
-    if ((*iterator).front() == "-p" ||
-        (*iterator).front() == "--base-path")
+    if ((*iterator).first == "-p" ||
+        (*iterator).first == "--base-path")
     {
-      base_path = (*iterator).back();
+      base_path = (*iterator).second;
       if (base_path == "")
       {
-        std::cout << "-p or --base-path must have a value." << std::endl;
+        std::cout << "-p or --base-path must have an argument." << std::endl;
         return -101;
       }
       break;
     }
   }
-
-  std::cout << "Base Path: " << base_path << std::endl;
 
   // Executing.
   CmdManager cmd_manager(base_path);

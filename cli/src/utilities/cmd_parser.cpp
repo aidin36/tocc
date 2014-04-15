@@ -24,18 +24,9 @@
 namespace tocccli
 {
 
-  /*
-   * Parses command line parameters.
-   *
-   * @param argc: Count of parameters.
-   * @param argv: Array of parameters.
-   *
-   * @return: A vector of options and their values. First element of the
-   *   the internal vector is the option, and second element is its value.
-   */
-  std::vector<std::vector<std::string> > parse_cmd(int argc, char* argv[])
+  std::vector<std::pair<std::string, std::string> > parse_cmd(int argc, char* argv[])
   {
-    std::vector<std::vector<std::string> > result;
+    std::vector<std::pair<std::string, std::string> > result;
 
     // We started the loop from one, because zero is the name of the binary.
     for (int i = 1; i < argc; ++i)
@@ -43,12 +34,7 @@ namespace tocccli
       if (argv[i][0] == '-')
       {
         // A new option.
-        std::vector<std::string> single_option;
-
-        single_option.push_back(argv[i]);
-        single_option.push_back("");
-
-        result.push_back(single_option);
+        result.push_back(std::make_pair(argv[i], ""));
       }
       else
       {
@@ -58,11 +44,11 @@ namespace tocccli
               "First parameter have to be an option (e.g. starts with a dash)");
         }
 
-        if (result.back().back() != "")
+        if (result.back().second != "")
         {
-          result.back().back() += " ";
+          result.back().second += " ";
         }
-        result.back().back() += argv[i];
+        result.back().second += argv[i];
       }
     }
 

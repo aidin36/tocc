@@ -21,12 +21,22 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 
 namespace tocccli
 {
 
-  std::vector<std::vector<std::string> > parse_cmd(int argc, char* argv[]);
+  /*
+   * Parses command line parameters.
+   *
+   * @param argc: Count of parameters.
+   * @param argv: Array of parameters.
+   *
+   * @return: A vector of options and their values. First element of the
+   *   the internal pair is the option, and second element is its value.
+   */
+  std::vector<std::pair<std::string, std::string> > parse_cmd(int argc, char* argv[]);
 
 }
 
