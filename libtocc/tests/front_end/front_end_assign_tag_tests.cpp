@@ -17,13 +17,11 @@
  */
 
 
-#include <iostream>
-
 #include <catch.hpp>
 
 #include "libtocc.h"
 
-TEST_CASE("fron end: assign tag")
+TEST_CASE("front_end: assign tag")
 {
   libtocc::Manager manager("/tmp/");
 

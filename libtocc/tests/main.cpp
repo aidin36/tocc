@@ -24,14 +24,3 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-/*
- * Including Test Cases.
- */
-//#include "file_system/basic_tests.cpp"
-#//include "database/basic_tests.cpp"
-//#include "database/expr_tests.cpp"
-//#include "database/get_file_tests.cpp"
-//#include "database/tag_operation_tests.cpp"
-//#include "engine/files_engine_tests.cpp"
-//#include "engine/tags_engine_tests.cpp"
-//#include "front_end/front_end_copy_file_tests.cpp"
