@@ -12,9 +12,28 @@
 *.la
 *.a
 
-# build directories
+# Build directories
 build/
 bin/
 
-# backup files
+# Backup files
 *~
+
+# Auto tools generated files.
+libtocc/src/.deps/
+libtocc/src/.libs/
+libtocc/src/Makefile
+libtocc/src/Makefile.in
+libtocc/src/aclocal.m4
+libtocc/src/autom4te.cache/
+libtocc/src/config.guess
+libtocc/src/config.log
+libtocc/src/config.status
+libtocc/src/config.sub
+libtocc/src/configure
+libtocc/src/depcomp
+libtocc/src/install-sh
+libtocc/src/libtocc.pc
+libtocc/src/libtool
+libtocc/src/ltmain.sh
+libtocc/src/missing
