@@ -16,52 +16,34 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
-#define TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
+#ifndef TOCCCLI_CMD_PARAM_H_INCLUDED
+#define TOCCCLI_CMD_PARAM_H_INCLUDED
 
 #include <string>
 #include <vector>
-
-#include <libtocc.h>
 
 namespace tocccli
 {
 
   /*
-   * Base class for handlers of action parameters.
+   * Represents a command line parameter.
    */
-  class Selector
+  class CmdParam
   {
   public:
 
-    virtual ~Selector();
+    /*
+     * Command line option.
+     */
+    std::string option;
 
     /*
-     * Returns short form of the parameter.
+     * List of arguments of the option.
+     * It will be an empty vector if no argument pass
+     * for this option.
      */
-    virtual std::string get_short_form() = 0;
-
-    /*
-     * Returns long form of the parameter.
-     */
-    virtual std::string get_long_form() = 0;
-
-    /*
-     * Returns the help text of the parameter.
-     * (Full help text, include parameter itself.)
-     */
-    virtual std::string get_help_text() = 0;
-
-    /*
-     * Executes the selector.
-     *
-     * @param cmd_arguments: Arguments of this option that is passed to
-     *   command line.
-     *
-     * @return: List of founded files.
-     */
-    virtual std::vector<libtocc::FileInfo> execute(std::vector<std::string> cmd_arguments) = 0;
+    std::vector<std::string> arguments;
   };
 }
 
-#endif /* TOCCCLI_SELECTOR_HANDLER_H_INCLUDED */
+#endif /* TOCCCLI_CMD_PARAM_H_INCLUDED */

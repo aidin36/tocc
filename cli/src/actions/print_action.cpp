@@ -49,9 +49,9 @@ namespace tocccli
   }
 
   void PrintAction::execute(std::vector<libtocc::FileInfo> files,
-                            std::string cmd_value)
+                            std::vector<std::string> cmd_arguments)
   {
-    if (cmd_value != "")
+    if (!cmd_arguments.empty())
     {
       throw InvalidParametersError("`--print' does not accept any argument.");
     }

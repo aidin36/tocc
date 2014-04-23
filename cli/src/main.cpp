@@ -24,6 +24,7 @@
 #include <iostream>
 #include <errno.h>
 
+#include "common/cmd_param.h"
 #include "utilities/cmd_parser.h"
 #include "utilities/errno_translator.h"
 #include "engine/cmd_manager.h"
@@ -35,7 +36,7 @@ int main(int argc, char* argv[])
 {
 
   // Parsing passed parameters.
-  std::vector<std::pair<std::string, std::string> > cmd_parameters = parse_cmd(argc, argv);
+  std::vector<CmdParam> cmd_parameters = parse_cmd(argc, argv);
 
   // Finding the current directory (default of Base Path).
   char path_buffer[FILENAME_MAX];
@@ -47,19 +48,25 @@ int main(int argc, char* argv[])
   std::string base_path(path_buffer);
 
   // Checking if user specified base path option.
-  std::vector<std::pair<std::string, std::string> >::iterator iterator =
-      cmd_parameters.begin();
+  std::vector<CmdParam>::iterator iterator = cmd_parameters.begin();
   for (; iterator != cmd_parameters.end(); ++iterator)
   {
-    if ((*iterator).first == "-p" ||
-        (*iterator).first == "--base-path")
+    if ((*iterator).option == "-p" ||
+        (*iterator).option == "--base-path")
     {
-      base_path = (*iterator).second;
-      if (base_path == "")
+      if ((*iterator).arguments.empty())
       {
         std::cout << "-p or --base-path must have an argument." << std::endl;
         return -101;
       }
+      if ((*iterator).arguments.size() != 1)
+      {
+        std::cout << "-p or --base-path take exactly one argument." << std::endl;
+        return -102;
+      }
+
+      base_path = (*iterator).arguments.front();
+
       break;
     }
   }

@@ -59,12 +59,12 @@ namespace tocccli
     /*
      * Executes the selector.
      *
-     * @param cmd_value: Value of this parameter that is passed from
+     * @param cmd_arguments: Arguments of this option that is passed to
      *   command line.
      *
      * @return: List of founded files.
      */
-    virtual std::vector<libtocc::FileInfo> execute(std::string cmd_value);
+    virtual std::vector<libtocc::FileInfo> execute(std::vector<std::string> cmd_arguments);
 
   private:
     libtocc::Manager* libtocc_manager;

@@ -24,9 +24,9 @@
 namespace tocccli
 {
 
-  std::vector<std::pair<std::string, std::string> > parse_cmd(int argc, char* argv[])
+  std::vector<CmdParam> parse_cmd(int argc, char* argv[])
   {
-    std::vector<std::pair<std::string, std::string> > result;
+    std::vector<CmdParam> result;
 
     // We started the loop from one, because zero is the name of the binary.
     for (int i = 1; i < argc; ++i)
@@ -34,7 +34,9 @@ namespace tocccli
       if (argv[i][0] == '-')
       {
         // A new option.
-        result.push_back(std::make_pair(argv[i], ""));
+        CmdParam new_param;
+        new_param.option = argv[i];
+        result.push_back(new_param);
       }
       else
       {
@@ -44,11 +46,7 @@ namespace tocccli
               "First parameter have to be an option (e.g. starts with a dash)");
         }
 
-        if (result.back().second != "")
-        {
-          result.back().second += " ";
-        }
-        result.back().second += argv[i];
+        result.back().arguments.push_back(argv[i]);
       }
     }
 

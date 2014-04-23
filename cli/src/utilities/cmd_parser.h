@@ -19,9 +19,9 @@
 #ifndef TOCCCLI_CMD_PARSER_H_INCLUDED
 #define TOCCCLI_CMD_PARSER_H_INCLUDED
 
-#include <string>
 #include <vector>
-#include <utility>
+
+#include "common/cmd_param.h"
 
 
 namespace tocccli
@@ -33,10 +33,9 @@ namespace tocccli
    * @param argc: Count of parameters.
    * @param argv: Array of parameters.
    *
-   * @return: A vector of options and their values. First element of the
-   *   the internal pair is the option, and second element is its value.
+   * @return: A vector of command line parameters.
    */
-  std::vector<std::pair<std::string, std::string> > parse_cmd(int argc, char* argv[]);
+  std::vector<CmdParam> parse_cmd(int argc, char* argv[]);
 
 }
 

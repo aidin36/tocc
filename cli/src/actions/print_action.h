@@ -24,6 +24,7 @@
 
 #include <libtocc.h>
 
+#include "common/cmd_param.h"
 #include "actions/action.h"
 
 
@@ -60,10 +61,10 @@ namespace tocccli
      * Executes the action.
      *
      * @param files: Files to do the action on.
-     * @param cmd_value: Value of this parameter that is passed from
+     * @param cmd_arguments: Arguments of this parameter that is passed to
      *   command line.
      */
-    virtual void execute(std::vector<libtocc::FileInfo> files, std::string cmd_value);
+    virtual void execute(std::vector<libtocc::FileInfo> files, std::vector<std::string> cmd_arguments);
 
   private:
     libtocc::Manager* libtocc_manager;

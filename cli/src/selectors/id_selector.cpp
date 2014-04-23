@@ -17,6 +17,7 @@
  */
 
 #include "selectors/id_selector.h"
+#include "common/exceptions/cmd_usage_exceptions.h"
 
 namespace tocccli
 {
@@ -45,10 +46,15 @@ namespace tocccli
     return "-i, --id=ID\tSelects a file by its ID.";
   }
 
-  std::vector<libtocc::FileInfo> IDSelector::execute(std::string cmd_value)
+  std::vector<libtocc::FileInfo> IDSelector::execute(std::vector<std::string> cmd_arguments)
   {
+    if (cmd_arguments.empty() || cmd_arguments.size() != 1)
+    {
+      throw InvalidParametersError("-i or --id takes exactly one argument.");
+    }
+
     libtocc::FileInfo selected_file =
-        this->libtocc_manager->get_file_info(cmd_value.c_str());
+        this->libtocc_manager->get_file_info(cmd_arguments.front().c_str());
 
     std::vector<libtocc::FileInfo> result;
     result.push_back(selected_file);

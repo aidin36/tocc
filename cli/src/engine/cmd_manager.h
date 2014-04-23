@@ -24,6 +24,7 @@
 
 #include <libtocc.h>
 
+#include "common/cmd_param.h"
 #include "actions/action.h"
 #include "selectors/selector.h"
 
@@ -47,11 +48,8 @@ namespace tocccli
      * Parses command line arguments and executes the required actions.
      *
      * @param cmd_parameters: A vector of parameters passed to command line.
-     *   The first element of the internal pair is an option, and the
-     *   second one is the value of that option, which is empty string
-     *   if no value is passed.
      */
-    void execute(std::vector<std::pair<std::string, std::string> > cmd_parameters);
+    void execute(std::vector<CmdParam> cmd_parameters);
 
   private:
     libtocc::Manager* libtocc_manager;
