@@ -33,6 +33,13 @@ AC_CHECK_FUNCS([mkdir pow strerror])
 AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to documentation for more info.])])
 AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to documentation for more info.])])
 
+# Option and variable for pkgconfig directory.
+AC_ARG_WITH(pkgconfigdir,
+            [  --with-pkgconfigdir=DIR    Where to install pkgconfig file. @<:@DIR/pkgconfig@:>@],
+            [pkgconfigdir=$withval],
+            [pkgconfigdir='${libdir}/pkgconfig'])
+AC_SUBST(pkgconfigdir)
+
 # Output files.
 AC_CONFIG_FILES([Makefile libtocc.pc])
 AC_OUTPUT

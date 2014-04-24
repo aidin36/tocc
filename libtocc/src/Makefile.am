@@ -13,4 +13,6 @@ libtocc_la_SOURCES = common/database_exceptions.cpp common/expr_exceptions.cpp c
 library_includedir=$(includedir)
 library_include_HEADERS = libtocc.h
 
+pkgconfigdir = @pkgconfigdir@
+pkgconfig_DATA = libtocc.pc
 

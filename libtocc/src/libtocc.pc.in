@@ -7,6 +7,5 @@ Name: libtocc
 Description: Library of Tocc project.
 URL: http://www.tocc-project.com
 Version: @VERSION@
-Requires: libunqlite.so
 Libs: -L${libdir} -ltocc
 Cflags: -I${includedir}
