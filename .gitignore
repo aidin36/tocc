@@ -37,3 +37,15 @@ libtocc/src/libtocc.pc
 libtocc/src/libtool
 libtocc/src/ltmain.sh
 libtocc/src/missing
+libtocc/tests/.deps/
+libtocc/tests/Makefile.in
+libtocc/tests/aclocal.m4
+libtocc/tests/autom4te.cache/
+libtocc/tests/config.log
+libtocc/tests/config.status
+libtocc/tests/configure
+libtocc/tests/depcomp
+libtocc/tests/install-sh
+libtocc/tests/missing
+libtocc/tests/libtocctests
+
