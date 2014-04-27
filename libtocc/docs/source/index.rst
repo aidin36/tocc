@@ -116,6 +116,7 @@ Where to go from here
 =====================
 
 * :doc:`overview`
+* :doc:`compile`
 * :doc:`api_reference`
 
 Indices and tables
