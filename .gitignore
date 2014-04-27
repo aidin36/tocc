@@ -48,4 +48,11 @@ libtocc/tests/depcomp
 libtocc/tests/install-sh
 libtocc/tests/missing
 libtocc/tests/libtocctests
+cli/src/Makefile.in
+cli/src/aclocal.m4
+cli/src/autom4te.cache/
+cli/src/configure
+cli/src/depcomp
+cli/src/install-sh
+cli/src/missing
 
