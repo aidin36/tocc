@@ -67,4 +67,3 @@ a new version.
 If you have some free time every three or four months, you can be the Release
 Technician of you favorite OS.
 
-.. Ravabet Omumi/Sokhangu (Facebook, twitter,...)

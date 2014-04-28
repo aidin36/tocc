@@ -2,7 +2,8 @@
 Design Overview
 ===============
 
-.. TODO Add design-overview.png image here.
+.. image:: _static/design-overview.png
+  :alt: Design Overview of libtocc
 
 Engine of the Tocc is *libtocc*. Everything is implemented in it. Other
 components are interfaces that works with it. i.e. *tocc* CLI, *toccfs*,

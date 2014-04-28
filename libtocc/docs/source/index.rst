@@ -10,7 +10,11 @@ Documentation of the *libtocc*
 ================================
 
 .. toctree::
-  :maxdepth: 2
+  :hidden:
+
+  overview
+  compile
+  api_reference
 
 
 Introduction
@@ -118,11 +122,4 @@ Where to go from here
 * :doc:`overview`
 * :doc:`compile`
 * :doc:`api_reference`
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

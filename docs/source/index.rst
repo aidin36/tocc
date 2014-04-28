@@ -10,17 +10,21 @@
 ==================================================
 
 .. toctree::
-   :maxdepth: 2
+  :hidden:
+
+  manual/index
+  contribution
+
 
 Tocc is a tag-based file management system. It also includes a tag-based file
 system called Toccfs. The goal of Tocc is to provide a better system for
 classifying files, more flexible than classic file systems that are based on a
 tree of files and directories.
 
-.. TODO Add an image of GPLv3
-
+.. image:: _static/gplv3.png
+  :alt: Gnu General Public License, version 3
 Tocc is free software. It publishes under the terms of Gnu General Public
-Licence version 3.
+License version 3.
 
 Who Needs Tocc?
 ===============

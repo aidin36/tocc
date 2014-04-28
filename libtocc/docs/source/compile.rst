@@ -3,10 +3,10 @@ How to Compile And Use libtocc
 ==============================
 
 Compile
-=======
+-------
 
 Use with Autotools
-==================
+------------------
 If you use Gnu Autotools for your application, you can check for and link
 against *libtocc* in one of these ways.
 
