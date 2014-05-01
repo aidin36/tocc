@@ -10,9 +10,9 @@ classifying files, more flexible than classic file systems that are based on a
 tree of files and directories.
 
 For more information about why Tocc is created, do you need it, its vision and
-what it can be used for, take a look at its wiki page:
+what it can be used for, take a look at its web page:
 
-   https://github.com/aidin36/tocc/wiki
+   http://t-o-c-c.com
 
 Copyright
 ---------
