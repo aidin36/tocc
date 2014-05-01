@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([tocc-cli], [0.1], [tocc@aidinhut.com], [Official CLI of tocc], [https://github.com/aidin36/tocc])
+AC_INIT([tocc-cli], [0.1], [aidin@t-o-c-c.com], [Official CLI of tocc], [http://t-o-c-c.com])
 AC_CONFIG_SRCDIR([main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 

@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
+ * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

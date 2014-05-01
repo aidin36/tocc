@@ -50,9 +50,9 @@ Contact
 Currently, Tocc is maintain by Aidin Gharibnavaz. You can contact him by the
 following e-mail address:
 
-   tocc (at) aidinhut dot com
+   aidin (at) t-o-c-c.com
 
 You can find the development team by visiting Tocc's Github page:
 
-   https://github.com/aidin36/
+   https://github.com/aidin36/tocc/
 
