@@ -23,6 +23,7 @@
 #include "engine/cmd_manager.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
+#include "selectors/import_file_selector.h"
 #include "actions/print_action.h"
 
 
@@ -37,6 +38,7 @@ namespace tocccli
      * Instantiating all of available selectors.
      */
     this->selectors.push_back(new IDSelector(this->libtocc_manager));
+    this->selectors.push_back(new ImportFileSelector(this->libtocc_manager));
 
     /*
      * Instantiating all of available actions.
@@ -64,6 +66,12 @@ namespace tocccli
 
   void CmdManager::execute(std::vector<CmdParam> cmd_parameters)
   {
+    // The algorithm:
+    // We look through the parameters to see what Selectors or Actions are
+    // passed. First, we loop through the parameters and execute each selector.
+    // But actions are kept for later. Because first we should have all the
+    // files user selected, then do the actions on them.
+
     // Keeps files that are selected by Selectors.
     std::vector<libtocc::FileInfo> selected_files;
 
@@ -72,6 +80,8 @@ namespace tocccli
     // passed in the command line.
     std::vector<std::pair<Action*, std::vector<std::string> > > actions_to_execute;
 
+    // Looping through parameters to see if --version or --help is passed.
+    // If so, we just print out help or version and exit.
     std::vector<CmdParam>::iterator params_iterator = cmd_parameters.begin();
     for (; params_iterator < cmd_parameters.end(); ++params_iterator)
     {
@@ -99,11 +109,16 @@ namespace tocccli
         print_version();
         return;
       }
+    }
 
+    // Looping through parameters again, and executing Selectors and Actions.
+    params_iterator = cmd_parameters.begin();
+    for (; params_iterator < cmd_parameters.end(); ++params_iterator)
+    {
       // Will set to true if any Selector or Action found for this option.
       bool option_handler_found = false;
 
-      // Looking for Selectors and Actions among parameters.
+      // Looking for Selectors among parameters.
       std::vector<Selector*>::iterator selectors_iterator =
           this->selectors.begin();
       for (; selectors_iterator < this->selectors.end(); ++selectors_iterator)
@@ -128,6 +143,7 @@ namespace tocccli
         continue;
       }
 
+      // Looking for actions among parameters.
       std::vector<Action*>::iterator actions_iterator =
           this->actions.begin();
       for (; actions_iterator < this->actions.end(); ++actions_iterator)
