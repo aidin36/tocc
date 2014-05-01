@@ -37,16 +37,16 @@ TEST_CASE("engine: files engine tests")
   libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
 
   /*
-   * Testing file copy.
+   * Testing file import.
    */
-  // Creating a test file to copy.
+  // Creating a test file to import.
   std::ofstream file_stream;
-  file_stream.open("/tmp/tocc_a_file_to_copy");
+  file_stream.open("/tmp/tocc_a_file_to_import");
   file_stream << "some data...";
   file_stream.close();
 
   // Copying the file.
-  libtocc::IntFileInfo first_file = files_engine.copy_file("/tmp/tocc_a_file_to_copy");
+  libtocc::IntFileInfo first_file = files_engine.import_file("/tmp/tocc_a_file_to_import");
   // Checking if it's OK.
   REQUIRE(first_file.get_title() == "");
   REQUIRE(first_file.get_traditional_path() == "");

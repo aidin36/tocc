@@ -37,24 +37,24 @@ namespace libtocc
     return this->database->get(file_id);
   }
 
-  IntFileInfo FilesEngine::copy_file(std::string source_path,
-                                     std::string title,
-                                     std::string traditional_path)
+  IntFileInfo FilesEngine::import_file(std::string source_path,
+                                       std::string title,
+                                       std::string traditional_path)
   {
     std::vector<std::string> empty_tags_list;
 
-    return this->copy_file(source_path,
-                           title,
-                           traditional_path,
-                           empty_tags_list);
+    return this->import_file(source_path,
+                             title,
+                             traditional_path,
+                             empty_tags_list);
   }
 
-  IntFileInfo FilesEngine::copy_file(std::string source_path,
-                                     std::string title,
-                                     std::string traditional_path,
-                                     std::vector<std::string> tags)
+  IntFileInfo FilesEngine::import_file(std::string source_path,
+                                       std::string title,
+                                       std::string traditional_path,
+                                       std::vector<std::string> tags)
   {
-    // TODO: Start a new database transaction and at the end commit it.
+    // TODO: If title is not specified, use file name.
 
     IntFileInfo new_file = this->database->create_file(tags, title,
                                                        traditional_path);

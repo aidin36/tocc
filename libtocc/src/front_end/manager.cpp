@@ -92,29 +92,29 @@ namespace libtocc
     return to_external_file_info(&info);
   }
 
-  FileInfo Manager::copy_file(const char* source_path,
-                              const char* title,
-                              const char* traditional_path)
+  FileInfo Manager::import_file(const char* source_path,
+                                const char* title,
+                                const char* traditional_path)
   {
     IntFileInfo new_file_info =
-        this->private_data->files_engine->copy_file(source_path,
-                                                    title, traditional_path);
+        this->private_data->files_engine->import_file(source_path,
+                                                      title, traditional_path);
 
     return to_external_file_info(&new_file_info);
   }
 
-  FileInfo Manager::copy_file(const char* source_path,
-                              const char* title,
-                              const char* traditional_path,
-                              const TagsCollection* tags)
+  FileInfo Manager::import_file(const char* source_path,
+                                const char* title,
+                                const char* traditional_path,
+                                const TagsCollection* tags)
   {
     std::vector<std::string> tags_vector = tags_to_vector(tags);
 
     IntFileInfo new_file_info =
-        this->private_data->files_engine->copy_file(source_path,
-                                                    title,
-                                                    traditional_path,
-                                                    tags_vector);
+        this->private_data->files_engine->import_file(source_path,
+                                                      title,
+                                                      traditional_path,
+                                                      tags_vector);
 
     return to_external_file_info(&new_file_info);
   }

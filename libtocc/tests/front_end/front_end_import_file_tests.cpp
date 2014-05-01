@@ -22,47 +22,47 @@
 
 #include "libtocc.h"
 
-TEST_CASE("front_end: file copy")
+TEST_CASE("front_end: file import")
 {
-  // Creating a file to copy.
+  // Creating a file to import.
   std::ofstream file_stream;
-  file_stream.open("/tmp/tocc_test_file_to_copy_2");
+  file_stream.open("/tmp/tocc_test_file_to_import_2");
   file_stream << "some data...";
   file_stream.close();
 
   // Creating an instance of the manager.
   libtocc::Manager manager("/tmp/");
 
-  // Copying the file with no property.
+  // Importing the file with no property.
   libtocc::FileInfo test_file =
-      manager.copy_file("/tmp/tocc_test_file_to_copy_2");
+      manager.import_file("/tmp/tocc_test_file_to_import_2");
   // Checking if it's OK.
   REQUIRE(strcmp(test_file.get_title(), "") == 0);
   REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
   REQUIRE(test_file.get_tags().size() == 0);
 
-  // Copying the file with Title and Traditional Path.
+  // Importing the file with Title and Traditional Path.
   libtocc::FileInfo test_file_2 =
-      manager.copy_file("/tmp/tocc_test_file_to_copy_2",
-                        "Title of the test file",
-                        "/home/not_well_organized/test");
+      manager.import_file("/tmp/tocc_test_file_to_import_2",
+                          "Title of the test file",
+                          "/home/not_well_organized/test");
   // Checking if it's OK.
   REQUIRE(strcmp(test_file_2.get_title(), "Title of the test file") == 0);
   REQUIRE(strcmp(test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
   REQUIRE(test_file_2.get_tags().size() == 0);
 
-  // Copying the file with some tags.
+  // Importing the file with some tags.
   libtocc::TagsCollection tags;
   tags.add_tag("test");
   tags.add_tag("safe-to-remove");
   libtocc::FileInfo test_file_3 =
-      manager.copy_file("/tmp/tocc_test_file_to_copy_2",
-                        "Third copy",
-                        "/home/not_well_organized/test3",
-                        &tags);
+      manager.import_file("/tmp/tocc_test_file_to_import_2",
+                          "Third import",
+                          "/home/not_well_organized/test3",
+                          &tags);
 
   // Checking if it's OK.
-  REQUIRE(strcmp(test_file_3.get_title(), "Third copy") == 0);
+  REQUIRE(strcmp(test_file_3.get_title(), "Third import") == 0);
   REQUIRE(strcmp(test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
 
   libtocc::TagsCollection file_tags = test_file_3.get_tags();
@@ -91,7 +91,7 @@ TEST_CASE("front_end: file copy")
   // Getting third file.
   libtocc::FileInfo fetched_test_file_3 = manager.get_file_info(test_file_3.get_id());
   // Checking if it's OK.
-  REQUIRE(strcmp(fetched_test_file_3.get_title(), "Third copy") == 0);
+  REQUIRE(strcmp(fetched_test_file_3.get_title(), "Third import") == 0);
   REQUIRE(strcmp(fetched_test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
 
   libtocc::TagsCollection fetched_file_tags = fetched_test_file_3.get_tags();

@@ -52,7 +52,7 @@ namespace libtocc
     IntFileInfo get(std::string file_id);
 
     /*
-     * Copies a file from the path to the file system.
+     * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.
      * @param title: (optional) title of the file.
@@ -60,12 +60,12 @@ namespace libtocc
      *
      * @return: Information of the newly created file.
      */
-    IntFileInfo copy_file(std::string source_path,
-                          std::string title="",
-                          std::string traditional_path="");
+    IntFileInfo import_file(std::string source_path,
+                            std::string title="",
+                            std::string traditional_path="");
 
     /*
-     * Copies a file from the path to the file system.
+     * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.
      * @param title: title of the file.
@@ -75,10 +75,10 @@ namespace libtocc
      *
      * @return: Information of the newly created file.
      */
-    IntFileInfo copy_file(std::string source_path,
-                          std::string title,
-                          std::string traditional_path,
-                          std::vector<std::string> tags);
+    IntFileInfo import_file(std::string source_path,
+                            std::string title,
+                            std::string traditional_path,
+                            std::vector<std::string> tags);
 
   private:
     Database* database;

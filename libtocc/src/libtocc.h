@@ -24,6 +24,9 @@
  * `front_end' directory.
  */
 
+#include <ostream>
+
+
 namespace libtocc
 {
 
@@ -234,7 +237,7 @@ namespace libtocc
     FileInfo get_file_info(const char* file_id);
 
     /*
-     * Copies a file from the path to the file system.
+     * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.
      * @param title: (optional) title of the file.
@@ -242,12 +245,12 @@ namespace libtocc
      *
      * @return: Information of the newly created file.
      */
-    FileInfo copy_file(const char* source_path,
-                       const char* title="",
-                       const char* traditional_path="");
+    FileInfo import_file(const char* source_path,
+                         const char* title="",
+                         const char* traditional_path="");
 
     /*
-     * Copies a file from the path to the file system.
+     * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.
      * @param title: title of the file.
@@ -257,10 +260,10 @@ namespace libtocc
      *
      * @return: Information of the newly created file.
      */
-    FileInfo copy_file(const char* source_path,
-                       const char* title,
-                       const char* traditional_path,
-                       const TagsCollection* tags);
+    FileInfo import_file(const char* source_path,
+                         const char* title,
+                         const char* traditional_path,
+                         const TagsCollection* tags);
 
     /*
      * Assigns specified tags to all files in the specified list of files.
