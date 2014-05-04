@@ -28,7 +28,7 @@ tocc-managed file system.) Note that it have to be absolute.
 Returns information of a specific file. ``file_id`` is the ID of the file you
 want its information. It throw exception if no file with this ID found.
 
-.. function:: libtocc::FileInfo libtocc::Manager::copy_file(const char* source_path, \
+.. function:: libtocc::FileInfo libtocc::Manager::import_file(const char* source_path, \
                 const char* title="", \
                 const char* traditional_path="")
 
@@ -45,12 +45,12 @@ Since no tag is passed, a default tag will be assign to the new file.
 
 It returns the information of the newly copied file.
 
-.. function:: libtocc::FileInfo libtocc::Manager::copy_file(const char* source_path, \
+.. function:: libtocc::FileInfo libtocc::Manager::import_file(const char* source_path, \
                 const char* title="", \
                 const char* traditional_path="", \
                 const TagsCollection* tags)
 
-Another overload of ``copy_file``. Same as the previous function, but it also
+Another overload of ``import_file``. Same as the previous function, but it also
 accepts ``tags``. These tags will be assign to the copied file.
 
 .. function:: void assign_tags(const char* file_ids[], \
@@ -107,7 +107,7 @@ This operator will be put a formatted string (in a JSON-like format) of the
 class into the ``ostream``. For example, it can be used to print out the
 file info::
 
-  libtocc::FileInfo copied_file = manager.copy_file("/path/to/file");
+  libtocc::FileInfo copied_file = manager.import_file("/path/to/file");
   std::cout << copied_file << std::endl;
 
 which will print out something like:
