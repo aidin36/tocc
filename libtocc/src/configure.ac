@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([libtocc], [0.1], [aidin@t-o-c-c.com], [libtocc], [http://t-o-c-c.com])
-AC_CONFIG_SRCDIR([libtocc.h])
+AC_CONFIG_SRCDIR([front_end/manager.h])
 #AC_CONFIG_HEADERS([config.h])
 
 # Initializing Libtool

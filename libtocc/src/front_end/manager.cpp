@@ -23,7 +23,7 @@
 #include "engine/tags_engine.h"
 #include "engine/files_engine.h"
 #include "utilities/file_info_converter.h"
-#include "libtocc.h"
+#include "front_end/manager.h"
 
 
 namespace libtocc

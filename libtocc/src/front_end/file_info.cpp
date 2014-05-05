@@ -21,7 +21,8 @@
 #include <iostream> // for std::endl
 #include <vector>
 
-#include "libtocc.h"
+#include "front_end/file_info.h"
+
 
 namespace libtocc
 {
@@ -246,6 +247,15 @@ namespace libtocc
     this->private_data->tags = tags->private_data->tags;
   }
 
+  FileInfo::FileInfo(const FileInfo& source)
+  {
+    this->private_data = new PrivateData();
+    this->private_data->file_id = source.private_data->file_id;
+    this->private_data->title = source.private_data->title;
+    this->private_data->traditional_path = source.private_data->traditional_path;
+    this->private_data->tags = source.private_data->tags;
+  }
+
   FileInfo::~FileInfo()
   {
     delete this->private_data;
@@ -297,4 +307,18 @@ namespace libtocc
     return stream;
   }
 
+  FileInfo& FileInfo::operator=(const FileInfo& source)
+  {
+    if (this == &source)
+    {
+      return *this;
+    }
+
+    this->private_data->file_id = source.private_data->file_id;
+    this->private_data->title = source.private_data->title;
+    this->private_data->traditional_path = source.private_data->traditional_path;
+    this->private_data->tags = source.private_data->tags;
+
+    return *this;
+  }
 }

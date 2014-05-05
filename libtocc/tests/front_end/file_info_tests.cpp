@@ -16,25 +16,20 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED
-#define LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED
 
+#include <catch.hpp>
 #include <vector>
-#include <string>
-
-#include "common/int_file_info.h"
 #include "front_end/file_info.h"
 
-namespace libtocc
+
+TEST_CASE("File Info in Vector")
 {
-  FileInfo to_external_file_info(const IntFileInfo* internal_file_info);
+  // Once upon a time, there was a Segfaul bug putting a FileInfo in a vector.
 
-  IntFileInfo to_internal_file_info(const FileInfo* external_file_info);
-
-  std::vector<std::string> tags_to_vector(const TagsCollection* collection);
-
-  TagsCollection vector_to_tags(const std::vector<std::string>* vector);
-
+  std::vector<libtocc::FileInfo> v;
+  
+  {
+    libtocc::FileInfo f("");
+    v.push_back(f);
+  }
 }
-
-#endif /* LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED */

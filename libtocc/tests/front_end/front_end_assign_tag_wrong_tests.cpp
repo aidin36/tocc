@@ -19,7 +19,7 @@
 
 #include <catch.hpp>
 
-#include "libtocc.h"
+#include "front_end/manager.h"
 #include "common/database_exceptions.h"
 
 /*
