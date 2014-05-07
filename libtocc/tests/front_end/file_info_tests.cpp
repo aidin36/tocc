@@ -19,7 +19,7 @@
 
 #include <catch.hpp>
 #include <vector>
-#include "front_end/file_info.h"
+#include "libtocc/front_end/file_info.h"
 
 
 TEST_CASE("File Info in Vector")

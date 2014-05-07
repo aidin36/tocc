@@ -16,20 +16,37 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
+#define LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
 
-#include <catch.hpp>
+#include <string>
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
+#include "libtocc/common/base_exception.h"
 
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
+  class InvalidArgumentError : public BaseException
+  {
+  public:
+    InvalidArgumentError(std::string message) throw()
+    {
+      this->message = message;
+    }
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+    virtual ~InvalidArgumentError() throw()
+    {
+    }
+
+    virtual const char* what() const throw()
+    {
+      return this->message.c_str();
+    }
+
+  private:
+    std::string message;
+  };
 
 }
+
+
+#endif /* LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED */

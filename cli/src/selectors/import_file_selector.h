@@ -19,7 +19,8 @@
 #ifndef TOCCCLI_COPY_FILE_SELECTOR_H_INCLUDED
 #define TOCCCLI_COPY_FILE_SELECTOR_H_INCLUDED
 
-#include <libtocc.h>
+#include <libtocc/front_end/file_info.h>
+#include <libtocc/front_end/manager.h>
 
 #include "selectors/selector.h"
 

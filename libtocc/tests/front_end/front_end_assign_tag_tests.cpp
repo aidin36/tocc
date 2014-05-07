@@ -19,7 +19,7 @@
 
 #include <catch.hpp>
 
-#include "front_end/manager.h"
+#include "libtocc/front_end/manager.h"
 
 TEST_CASE("front_end: assign tag")
 {

@@ -16,20 +16,31 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/engine/tags_engine.h"
 
-#include <catch.hpp>
-
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
-
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  TagsEngine::TagsEngine(Database* database)
+  {
+    this->database = database;
+  }
+
+  void TagsEngine::assign_tags(std::string file_id,
+                               std::vector<std::string> tags)
+  {
+    this->database->assign_tag(file_id, tags);
+  }
+
+  void TagsEngine::assign_tags(std::vector<std::string> file_ids,
+                               std::vector<std::string> tags)
+  {
+    this->database->assign_tag(file_ids, tags);
+  }
+
+  void TagsEngine::assign_tags(std::string file_id, std::string tag)
+  {
+    this->database->assign_tag(file_id, tag);
+  }
 
 }

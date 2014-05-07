@@ -19,11 +19,11 @@
 #include <fstream>
 #include <catch.hpp>
 
-#include "common/int_file_info.h"
-#include "database/database.h"
-#include "engine/tags_engine.h"
-#include "engine/files_engine.h"
-#include "engine/files_engine.h"
+#include "libtocc/common/int_file_info.h"
+#include "libtocc/database/database.h"
+#include "libtocc/engine/tags_engine.h"
+#include "libtocc/engine/files_engine.h"
+#include "libtocc/engine/files_engine.h"
 
 
 TEST_CASE("engine: files engine tests")

@@ -20,8 +20,8 @@
 #include <vector>
 #include <string>
 
-#include "database/database.h"
-#include "engine/tags_engine.h"
+#include "libtocc/database/database.h"
+#include "libtocc/engine/tags_engine.h"
 
 TEST_CASE("engine: tags engine tests")
 {

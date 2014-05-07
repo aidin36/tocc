@@ -17,19 +17,26 @@
  */
 
 
-#include <catch.hpp>
+#ifndef LIBTOCC_OPERAND_H_INCLUDED
+#define LIBTOCC_OPERAND_H_INCLUDED
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
+#include <string>
+#include "libtocc/exprs/expr.h"
 
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  /*
+   * Base class of all operand expressions.
+   */
+  class OperandExpr : public Expr
+  {
+  public:
+    virtual expr_type::ExprType get_type();
 
-}
+    virtual std::string compile();
+  };
+
+};
+
+#endif /* LIBTOCC_OPERAND_H_INCLUDED */

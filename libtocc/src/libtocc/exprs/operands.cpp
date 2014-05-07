@@ -17,19 +17,19 @@
  */
 
 
-#include <catch.hpp>
+#include "libtocc/exprs/operands.h"
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
-
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  expr_type::ExprType OperandExpr::get_type()
+  {
+    return expr_type::OPERAND;
+  }
 
-}
+  std::string OperandExpr::compile()
+  {
+    return "Not Implemented";
+  }
+
+};

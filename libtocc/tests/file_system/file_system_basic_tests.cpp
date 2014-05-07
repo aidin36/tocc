@@ -25,8 +25,8 @@
 #include <fstream>
 #include <unistd.h>
 
-#include "common/base_exception.h"
-#include "file_system/file_manager.h"
+#include "libtocc/common/base_exception.h"
+#include "libtocc/file_system/file_manager.h"
 
 TEST_CASE("file_system: basic tests")
 {

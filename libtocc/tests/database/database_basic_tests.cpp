@@ -20,8 +20,8 @@
 #include <string>
 #include <vector>
 
-#include "common/int_file_info.h"
-#include "database/database.h"
+#include "libtocc/common/int_file_info.h"
+#include "libtocc/database/database.h"
 
 
 TEST_CASE("database: basic tests")

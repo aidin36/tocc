@@ -16,20 +16,37 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <catch.hpp>
-
-#include "libtocc/front_end/manager.h"
 #include "libtocc/common/database_exceptions.h"
 
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  BaseDatabaseException::BaseDatabaseException(std::string message) throw()
+  {
+    this->message = message;
+  }
 
+  BaseDatabaseException::~BaseDatabaseException() throw()
+  {
+  }
+
+  const char* BaseDatabaseException::what() const throw()
+  {
+    return this->message.c_str();
+  }
+
+  DatabaseInitializationError::DatabaseInitializationError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
+
+  DatabaseScriptCompilationError::DatabaseScriptCompilationError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
+
+  DatabaseScriptExecutionError::DatabaseScriptExecutionError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
 }

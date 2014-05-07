@@ -16,20 +16,27 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_COMPILER_H_INCLUDED
+#define LIBTOCC_COMPILER_H_INCLUDED
 
-#include <catch.hpp>
+#include <string>
+#include "libtocc/exprs/query.h"
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
-
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
+  /*
+   * Compiler of queries.
+   */
+  class QueryCompiler
+  {
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  public:
+    /*
+     * Compiles a query object to a Jx9 script.
+     */
+    std::string compile(Query& query_to_compile);
 
-}
+  };
+};
+
+#endif /* LIBTOCC_COMPILER_H_INCLUDED */

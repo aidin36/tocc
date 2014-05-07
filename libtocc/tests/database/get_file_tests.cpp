@@ -18,7 +18,7 @@
 
 #include <catch.hpp>
 
-#include "database/database.h"
+#include "libtocc/database/database.h"
 
 TEST_CASE("database: get file tests")
 {

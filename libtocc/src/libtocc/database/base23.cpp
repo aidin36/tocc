@@ -16,20 +16,39 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+#include <cassert>
 
-#include <catch.hpp>
+#include "libtocc/database/base23.h"
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
+const std::string DIGITS = "0123456789abcdefghijklmn";
 
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+std::string to_base23(unsigned long num)
 {
-  libtocc::Manager manager("/tmp/");
+  assert(num <= 3404825447);
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  std::string result = "0000000";
 
+  short index = 6;
+  while (num > 0)
+  {
+    result[index] = DIGITS[num % 23];
+    num = num / 23;
+    index--;
+  }
+
+  return result;
+}
+
+unsigned long from_base23(std::string num)
+{
+  assert(num.length() == 7);
+
+  unsigned long result = 0;
+  for (short index = 6; index >= 0; index--)
+  {
+    result += DIGITS.find_first_of(num[index]) * pow(23, 6 - index);
+  }
+  
+  return result;
 }

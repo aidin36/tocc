@@ -5,11 +5,15 @@ lib_LTLIBRARIES = libtocc.la
 # Refer to this chapter of Libtool Manual for understanding versioning rules:
 # http://www.gnu.org/software/libtool/manual/html_node/Versioning.html
 libtocc_la_LDFLAGS = -version-info 0:0:0
-libtocc_la_SOURCES = check_exists.cpp common/database_exceptions.cpp common/expr_exceptions.cpp common/file_system_exceptions.cpp common/int_file_info.cpp utilities/file_info_converter.cpp database/base23.cpp database/database.cpp database/exprs/compiled_expr.cpp database/exprs/compiler.cpp database/exprs/connectives.cpp database/exprs/fields.cpp database/exprs/functions.cpp database/exprs/operands.cpp database/exprs/query.cpp file_system/file_manager.cpp engine/files_engine.cpp engine/tags_engine.cpp front_end/file_info.cpp front_end/manager.cpp
+libtocc_la_SOURCES = libtocc/check_exists.cpp libtocc/common/database_exceptions.cpp libtocc/common/expr_exceptions.cpp libtocc/common/file_system_exceptions.cpp libtocc/common/int_file_info.cpp libtocc/utilities/file_info_converter.cpp libtocc/database/base23.cpp libtocc/database/database.cpp libtocc/exprs/compiled_expr.cpp libtocc/exprs/compiler.cpp libtocc/exprs/connectives.cpp libtocc/exprs/fields.cpp libtocc/exprs/functions.cpp libtocc/exprs/operands.cpp libtocc/exprs/query.cpp libtocc/file_system/file_manager.cpp libtocc/engine/files_engine.cpp libtocc/engine/tags_engine.cpp libtocc/front_end/file_info.cpp libtocc/front_end/manager.cpp
 
 # Installing headers
-library_includedir=$(includedir)/libtocc/
-library_include_HEADERS = front_end/file_info.h front_end/manager.h common/base_exception.h common/database_exceptions.h common/expr_exceptions.h common/file_system_exceptions.h common/runtime_exceptions.h database/exprs/expr.h database/exprs/connectives.h database/exprs/fields.h database/exprs/functions.h database/exprs/operands.h database/exprs/query.h
+front_end_includedir = $(includedir)/libtocc/front_end
+front_end_include_HEADERS = libtocc/front_end/file_info.h libtocc/front_end/manager.h
+common_includedir = $(includedir)/libtocc/common/
+common_include_HEADERS = libtocc/common/base_exception.h libtocc/common/database_exceptions.h libtocc/common/expr_exceptions.h libtocc/common/file_system_exceptions.h libtocc/common/runtime_exceptions.h
+exprs_includedir = $(includedir)/libtocc/exprs/
+exprs_include_HEADERS = libtocc/exprs/expr.h libtocc/exprs/connectives.h libtocc/exprs/fields.h libtocc/exprs/functions.h libtocc/exprs/operands.h libtocc/exprs/query.h
 
 pkgconfigdir = @pkgconfigdir@
 pkgconfig_DATA = libtocc.pc

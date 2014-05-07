@@ -19,10 +19,10 @@
 #include <catch.hpp>
 #include <string>
 
-#include "database/exprs/query.h"
-#include "database/exprs/connectives.h"
-#include "database/exprs/fields.h"
-#include "database/exprs/compiler.h"
+#include "libtocc/exprs/query.h"
+#include "libtocc/exprs/connectives.h"
+#include "libtocc/exprs/fields.h"
+#include "libtocc/exprs/compiler.h"
 
 // TODO: Give generated Jx9 scripts to Unqlite, to check if their
 //       syntactically correct.

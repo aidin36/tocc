@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include <libtocc.h>
+#include <libtocc/front_end/manager.h>
 
 #include "common/cmd_param.h"
 #include "actions/action.h"

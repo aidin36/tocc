@@ -18,7 +18,8 @@
 
 #include <sstream>
 
-#include <libtocc.h>
+#include <libtocc/front_end/file_info.h>
+#include <libtocc/front_end/manager.h>
 
 #include "engine/cmd_manager.h"
 #include "common/exceptions/cmd_usage_exceptions.h"

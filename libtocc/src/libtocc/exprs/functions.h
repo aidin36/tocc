@@ -16,20 +16,34 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_FUNCTION_H_INCLUDED
+#define LIBTOCC_FUNCTION_H_INCLUDED
 
-#include <catch.hpp>
+#include <string>
+#include "libtocc/exprs/expr.h"
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
-
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  /*
+   * Defines base class of all function expressions.
+   */
+  class FunctionExpr : public Expr
+  {
+  public:
+    virtual expr_type::ExprType get_type();
 
-}
+    /*
+     * Compiled the function.
+     *
+     * @param base_arg: This will be used as the first argument
+     *   that passes to the function.
+     *   for example:
+     *   compile("tag") -> "Regex("tag", "...")
+     */
+    virtual std::string compile(std::string base_arg);
+  };
+
+};
+
+#endif /* LIBTOCC_FUNCTION_H_INCLUDED */

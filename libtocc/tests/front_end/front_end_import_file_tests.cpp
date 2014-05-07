@@ -20,8 +20,8 @@
 #include <fstream>
 #include <cstring>
 
-#include "front_end/manager.h"
-#include "front_end/file_info.h"
+#include "libtocc/front_end/manager.h"
+#include "libtocc/front_end/file_info.h"
 
 
 TEST_CASE("front_end: file import")

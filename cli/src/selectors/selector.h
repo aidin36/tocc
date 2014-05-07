@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include <libtocc.h>
+#include <libtocc/front_end/file_info.h>
 
 namespace tocccli
 {

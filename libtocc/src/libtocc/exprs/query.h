@@ -16,20 +16,39 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_QUERY_H_INCLUDED
+#define LIBTOCC_QUERY_H_INCLUDED
 
-#include <catch.hpp>
+#include "libtocc/exprs/connectives.h"
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
-
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace libtocc
 {
-  libtocc::Manager manager("/tmp/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  /*
+   * Defines a Query object.
+   * To execute a query on database, use need
+   * an instance of this class.
+   */
+  class Query
+  {
+  public:
+    /*
+     * @param expression: Expression of this query.
+     *   i.e. the expression that will be executed when
+     *   this query object executes.
+     */
+    Query(ConnectiveExpr* expression);
 
+    ~Query();
+
+    /*
+     * Gets the internal expression.
+     */
+    ConnectiveExpr* get_expr();
+
+  private:
+    ConnectiveExpr* expr;
+  };
 }
+
+#endif /* LIBTOCC_QUERY_H_INCLUDED */
