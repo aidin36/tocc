@@ -71,17 +71,18 @@ header files in ``/usr/local/include`` by default.
 If you want to install it on another directory, pass ``--prefix`` option
 to ``configure`` script. i.e.::
 
-  ./configure --prefix=./bin/
+  ./configure --prefix=./output/
 
-Which installs compiled library in ``./bin/lib/`` and headers in
-``./bin/include/``.
+Which installs compiled library in ``./output/lib/`` and headers in
+``./output/include/``.
 
 A Minimal Example
 -----------------
 The following is a minimal example of an application that uses *libtocc*::
 
   #include <iostream>
-  #include "libtocc.h"
+  #include "libtocc/manager.h"
+  #include "libtocc/file_info.h"
 
   int main(int argc, char* argv[])
   {
@@ -89,11 +90,11 @@ The following is a minimal example of an application that uses *libtocc*::
     // kept. Replace it with an existing path.
     libtocc::Manager manager("/opt/tocc-managed/");
 
-    // Copying a file from the file system to the tocc-managed file system.
+    // Importing a file from the file system to the tocc-managed file system.
     // The second argument is the title of this file.
     libtocc::FileInfo new_file_info =
-      manager.copy_file("/home/aidin/photos/portrate01.jpeg",
-                        "A Beautiful Portrate");
+      manager.import_file("/home/aidin/photos/portrate01.jpeg",
+                          "A Beautiful Portrate");
 
    // Printing out information of the copied file.
    std::cout << new_file_info << std::endl;
@@ -103,15 +104,15 @@ Put it in ``sample.cpp`` file, and then simply compile it::
 
   $g++ -o sample sample.cpp -ltocc -lunqlite
 
-**Note:** At the current version, you also have to link your application
-against the ``libunqlite.so``. This will be fix in future versions.
+**Note:** You also have to link your application
+against the ``libunqlite.so``. Because *libtocc* depends on it.
 
 Here's an explanation of what happened. First, you need to include
-``libtocc.h`` which defines the interface of the *libtocc*. The main class in
-that file is the :cpp:class:`libtocc::Manager` class. All of the Tocc functionalities
+``libtocc/manager.h`` which defines :cpp:class:`libtocc::Manager`, the
+interface of the *libtocc*. All of the Tocc functionalities
 are accessible through Manager class. In its constructor, it gets a path to a
 directory that it should keeps its files and database. After that, we invoked
-the :cpp:func:`libtocc::Manager::copy_file` method in order to copy a file from
+the :cpp:func:`libtocc::Manager::import_file` method in order to copy a file from
 the traditional file system to the tocc-managed file system. It's a photo, and
 its title is "A Beautiful Portrate".
 

@@ -7,12 +7,19 @@
 
 Reference of *libtocc* API
 ==========================
-The whole API of *libtocc* is available in ``libtocc.h`` header file.
-And the whole functionality of the API is available in
-:class:`libtocc::Manager` class.
+Header files of *libtocc* are in ``libtocc`` directory, which itself structured
+into the following directories.
+
+* **front_end**: This directory defines the the interface of *libtocc*.
+:cpp:class:`libtocc::Manager` in ``manager.h`` defines the main
+functionalities.
+
+* **exprs**: Expresions for quering files.
 
 libtocc::Manager
 ----------------
+
+*Available in libtocc/front_end/manager.h*
 
 .. class:: libtocc::Manager(const char* base_path)
 
@@ -53,7 +60,7 @@ It returns the information of the newly copied file.
 Another overload of ``import_file``. Same as the previous function, but it also
 accepts ``tags``. These tags will be assign to the copied file.
 
-.. function:: void assign_tags(const char* file_ids[], \
+.. function:: void libtocc::Manager::assign_tags(const char* file_ids[], \
                 int file_ids_size, \
                 const TagsCollection* tags)
 
@@ -66,17 +73,19 @@ the size of the ``file_ids`` array. If you pass zero or a negative number as
 size in your hand, it's better to pass it. ``tags`` is the list of tags to
 assign to these files.
 
-.. function:: void assign_tags(const char* file_id, const TagsCollection* tags)
+.. function:: void libtocc::Manager::assign_tags(const char* file_id, const TagsCollection* tags)
 
 Overload of the previous function that accepts a file and a list of tags.
 
-.. function:: void assign_tags(const char* file_id, const char* tag)
+.. function:: void libtocc::Manager::assign_tags(const char* file_id, const char* tag)
 
 Overload of the previous function that accepts a single file and a single tag.
 
 
 FileInfo Class
 --------------
+
+*Available in libtocc/front_end/file_info.h*
 
 .. class:: FileInfo
 
@@ -127,6 +136,8 @@ TagsCollection class
 
 This class keeps a list of tags.
 
+*Available in libtocc/front_end/file_info.h*
+
 .. class:: libtocc::TagsCollection
 Construct an empty collection.
 
@@ -159,6 +170,9 @@ Returns true if the collection is empty.
 
 TagsCollection::Iterator class
 ------------------------------
+
+*Available in libtocc/front_end/file_info.h*
+
 Iterator of the TagsCollection. Usage example::
 
   TagsCollection tags;
