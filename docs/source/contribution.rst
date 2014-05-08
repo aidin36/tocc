@@ -11,7 +11,7 @@ gain more experience.
 You don't have to be a developer. There are other tasks that should be handled.
 This page lists things you can help with.
 
-If you decided to contribute, contact Aidin at *tocc (AT) aidinhut.com*
+If you decided to contribute, contact Aidin at *aidin (AT) t-o-c-c.com*
 
 Development
 -----------
