@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <iostream>
 
 #include <libtocc/front_end/file_info.h>
 #include <libtocc/front_end/manager.h>
@@ -26,6 +27,13 @@
 #include "selectors/id_selector.h"
 #include "selectors/import_file_selector.h"
 #include "actions/print_action.h"
+
+
+// PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
+// Autoconf for building CLI, this checking is added.
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION 0.0
+#endif
 
 
 namespace tocccli
@@ -179,11 +187,37 @@ namespace tocccli
 
   void CmdManager::print_usage()
   {
+    std::cout << "Usage: tocc [actions]" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Available actions are:" << std::endl;
 
+    std::vector<Selector*>::iterator selectors_iterator = this->selectors.begin();
+    for (;selectors_iterator < this->selectors.end(); ++selectors_iterator)
+    {
+      std::cout << " " << (*selectors_iterator)->get_help_text() << std::endl;
+    }
+
+    std::vector<Action*>::iterator actions_iterator = this->actions.begin();
+    for (;actions_iterator < this->actions.end(); ++actions_iterator)
+    {
+      std::cout << " " << (*actions_iterator)->get_help_text() << std::endl;
+    }
+
+    std::cout << " " << "-h, --help\tPrints out this help and exits." << std::endl;
+    std::cout << " " << "-v, --version\tPrints out version info and exits." << std::endl;
   }
 
   void CmdManager::print_version()
   {
+    // PACKAGE_VERSION macro defines by the Autoconf.
 
+    std::cout << "Official command line interface for Tocc." << std::endl;
+    std::cout << "Version: " << PACKAGE_VERSION << std::endl;
+    std::cout << std::endl;
+    std::cout << "Copyright (C) 2013, 2014 Aidin Gharibnavaz" << std::endl;
+    std::cout << "Tocc comes with ABSOLUTELY NO WARRANTY." << std::endl;
+    std::cout << "Tocc is free software and you are welcome to redistribute it" << std::endl;
+    std::cout << "under certain conditions. See COPYING file in the distributed" << std::endl;
+    std::cout << "package, or <http://t-o-c-c.com> for more info." << std::endl;
   }
 }
