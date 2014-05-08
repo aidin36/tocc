@@ -16,7 +16,7 @@ and other properties of the file.
 
 To understand it, consider the following scenario.
 
-When user wants to store a file in Tocc system, it will call ``copy`` method
+When user wants to store a file in Tocc system, it will call ``import`` method
 of the *libtocc* API. The file itself copies to the real file system (Ext4
 in our example), and a record will be store in the database containing the file
 information. Then, user assign some tags to the file by calling ``assign_tag``
