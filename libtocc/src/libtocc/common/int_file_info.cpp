@@ -39,6 +39,13 @@ namespace libtocc
     this->tags = tags;
   }
 
+  IntFileInfo::IntFileInfo(const IntFileInfo& source)
+  {
+    this->id = source.id;
+    this->title = source.title;
+    this->traditional_path = source.traditional_path;
+    this->tags = source.tags;
+  }
 
   std::string IntFileInfo::get_id() const
   {
@@ -113,6 +120,21 @@ namespace libtocc
                            const IntFileInfo& file_info)
   {
     return stream << file_info.to_string();
+  }
+
+  IntFileInfo& IntFileInfo::operator=(const IntFileInfo& source)
+  {
+    if (this == &source)
+    {
+      return *this;
+    }
+
+    this->id = source.id;
+    this->title = source.title;
+    this->traditional_path = source.traditional_path;
+    this->tags = source.tags;
+
+    return *this;
   }
 
   FileInfoCollection::FileInfoCollection()

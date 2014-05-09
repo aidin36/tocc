@@ -46,6 +46,11 @@ namespace libtocc
                 std::vector<std::string> tags);
 
     /*
+     * Copy constructor.
+     */
+    IntFileInfo(const IntFileInfo& source);
+
+    /*
      * Gets ID of the file.
      */
     std::string get_id() const;
@@ -97,6 +102,11 @@ namespace libtocc
      *   std::cout << file_info;
      */
     friend std::ostream& operator<<(std::ostream& stream, const IntFileInfo& file_info);
+
+    /*
+     * Assignment operator.
+     */
+    IntFileInfo& operator=(const IntFileInfo& source);
 
   private:
     std::string id;
