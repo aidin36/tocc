@@ -23,7 +23,8 @@ You don't have to be a professional. Any contribution is valuable.
    itself. Tocc project have three parts: main library (libtocc), official
    command line interface, and a file system (toccfs). Take a look at
    `issues <https://www.github.com/aidin36/tocc/issues/>`_ to findout what
-   tasks are waiting to be done.
+   tasks are waiting to be done. Tasks that labeled *easy* are good points
+   to start.
 
  * **UIs**: There can be different UIs for Tocc. CLIs, GUIs, plugins for different
    applications (i.e. file browsers like Nautilus of Dolphin).
