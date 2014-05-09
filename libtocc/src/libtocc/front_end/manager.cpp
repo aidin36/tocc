@@ -40,11 +40,13 @@ namespace libtocc
   public:
     PrivateData(Database* database,
                 TagsEngine* tags_engine,
-                FilesEngine* files_engine)
+                FilesEngine* files_engine,
+                FileManager* file_manager)
     {
       this->database = database;
       this->tags_engine = tags_engine;
       this->files_engine = files_engine;
+      this->file_manager = file_manager;
     }
 
     ~PrivateData()
@@ -55,11 +57,14 @@ namespace libtocc
       this->tags_engine = NULL;
       delete this->files_engine;
       this->files_engine = NULL;
+      delete this->file_manager;
+      this->file_manager = NULL;
     }
 
     Database* database;
     TagsEngine* tags_engine;
     FilesEngine* files_engine;
+    FileManager* file_manager;
   };
 
   Manager::Manager(const char* base_path)
@@ -75,8 +80,11 @@ namespace libtocc
                                                 file_manager,
                                                 tags_engine);
 
-    this->private_data = new PrivateData(database,
-                                         tags_engine, files_engine);
+    //Note: FileManager's pointer never used in this class. But kept in the
+    //      PrivateData to be release later.
+
+    this->private_data = new PrivateData(database, tags_engine,
+                                         files_engine, file_manager);
   }
 
   Manager::~Manager()
