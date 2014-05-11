@@ -29,6 +29,7 @@ namespace libtocc
   Query::~Query()
   {
     delete this->expr;
+    this->expr = NULL;
   }
 
   ConnectiveExpr* Query::get_expr()

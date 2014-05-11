@@ -296,7 +296,7 @@ namespace libtocc
       field_after_group_state_handler
   };
 
-  std::string QueryCompiler::compile(Query& query_to_compile)
+  std::string QueryCompiler::compile(Query& query_to_compile, std::string result_var_name)
   {
     ConnectiveExpr* expression_to_compile = query_to_compile.get_expr();
 
@@ -348,7 +348,10 @@ namespace libtocc
     script += " " + tags_stream.str() +" }";
     script += " " + fields_stream.str();
     script += " return " + result.str() + ";";
-    script += " }; $fetched_records = db_fetch_all('files', $filter_func);";
+    script += " }; ";
+    // Applying filter on database's records, and putting the result in the
+    // result variable.
+    script += "$" + result_var_name + " = db_fetch_all('files', $filter_func);";
 
     return script;
   }

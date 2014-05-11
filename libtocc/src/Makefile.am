@@ -13,7 +13,8 @@ front_end_include_HEADERS = libtocc/front_end/file_info.h libtocc/front_end/mana
 common_includedir = $(includedir)/libtocc/common/
 common_include_HEADERS = libtocc/common/base_exception.h libtocc/common/database_exceptions.h libtocc/common/expr_exceptions.h libtocc/common/file_system_exceptions.h libtocc/common/runtime_exceptions.h
 exprs_includedir = $(includedir)/libtocc/exprs/
-exprs_include_HEADERS = libtocc/exprs/expr.h libtocc/exprs/connectives.h libtocc/exprs/fields.h libtocc/exprs/functions.h libtocc/exprs/operands.h libtocc/exprs/query.h
+# FIXME: compiled_expr.h shouldn't be here.
+exprs_include_HEADERS = libtocc/exprs/expr.h libtocc/exprs/connectives.h libtocc/exprs/fields.h libtocc/exprs/functions.h libtocc/exprs/operands.h libtocc/exprs/query.h libtocc/exprs/compiled_expr.h
 
 pkgconfigdir = @pkgconfigdir@
 pkgconfig_DATA = libtocc.pc

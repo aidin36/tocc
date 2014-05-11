@@ -49,4 +49,9 @@ namespace libtocc
     : BaseDatabaseException(message)
   {
   }
+
+  DatabaseScriptLogicalError::DatabaseScriptLogicalError(std::string message) throw()
+    : BaseDatabaseException(message)
+  {
+  }
 }

@@ -20,6 +20,7 @@
 #define LIBTOCC_MANAGER_H_INCLUDED
 
 #include "libtocc/front_end/file_info.h"
+#include "libtocc/exprs/query.h"
 
 
 namespace libtocc
@@ -40,6 +41,12 @@ namespace libtocc
 
     /*
      * Gets information of a file.
+     *
+     * @param file_id: ID of the file to get.
+     *
+     * @return: Infomration of the file.
+     *
+     * @throw: DatabaseScriptLogicalError if file not found.
      */
     FileInfo get_file_info(const char* file_id);
 
@@ -79,6 +86,8 @@ namespace libtocc
      * @param file_ids_size: size of the `file_ids' array. If set to
      *   zero or less, it will calculated automatically.
      * @param tags: Tags to assign to file.
+     *
+     * @note: It won't throw any exception if no file found with these IDs.
      */
     void assign_tags(const char* file_ids[],
                      int file_ids_size,
@@ -89,6 +98,8 @@ namespace libtocc
      *
      * @param file_id: File to assign tags to.
      * @param tags: Tags to assign to file.
+     *
+     * @note: It won't throw any exception if no file found with this ID.
      */
     void assign_tags(const char* file_id, const TagsCollection* tags);
 
@@ -97,9 +108,20 @@ namespace libtocc
      *
      * @param file_id: File to assign tags to.
      * @param tag: Tag to assign to file.
+     *
+     * @note: It won't throw any exception if no file found with this ID.
      */
     void assign_tags(const char* file_id, const char* tag);
 
+    /*
+     * Search files according to the specified query.
+     *
+     * @param query: Query to execute.
+     *
+     * @return: Collection of founded file. If nothing found,
+     *   an empty collection will return.
+     */
+    FileInfoCollection search_files(Query& query);
 
   private:
     /*

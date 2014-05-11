@@ -150,12 +150,6 @@ namespace libtocc
     this->private_data->tags_engine->assign_tags(file_ids_vector, tags_vector);
   }
 
-  /*
-   * Assigns tags to a file.
-   *
-   * @param file_id: File to assign tags to.
-   * @param tags: Tags to assign to file.
-   */
   void Manager::assign_tags(const char* file_id, const TagsCollection* tags)
   {
     // Converting tags to vector.
@@ -164,15 +158,16 @@ namespace libtocc
     this->private_data->tags_engine->assign_tags(file_id, tags_vector);
   }
 
-  /*
-   * Assigns a tag to a file.
-   *
-   * @param file_id: File to assign tags to.
-   * @param tag: Tag to assign to file.
-   */
   void Manager::assign_tags(const char* file_id, const char* tag)
   {
     this->private_data->tags_engine->assign_tags(file_id, tag);
   }
 
+  FileInfoCollection Manager::search_files(Query& query)
+  {
+    std::vector<IntFileInfo> founded_files =
+        this->private_data->database->search_files(query);
+
+    return to_external_file_infos(founded_files);
+  }
 }

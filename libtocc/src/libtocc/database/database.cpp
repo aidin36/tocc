@@ -20,8 +20,9 @@
 #include <cstring>
 
 #include "libtocc/database/database.h"
-#include "libtocc/database/scripts.h"
 #include "libtocc/database/base23.h"
+#include "libtocc/database/scripts.h"
+#include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
 
 extern "C"
@@ -144,7 +145,7 @@ namespace libtocc
 
       // Second variable is a pointer to int, which returns the length of the
       // string. Since we don't need it, we passed null.
-      throw DatabaseScriptExecutionError(
+      throw DatabaseScriptLogicalError(
           unqlite_value_to_string(execution_error, NULL));
     }
   }
@@ -218,33 +219,8 @@ namespace libtocc
     return UNQLITE_OK;
   }
 
-  /*
-   * Extracts a file object from the VM.
-   * It raises exception if specified variable name does not exists
-   * in the VM.
-   *
-   * @param vm: VM to extract variable from.
-   * @param variable_name: name of the variable to extract.
-   *
-   * @return: Instance of IntFileInfo.
-   */
-  IntFileInfo extract_file_from_vm(unqlite_vm* vm, std::string variable_name)
+  IntFileInfo convert_vm_object_to_file_info(unqlite_value* file_object)
   {
-    // Extracting variable from VM.
-    unqlite_value* file_object =
-        unqlite_vm_extract_variable(vm, variable_name.c_str());
-
-    if (file_object == NULL)
-    {
-      std::stringstream message_stream;
-      message_stream << "Error when extracting file object from VM: ";
-      message_stream << "Variable \"" << variable_name << "\" does not exists.";
-      throw DatabaseScriptExecutionError(message_stream.str());
-    }
-
-    // Auto release value.
-    UnqliteValueHolder holder(file_object, vm);
-
     // Extracting keys from object.
     unqlite_value* value_pointer;
 
@@ -283,6 +259,106 @@ namespace libtocc
                          &tags_vector);
       result.set_tags(tags_vector);
     }
+
+    return result;
+  }
+
+  /*
+   * Extracts a file object from the VM.
+   * It raises exception if specified variable name does not exists
+   * in the VM.
+   *
+   * @param vm: VM to extract variable from.
+   * @param variable_name: name of the variable to extract.
+   *
+   * @return: Instance of IntFileInfo.
+   */
+  IntFileInfo extract_file_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    // Extracting variable from VM.
+    unqlite_value* file_object =
+        unqlite_vm_extract_variable(vm, variable_name.c_str());
+
+    if (file_object == NULL)
+    {
+      std::stringstream message_stream;
+      message_stream << "Error when extracting file object from VM: ";
+      message_stream << "Variable \"" << variable_name << "\" does not exists.";
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(file_object, vm);
+
+    return convert_vm_object_to_file_info(file_object);
+  }
+
+  /*
+   * Call back for unqlite_array_walk.
+   *
+   * @param key: key of the array element.
+   * @param value: value of the array element.
+   * @param vector_to_fill: a pointer to a vector of IntFileInfo.
+   *   Each extracted value will be pushed to this vector.
+   */
+  int files_array_walk_callback(unqlite_value* key, unqlite_value* value,
+                                void* vector_to_fill)
+  {
+    ((std::vector<IntFileInfo>*)vector_to_fill)->push_back(
+        convert_vm_object_to_file_info(value));
+
+    return UNQLITE_OK;
+  }
+
+  /*
+   * Extracts a list of files from the Unqlite VM.
+   *
+   * @param vm: VM to extract variable from.
+   * @param variable_name: Name of the variable in Jx9 that contains
+   *   list of files.
+   *
+   * @return: Vector of extracted files.
+   */
+  std::vector<IntFileInfo> extract_files_list_from_vm(unqlite_vm* vm,
+                                                      std::string variable_name)
+  {
+    // Extracting variable from VM.
+    unqlite_value* files_array =
+        unqlite_vm_extract_variable(vm, variable_name.c_str());
+
+    if (files_array == NULL)
+    {
+      std::stringstream message_stream;
+      message_stream << "Error when extracting files array from VM: ";
+      message_stream << "Variable \"" << variable_name << "\" does not exists.";
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(files_array, vm);
+
+    // Checking health of the variable.
+    if (!unqlite_value_is_json_array(files_array))
+    {
+      std::stringstream message_stream;
+      message_stream << "In `extract_files_list_from_vm': ";
+      message_stream << "Extracted variable was not an array. ";
+      message_stream << "Variable name: \"" << variable_name << "\"";
+      throw DatabaseScriptExecutionError(message_stream.str());
+    }
+
+    std::vector<IntFileInfo> result;
+
+    if (unqlite_array_count(files_array) <= 0)
+    {
+      // Returning an empty vector: Nothing is found.
+      return result;
+    }
+
+    // Walking over the array.
+    unqlite_array_walk(files_array,
+                       files_array_walk_callback,
+                       &result);
 
     return result;
   }
@@ -719,4 +795,24 @@ namespace libtocc
     execute_vm(vm);
   }
 
+  std::vector<IntFileInfo> Database::search_files(Query& query)
+  {
+    std::string result_variable_name = "fetched_records";
+
+    // Compiling the query to a Jx9.
+    QueryCompiler compiler;
+    std::string jx9_script = compiler.compile(query);
+
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    VMPointerHolder holder(&vm);
+
+    // Compiling Jx9
+    compile_jx9(this->db_pointer, jx9_script, &vm);
+
+    // Executing vm.
+    execute_vm(vm);
+
+    return extract_files_list_from_vm(vm, result_variable_name);
+  }
 }

@@ -114,59 +114,6 @@ namespace libtocc
     std::string title;
     std::string traditional_path;
   };
-
-
-  class FileInfoCollection
-  {
-  public:
-    /*
-     * Default constructor.
-     */
-    FileInfoCollection();
-
-    /*
-     * @param file_infos: Initialize collection with this vector
-     *   of file infos.
-     */
-    FileInfoCollection(std::vector<IntFileInfo> file_infos);
-
-    /*
-     * @param file_infos: Initialize collection with this array of vectors.
-     * @param count: Count of the array elements.
-     */
-    FileInfoCollection(IntFileInfo file_infos[], int count);
-
-    /*
-     * Adds a file info to the collection.
-     */
-    void add_file_info(IntFileInfo file_info);
-
-    /*
-     * Adds a vector of file infos to the collection.
-     */
-    void add_file_infos(std::vector<IntFileInfo> file_infos);
-
-    /*
-     * Adds an array of file infos to the collection.
-     *
-     * @param file_infos: Array to append.
-     * @param count: Count of the array elements.
-     */
-    void add_file_infos(IntFileInfo file_infos[], int count);
-
-    /*
-     * Gets file infos in the collection.
-     */
-    std::vector<IntFileInfo> get_file_infos();
-
-    /*
-     * Gets a list of all IDs in the collection.
-     */
-    std::vector<std::string> get_file_ids();
-
-  private:
-    std::vector<IntFileInfo> file_infos;
-  };
 }
 
 #endif /* LIBTOCC_INT_FILE_INFO_H_INCLUDED */

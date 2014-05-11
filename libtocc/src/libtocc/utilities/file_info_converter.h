@@ -31,6 +31,8 @@ namespace libtocc
 
   IntFileInfo to_internal_file_info(const FileInfo* external_file_info);
 
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos);
+
   std::vector<std::string> tags_to_vector(const TagsCollection* collection);
 
   TagsCollection vector_to_tags(const std::vector<std::string>* vector);

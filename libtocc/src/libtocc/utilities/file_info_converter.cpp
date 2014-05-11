@@ -52,6 +52,26 @@ namespace libtocc
     return result;
   }
 
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos)
+  {
+    if (internal_file_infos.empty())
+    {
+      // Returning an empty collection.
+      return FileInfoCollection();
+    }
+
+    // File info collection with reserved size.
+    FileInfoCollection result(internal_file_infos.size());
+
+    std::vector<IntFileInfo>::iterator iterator = internal_file_infos.begin();
+    for (; iterator != internal_file_infos.end(); ++iterator)
+    {
+      result.add_file_info(to_external_file_info(&*iterator));
+    }
+
+    return result;
+  }
+
   std::vector<std::string> tags_to_vector(const TagsCollection* collection)
   {
     std::vector<std::string> tags_vector;

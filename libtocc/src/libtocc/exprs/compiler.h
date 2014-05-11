@@ -33,8 +33,15 @@ namespace libtocc
   public:
     /*
      * Compiles a query object to a Jx9 script.
+     *
+     * @param query_to_compile: Query object to compile.
+     * @param result_var_name: Variable name inside the Jx9 script that
+     *   keeps the result of the query.
+     *
+     * @return: Compiled Jx9 script.
      */
-    std::string compile(Query& query_to_compile);
+    std::string compile(Query& query_to_compile,
+                        std::string result_var_name="fetched_records");
 
   };
 };

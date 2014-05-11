@@ -321,4 +321,147 @@ namespace libtocc
 
     return *this;
   }
+
+  class FileInfoCollection::PrivateData
+  {
+  public:
+    PrivateData()
+    {
+    }
+
+    PrivateData(int size)
+    {
+      file_infos.reserve(size);
+    }
+
+    PrivateData(FileInfo file_infos[], int count)
+    {
+      if (count <= 0)
+      {
+        count = sizeof(file_infos) / sizeof(file_infos[0]);
+      }
+
+      this->file_infos.reserve(count);
+      this->file_infos.assign(file_infos, file_infos + count);
+    }
+
+    PrivateData(std::vector<FileInfo> file_infos)
+    {
+      this->file_infos = file_infos;
+    }
+
+    std::vector<FileInfo> file_infos;
+  };
+
+  FileInfoCollection::FileInfoCollection()
+  {
+    this->private_data = new PrivateData();
+  }
+
+  FileInfoCollection::FileInfoCollection(int size)
+  {
+    this->private_data = new PrivateData(size);
+  }
+
+  FileInfoCollection::FileInfoCollection(FileInfo file_infos[], int count)
+  {
+    this->private_data = new PrivateData(file_infos, count);
+  }
+
+  FileInfoCollection::FileInfoCollection(const FileInfoCollection& source)
+  {
+    this->private_data = new PrivateData(source.private_data->file_infos);
+  }
+
+  FileInfoCollection::~FileInfoCollection()
+  {
+    delete this->private_data;
+    this->private_data = NULL;
+  }
+
+  void FileInfoCollection::add_file_info(FileInfo file_info)
+  {
+    this->private_data->file_infos.push_back(file_info);
+  }
+
+  int FileInfoCollection::size()
+  {
+    return this->private_data->file_infos.size();
+  }
+
+  bool FileInfoCollection::is_empty()
+  {
+    return this->private_data->file_infos.empty();
+  }
+
+  FileInfoCollection& FileInfoCollection::operator=(const FileInfoCollection& source)
+  {
+    if (this == &source)
+    {
+      return *this;
+    }
+
+    this->private_data->file_infos = source.private_data->file_infos;
+    return *this;
+  }
+
+  class FileInfoCollection::Iterator::PrivateData
+  {
+  public:
+    std::vector<FileInfo>::iterator collection_iterator;
+  };
+
+  FileInfoCollection::Iterator::Iterator(const FileInfoCollection* collection)
+  {
+    this->collection = collection;
+
+    this->private_data = new PrivateData();
+    this->private_data->collection_iterator =
+        this->collection->private_data->file_infos.begin();
+  }
+
+  FileInfoCollection::Iterator::~Iterator()
+  {
+    delete this->private_data;
+    this->private_data = NULL;
+  }
+
+  void FileInfoCollection::Iterator::next()
+  {
+    ++this->private_data->collection_iterator;
+  }
+
+  bool FileInfoCollection::Iterator::is_finished()
+  {
+    return (this->private_data->collection_iterator ==
+            this->collection->private_data->file_infos.end());
+  }
+
+  const FileInfo* FileInfoCollection::Iterator::get()
+  {
+    return &(*this->private_data->collection_iterator);
+  }
+
+  void FileInfoCollection::Iterator::reset()
+  {
+    this->private_data->collection_iterator =
+        this->collection->private_data->file_infos.begin();
+  }
+
+  FileInfoCollection::Iterator& FileInfoCollection::Iterator::operator++()
+  {
+    this->next();
+    return *this;
+  }
+
+  const FileInfo* FileInfoCollection::Iterator::operator*()
+  {
+    return this->get();
+  }
+
+  const FileInfo* FileInfoCollection::Iterator::operator->()
+  {
+    return this->get();
+  }
+
 }

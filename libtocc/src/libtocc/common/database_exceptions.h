@@ -71,6 +71,16 @@ namespace libtocc
   public:
     DatabaseScriptExecutionError(std::string message) throw();
   };
+
+  /*
+   * Raises if any logical error happened in database. i.e. a file ID
+   * not found.
+   */
+  class DatabaseScriptLogicalError : public BaseDatabaseException
+  {
+  public:
+    DatabaseScriptLogicalError(std::string message) throw();
+  };
 }
 
 #endif /* LIBTOCC_DATABASE_EXCEPTIONS_H_INCLUDED */

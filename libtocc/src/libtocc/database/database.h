@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 
+#include "libtocc/exprs/query.h"
 #include "libtocc/common/int_file_info.h"
 
 // Forward declaration of unqlite. So I don't have to include the
@@ -104,6 +105,11 @@ namespace libtocc
      * Unassign a tag from a file.
      */
     void unassign_tag(std::string file_id, std::string tag);
+
+    /*
+     * Searching the files by executing the specified query.
+     */
+    std::vector<IntFileInfo> search_files(Query& query);
 
   private:
     /*
