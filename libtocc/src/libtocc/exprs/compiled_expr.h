@@ -21,13 +21,11 @@
 
 #include <string>
 
+#include "libtocc/exprs/compiled_expr_types.h"
+
+
 namespace libtocc
 {
-
-  namespace compiled_expr
-  {
-    enum ExprType { CONNECTIVE, END_CONNECTIVE_GROUP, TAG, FIELD, NOPE };
-  };
 
   /*
    * When the expression compiles, it returns an instance

@@ -17,6 +17,8 @@
  */
 
 #include "libtocc/exprs/fields.h"
+#include "libtocc/exprs/compiled_expr.h"
+
 
 namespace libtocc
 {

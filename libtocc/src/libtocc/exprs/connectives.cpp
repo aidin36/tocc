@@ -17,6 +17,7 @@
  */
 
 #include "libtocc/exprs/connectives.h"
+#include "libtocc/exprs/compiled_expr.h"
 
 namespace libtocc
 {

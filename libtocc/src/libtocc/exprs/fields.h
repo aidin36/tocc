@@ -24,10 +24,14 @@
 #include "libtocc/exprs/expr.h"
 #include "libtocc/exprs/operands.h"
 #include "libtocc/exprs/functions.h"
-#include "libtocc/exprs/compiled_expr.h"
+#include "libtocc/exprs/compiled_expr_types.h"
+
 
 namespace libtocc
 {
+
+  // Forward declaration: This shouldn't be exposed in the public headers.
+  class CompiledExpr;
 
   /*
    * Base class of expressions that represents a field.

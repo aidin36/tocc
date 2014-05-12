@@ -23,10 +23,12 @@
 
 #include "libtocc/exprs/expr.h"
 #include "libtocc/exprs/fields.h"
-#include "libtocc/exprs/compiled_expr.h"
 
 namespace libtocc
 {
+
+  // Forward declaration: This shouldn't be exposed in the public headers.
+  class CompiledExpr;
 
   /*
    * Base class of all connective expressions.
