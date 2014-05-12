@@ -120,7 +120,13 @@ namespace libtocc
 
     while ((size = read(source, buf, BUFSIZ)) > 0)
     {
-        write(dest, buf, size);
+        ssize_t write_result = write(dest, buf, size);
+
+        if (write_result < 0)
+        {
+          // An error occurred while writing to file.
+          handle_errno(errno, source_path);
+        }
     }
 
     close(source);
