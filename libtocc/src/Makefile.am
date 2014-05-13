@@ -18,3 +18,9 @@ exprs_include_HEADERS = libtocc/exprs/expr.h libtocc/exprs/connectives.h libtocc
 pkgconfigdir = @pkgconfigdir@
 pkgconfig_DATA = libtocc.pc
 
+# Libtool doesn't update ld's cache by default. This hook is added to ensure
+# that cache is updated after library is installed. Though it make the
+# installation a little slow...
+install-exec-hook:
+	ldconfig
+
