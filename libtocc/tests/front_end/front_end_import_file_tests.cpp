@@ -22,6 +22,7 @@
 
 #include "libtocc/front_end/manager.h"
 #include "libtocc/front_end/file_info.h"
+#include "libtocc/common/file_system_exceptions.h"
 
 
 TEST_CASE("front_end: file import")
@@ -35,74 +36,91 @@ TEST_CASE("front_end: file import")
   // Creating an instance of the manager.
   libtocc::Manager manager("/tmp/");
 
-  // Importing the file with no property.
-  libtocc::FileInfo test_file =
-      manager.import_file("/tmp/tocc_test_file_to_import_2");
-  // Checking if it's OK.
-  REQUIRE(strcmp(test_file.get_title(), "") == 0);
-  REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
-  REQUIRE(test_file.get_tags().size() == 0);
+  SECTION("Importing a file with no property")
+  {
+    // Importing the file with no property.
+    libtocc::FileInfo test_file =
+        manager.import_file("/tmp/tocc_test_file_to_import_2");
+    // Checking if it's OK.
+    REQUIRE(strcmp(test_file.get_title(), "") == 0);
+    REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
+    REQUIRE(test_file.get_tags().size() == 0);
 
-  // Importing the file with Title and Traditional Path.
-  libtocc::FileInfo test_file_2 =
-      manager.import_file("/tmp/tocc_test_file_to_import_2",
-                          "Title of the test file",
-                          "/home/not_well_organized/test");
-  // Checking if it's OK.
-  REQUIRE(strcmp(test_file_2.get_title(), "Title of the test file") == 0);
-  REQUIRE(strcmp(test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
-  REQUIRE(test_file_2.get_tags().size() == 0);
+    // Getting the file again.
+    libtocc::FileInfo fetched_test_file = manager.get_file_info(test_file.get_id());
+    // Checking if it's OK.
+    REQUIRE(strcmp(fetched_test_file.get_title(), "") == 0);
+    REQUIRE(strcmp(fetched_test_file.get_traditional_path(), "") == 0);
+    REQUIRE(fetched_test_file.get_tags().size() == 0);
+  }
 
-  // Importing the file with some tags.
-  libtocc::TagsCollection tags;
-  tags.add_tag("test");
-  tags.add_tag("safe-to-remove");
-  libtocc::FileInfo test_file_3 =
-      manager.import_file("/tmp/tocc_test_file_to_import_2",
-                          "Third import",
-                          "/home/not_well_organized/test3",
-                          &tags);
+  SECTION("Importing the file with Title and Traditional Path")
+  {
+    libtocc::FileInfo test_file_2 =
+        manager.import_file("/tmp/tocc_test_file_to_import_2",
+                            "Title of the test file",
+                            "/home/not_well_organized/test");
+    // Checking if it's OK.
+    REQUIRE(strcmp(test_file_2.get_title(), "Title of the test file") == 0);
+    REQUIRE(strcmp(test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
+    REQUIRE(test_file_2.get_tags().size() == 0);
 
-  // Checking if it's OK.
-  REQUIRE(strcmp(test_file_3.get_title(), "Third import") == 0);
-  REQUIRE(strcmp(test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
+    // Getting the file again.
+    libtocc::FileInfo fetched_test_file_2 = manager.get_file_info(test_file_2.get_id());
+    // Checking if it's OK.
+    REQUIRE(strcmp(fetched_test_file_2.get_title(), "Title of the test file") == 0);
+    REQUIRE(strcmp(fetched_test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
+    REQUIRE(fetched_test_file_2.get_tags().size() == 0);
+  }
 
-  libtocc::TagsCollection file_tags = test_file_3.get_tags();
+  SECTION("Importing the file with some tags.")
+  {
+    libtocc::TagsCollection tags;
+    tags.add_tag("test");
+    tags.add_tag("safe-to-remove");
+    libtocc::FileInfo test_file_3 =
+        manager.import_file("/tmp/tocc_test_file_to_import_2",
+                            "Third import",
+                            "/home/not_well_organized/test3",
+                            &tags);
 
-  REQUIRE(file_tags.size() == 2);
+    // Checking if it's OK.
+    REQUIRE(strcmp(test_file_3.get_title(), "Third import") == 0);
+    REQUIRE(strcmp(test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
 
-  libtocc::TagsCollection::Iterator iterator(&file_tags);
-  REQUIRE(strcmp(iterator.get(), "test") == 0);
-  iterator.next();
-  REQUIRE(strcmp(iterator.get(), "safe-to-remove") == 0);
+    libtocc::TagsCollection file_tags = test_file_3.get_tags();
 
-  // Getting first file.
-  libtocc::FileInfo fetched_test_file = manager.get_file_info(test_file.get_id());
-  // Checking if it's OK.
-  REQUIRE(strcmp(fetched_test_file.get_title(), "") == 0);
-  REQUIRE(strcmp(fetched_test_file.get_traditional_path(), "") == 0);
-  REQUIRE(fetched_test_file.get_tags().size() == 0);
+    REQUIRE(file_tags.size() == 2);
 
-  // Getting second file.
-  libtocc::FileInfo fetched_test_file_2 = manager.get_file_info(test_file_2.get_id());
-  // Checking if it's OK.
-  REQUIRE(strcmp(fetched_test_file_2.get_title(), "Title of the test file") == 0);
-  REQUIRE(strcmp(fetched_test_file_2.get_traditional_path(), "/home/not_well_organized/test") == 0);
-  REQUIRE(fetched_test_file_2.get_tags().size() == 0);
+    libtocc::TagsCollection::Iterator iterator(&file_tags);
+    REQUIRE(strcmp(iterator.get(), "test") == 0);
+    iterator.next();
+    REQUIRE(strcmp(iterator.get(), "safe-to-remove") == 0);
 
-  // Getting third file.
-  libtocc::FileInfo fetched_test_file_3 = manager.get_file_info(test_file_3.get_id());
-  // Checking if it's OK.
-  REQUIRE(strcmp(fetched_test_file_3.get_title(), "Third import") == 0);
-  REQUIRE(strcmp(fetched_test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
+    // Getting the file again.
+    libtocc::FileInfo fetched_test_file_3 = manager.get_file_info(test_file_3.get_id());
+    // Checking if it's OK.
+    REQUIRE(strcmp(fetched_test_file_3.get_title(), "Third import") == 0);
+    REQUIRE(strcmp(fetched_test_file_3.get_traditional_path(), "/home/not_well_organized/test3") == 0);
 
-  libtocc::TagsCollection fetched_file_tags = fetched_test_file_3.get_tags();
+    libtocc::TagsCollection fetched_file_tags = fetched_test_file_3.get_tags();
 
-  REQUIRE(fetched_file_tags.size() == 2);
+    REQUIRE(fetched_file_tags.size() == 2);
 
-  libtocc::TagsCollection::Iterator tags_iterator(&fetched_file_tags);
-  REQUIRE(strcmp(tags_iterator.get(), "test") == 0);
-  tags_iterator.next();
-  REQUIRE(strcmp(tags_iterator.get(), "safe-to-remove") == 0);
+    libtocc::TagsCollection::Iterator tags_iterator(&fetched_file_tags);
+    REQUIRE(strcmp(tags_iterator.get(), "test") == 0);
+    tags_iterator.next();
+    REQUIRE(strcmp(tags_iterator.get(), "safe-to-remove") == 0);
+  }
 
+}
+
+TEST_CASE("Importing a not-existed file")
+{
+  // Creating an instance of the manager.
+  libtocc::Manager manager("/tmp/");
+
+  REQUIRE_THROWS_AS(
+      manager.import_file("/path/to/a/not/existed/file/fly364bouqc"),
+      libtocc::BadAddressError);
 }

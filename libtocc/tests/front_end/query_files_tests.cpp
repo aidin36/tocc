@@ -43,4 +43,47 @@ TEST_CASE("query_files_tests: simple tag search")
 
     REQUIRE(founded_files.size() == 1);
   }
+
+  SECTION("Search two tags")
+  {
+    manager.assign_tags("0000001", "test_tag_zE1jIqw");
+
+    libtocc::Tag* tag_expr = libtocc::Tag::create("test_tag_0xUi7");
+    libtocc::Tag* second_tag_expr = libtocc::Tag::create("test_tag_zE1jIqw");
+    libtocc::And* main_and = libtocc::And::create(tag_expr);
+    main_and->add(second_tag_expr);
+
+    libtocc::Query query(main_and);
+
+    libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+    REQUIRE(founded_files.size() == 1);
+  }
+
+  SECTION("Or two tags")
+  {
+    libtocc::Tag* tag_expr = libtocc::Tag::create("test_tag_0xUi7");
+    libtocc::Tag* second_tag_expr = libtocc::Tag::create("not-existed-tag:jFi92Xhd");
+
+    libtocc::Or* main_or = libtocc::Or::create(tag_expr);
+    main_or->add(second_tag_expr);
+
+    libtocc::Query query(main_or);
+
+    libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+    REQUIRE(founded_files.size() == 1);
+  }
+
+  SECTION("Query a not existed file")
+  {
+    libtocc::Tag* tag_expr = libtocc::Tag::create("a-not-existed-tag:anFhdu89");
+    libtocc::And* main_and = libtocc::And::create(tag_expr);
+
+    libtocc::Query query(main_and);
+
+    libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+    REQUIRE(founded_files.size() == 0);
+  }
 }

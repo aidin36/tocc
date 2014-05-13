@@ -16,6 +16,10 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+#include <string>
+#include <algorithm>
+
 #include <catch.hpp>
 
 #include "libtocc/common/int_file_info.h"
@@ -25,11 +29,17 @@ TEST_CASE("database: tag operation tests")
 {
   libtocc::Database db("/tmp/tocc.test.db");
 
-  // Assigning a single tag.
-  db.assign_tag("0000001", "unique_book");
+  SECTION("Assigning a single tag")
+  {
+    // Assigning a single tag.
+    db.assign_tag("0000001", "unique_book");
 
-  // Checking if it's OK.
-  libtocc::IntFileInfo file_info = db.get("0000001");
-  REQUIRE(file_info.get_tags().size() >= 1);
-  REQUIRE(file_info.get_tags().back() == "unique_book");
+    // Checking if it's OK.
+    libtocc::IntFileInfo file_info = db.get("0000001");
+    REQUIRE(file_info.get_tags().size() >= 1);
+
+    std::vector<std::string> file_tags = file_info.get_tags();
+    REQUIRE(std::find(file_tags.begin(), file_tags.end(), "unique_book") != file_tags.end());
+  }
 }
+
