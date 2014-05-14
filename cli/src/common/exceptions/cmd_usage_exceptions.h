@@ -19,8 +19,6 @@
 #ifndef TOCCCLI_CMD_USAGE_EXCEPTIONS_H_INCLUDED
 #define TOCCCLI_CMD_USAGE_EXCEPTIONS_H_INCLUDED
 
-#include <string>
-
 #include "common/exceptions/base_exception.h"
 
 namespace tocccli
@@ -32,7 +30,7 @@ namespace tocccli
   class CmdUsageBaseException : public BaseException
   {
   public:
-    CmdUsageBaseException(std::string message) throw();
+    CmdUsageBaseException(const char* message) throw();
 
     virtual ~CmdUsageBaseException() throw();
 
@@ -44,7 +42,7 @@ namespace tocccli
   class InvalidParametersError : public CmdUsageBaseException
   {
   public:
-    InvalidParametersError(std::string message) throw();
+    InvalidParametersError(const char* message) throw();
 
     virtual ~InvalidParametersError() throw();
   };
