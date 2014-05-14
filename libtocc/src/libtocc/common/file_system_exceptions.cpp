@@ -16,6 +16,7 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
 #include <string.h> // For `strerror'.
 #include <errno.h>
 

@@ -113,7 +113,7 @@ namespace libtocc
         error_message = log_buf;
       }
 
-      throw DatabaseScriptCompilationError(error_message);
+      throw DatabaseScriptCompilationError(error_message.c_str());
     }
   }
 
@@ -132,7 +132,7 @@ namespace libtocc
     {
       std::ostringstream message_stream;
       message_stream << "Error executing the script. Error No: " << result;
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     // Checking if any error occurred inside the script.
@@ -145,8 +145,9 @@ namespace libtocc
 
       // Second variable is a pointer to int, which returns the length of the
       // string. Since we don't need it, we passed null.
+      std::string _res(unqlite_value_to_string(execution_error, NULL)); 
       throw DatabaseScriptLogicalError(
-          unqlite_value_to_string(execution_error, NULL));
+          _res.c_str());
     }
   }
 
@@ -284,7 +285,7 @@ namespace libtocc
       std::stringstream message_stream;
       message_stream << "Error when extracting file object from VM: ";
       message_stream << "Variable \"" << variable_name << "\" does not exists.";
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     // Auto release value.
@@ -331,7 +332,7 @@ namespace libtocc
       std::stringstream message_stream;
       message_stream << "Error when extracting files array from VM: ";
       message_stream << "Variable \"" << variable_name << "\" does not exists.";
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     // Auto release value.
@@ -344,7 +345,7 @@ namespace libtocc
       message_stream << "In `extract_files_list_from_vm': ";
       message_stream << "Extracted variable was not an array. ";
       message_stream << "Variable name: \"" << variable_name << "\"";
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     std::vector<IntFileInfo> result;
@@ -395,7 +396,7 @@ namespace libtocc
       message_stream << " Error No: " << result;
       message_stream << " Value: " << value;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     // FIXME: Memory leak here.
@@ -419,7 +420,7 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << value;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
   }
 
@@ -455,7 +456,7 @@ namespace libtocc
       message_stream << " Error No: " << result;
       message_stream << " Value: " << value;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
     // FIXME: Memory leak here.
@@ -479,7 +480,7 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << value;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
   }
 
@@ -523,7 +524,7 @@ namespace libtocc
         message_stream << "Error reseting the scalar. ";
         message_stream << " Error No: " << result;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
+        throw DatabaseScriptExecutionError(message_stream.str().c_str());
       }
 
       result = unqlite_value_string(scalar, (*iterator).c_str(), (*iterator).length());
@@ -534,7 +535,7 @@ namespace libtocc
         message_stream << " Error No: " << result;
         message_stream << ", Value: " << *iterator;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
+        throw DatabaseScriptExecutionError(message_stream.str().c_str());
       }
 
       // Append scalar to the array.
@@ -546,7 +547,7 @@ namespace libtocc
         message_stream << " Error No: " << result;
         message_stream << ", Value: " << *iterator;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
+        throw DatabaseScriptExecutionError(message_stream.str().c_str());
       }
     }
 
@@ -571,7 +572,7 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
   }
 
@@ -615,7 +616,7 @@ namespace libtocc
         message_stream << " Error No: " << result;
         message_stream << ", Value: " << *iterator;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
+        throw DatabaseScriptExecutionError(message_stream.str().c_str());
       }
 
       // Append scalar to the array.
@@ -627,7 +628,7 @@ namespace libtocc
         message_stream << " Error No: " << result;
         message_stream << ", Value: " << *iterator;
 
-        throw DatabaseScriptExecutionError(message_stream.str());
+        throw DatabaseScriptExecutionError(message_stream.str().c_str());
       }
     }
 
@@ -652,7 +653,7 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
-      throw DatabaseScriptExecutionError(message_stream.str());
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
   }
 
@@ -668,7 +669,7 @@ namespace libtocc
       std::string message = "Error opening database file: [";
       message += database_file;
       message += "]";
-      throw DatabaseInitializationError(message);
+      throw DatabaseInitializationError(message.c_str());
     }
 
     // Ensuring that collection is available, by executing a Jx9 script.

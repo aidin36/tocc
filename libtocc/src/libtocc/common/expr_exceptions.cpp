@@ -21,7 +21,7 @@
 namespace libtocc
 {
 
-BaseExprException::BaseExprException(std::string message) throw()
+BaseExprException::BaseExprException(const char* message) throw()
 {
   this->message = message;
 }
@@ -32,10 +32,10 @@ BaseExprException::~BaseExprException() throw()
 
 const char* BaseExprException::what() const throw()
 {
-  return this->message.c_str();
+  return this->message;
 }
 
-ExprCompilerError::ExprCompilerError(std::string message) throw()
+ExprCompilerError::ExprCompilerError(const char* message) throw()
     : BaseExprException(message)
 {
 }

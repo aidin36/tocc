@@ -19,8 +19,6 @@
 #ifndef LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
 #define LIBTOCC_RUNTIME_EXCEPTIONS_H_INCLUDED
 
-#include <string>
-
 #include "libtocc/common/base_exception.h"
 
 namespace libtocc
@@ -28,7 +26,7 @@ namespace libtocc
   class InvalidArgumentError : public BaseException
   {
   public:
-    InvalidArgumentError(std::string message) throw()
+    InvalidArgumentError(const char* message) throw()
     {
       this->message = message;
     }
@@ -39,11 +37,11 @@ namespace libtocc
 
     virtual const char* what() const throw()
     {
-      return this->message.c_str();
+      return this->message;
     }
 
   private:
-    std::string message;
+    const char* message;
   };
 
 }

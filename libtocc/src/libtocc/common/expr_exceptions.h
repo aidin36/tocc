@@ -19,8 +19,6 @@
 #ifndef LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
 #define LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
 
-#include <string>
-
 #include "libtocc/common/base_exception.h"
 
 namespace libtocc
@@ -32,14 +30,14 @@ namespace libtocc
   class BaseExprException : public BaseException
   {
   public:
-    BaseExprException(std::string message) throw();
+    BaseExprException(const char* message) throw();
 
     virtual ~BaseExprException() throw();
 
     virtual const char* what() const throw();
 
   private:
-    std::string message;
+    const char* message;
   };
 
   /*
@@ -48,7 +46,7 @@ namespace libtocc
   class ExprCompilerError : public BaseExprException
   {
   public:
-    ExprCompilerError(std::string message) throw();
+    ExprCompilerError(const char* message) throw();
   };
 }
 
