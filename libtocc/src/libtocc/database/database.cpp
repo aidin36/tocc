@@ -551,17 +551,10 @@ namespace libtocc
       }
     }
 
-    // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                array);
 
     if (result != UNQLITE_OK)
@@ -572,8 +565,10 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
+      unqlite_vm_release_value(vm, array);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
+    unqlite_vm_release_value(vm, array);
   }
 
   /*
@@ -632,17 +627,10 @@ namespace libtocc
       }
     }
 
-    // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                array);
 
     if (result != UNQLITE_OK)
@@ -653,8 +641,11 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
+      unqlite_vm_release_value(vm, array);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
+   
+   unqlite_vm_release_value(vm, array);
   }
 
   Database::Database(std::string database_file)
