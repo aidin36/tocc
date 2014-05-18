@@ -26,7 +26,7 @@ namespace libtocc
 {
 	std::string getFilenameFromPath(std::string pPath)
 	{
-		char*		_charPath = new char[pPath.size()];
+		char*		_charPath = new char[pPath.size()+1];
 		char* 		_token;
 		std::string	_filename;
 		const char 	_sep[2] = "/"; //separator
