@@ -16,38 +16,24 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED
 #include"libtocc/utilities/file_utils.h"
-#endif //LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED
-
-#include<string.h> //for strtok
 
 namespace libtocc
 {
-	std::string getFilenameFromPath(std::string pPath)
+	std::string get_filename_from_path(std::string path)
 	{
-		char*		_charPath = new char[pPath.size()+1];
-		char* 		_token;
-		std::string	_filename;
-		const char 	_sep[2] = "/"; //separator
+		std::string filename;
+		//extract the file from path
+		int last_slash_index = path.rfind("/");
+		if(last_slash_index != std::string::npos)
+			filename = path.substr(last_slash_index+1, path.length());
 
-		//get the file from path
-		strcpy(_charPath, pPath.c_str());
-		_token = strtok(_charPath, _sep);
+		//remove the file extension
+		int last_point_index = path.rfind(".");
+		if(last_point_index != std::string::npos && last_point_index != 0)
+			filename = filename.substr(0, last_point_index);
 
-		while(_token != 0)
-		{
-			if(_token != 0)
-				_filename = std::string(_token);
-			_token = strtok(0, _sep);
-		}
-		delete[] _charPath;
-
-		//get the filename (without extension)
-		size_t _extPos = _filename.rfind(".");
-		if(_extPos != std::string::npos && _extPos != 0)
-			return _filename.substr(0, _extPos);
-
-		return _filename;
+		return filename;
+			
 	}
 }	

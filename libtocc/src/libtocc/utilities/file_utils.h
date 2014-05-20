@@ -23,7 +23,7 @@
 
 namespace libtocc
 {
-	std::string getFilenameFromPath(std::string pPath);
+	std::string get_filename_from_path(std::string path);
 }
 
 #endif
