@@ -412,10 +412,8 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << value;
 
-      unqlite_vm_release_value(vm, scalar);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
-      unqlite_vm_release_value(vm, scalar);
   }
 
   /*
@@ -467,10 +465,8 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << value;
 
-      unqlite_vm_release_value(vm, scalar);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
-      unqlite_vm_release_value(vm, scalar);
   }
 
   /*
@@ -554,10 +550,8 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
-      unqlite_vm_release_value(vm, array);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
-    unqlite_vm_release_value(vm, array);
   }
 
   /*
@@ -630,11 +624,8 @@ namespace libtocc
       message_stream << " Variable Name: " << variable_name;
       message_stream << " Variable Value: " << array;
 
-      unqlite_vm_release_value(vm, array);
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
-   
-   unqlite_vm_release_value(vm, array);
   }
 
   Database::Database(std::string database_file)
