@@ -4,5 +4,5 @@ set -e
 
 libtoolize
 aclocal
-autoconf
-automake --add-missing
+autoconf -Wall
+automake -Wall --add-missing
