@@ -42,14 +42,14 @@ TEST_CASE("front_end: file import")
     libtocc::FileInfo test_file =
         manager.import_file("/tmp/tocc_test_file_to_import_2");
     // Checking if it's OK.
-    REQUIRE(strcmp(test_file.get_title(), "") == 0);
+    REQUIRE(strcmp(test_file.get_title(), "tocc_test_file_to_import_2") == 0);
     REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
     REQUIRE(test_file.get_tags().size() == 0);
 
     // Getting the file again.
     libtocc::FileInfo fetched_test_file = manager.get_file_info(test_file.get_id());
     // Checking if it's OK.
-    REQUIRE(strcmp(fetched_test_file.get_title(), "") == 0);
+    REQUIRE(strcmp(fetched_test_file.get_title(), "tocc_test_file_to_import_2") == 0);
     REQUIRE(strcmp(fetched_test_file.get_traditional_path(), "") == 0);
     REQUIRE(fetched_test_file.get_tags().size() == 0);
   }

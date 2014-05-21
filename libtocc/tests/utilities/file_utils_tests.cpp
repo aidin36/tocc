@@ -21,10 +21,10 @@
 
 TEST_CASE("utilities/file_utils: get file name from path")
 {
-	REQUIRE( get_filename_from_path("/home") == "home");
-	REQUIRE( get_filename_from_path("/home/dummy.ext") == "dummy");
-	REQUIRE( get_filename_from_path("/home/dummy.dump.ext") == "dummy.dump");
-	REQUIRE( get_filename_from_path("/home.ext") == "home");
-	REQUIRE( get_filename_from_path("/home/.act.ext") == ".act");
-	REQUIRE( get_filename_from_path("/.home") == ".home");
+	REQUIRE( libtocc::get_filename_from_path("/home") == "home");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.ext") == "dummy");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.dump.ext") == "dummy.dump");
+	REQUIRE( libtocc::get_filename_from_path("/home.ext") == "home");
+	REQUIRE( libtocc::get_filename_from_path("/home/.act.ext") == ".act");
+	REQUIRE( libtocc::get_filename_from_path("/.home") == ".home");
 }

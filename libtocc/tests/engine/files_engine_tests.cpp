@@ -48,7 +48,7 @@ TEST_CASE("engine: files engine tests")
   // Copying the file.
   libtocc::IntFileInfo first_file = files_engine.import_file("/tmp/tocc_a_file_to_import");
   // Checking if it's OK.
-  REQUIRE(first_file.get_title() == "");
+  REQUIRE(first_file.get_title() == "tocc_a_file_to_import");
   REQUIRE(first_file.get_traditional_path() == "");
   REQUIRE(first_file.get_tags().size() == 0);
 
@@ -57,7 +57,7 @@ TEST_CASE("engine: files engine tests")
    */
   libtocc::IntFileInfo fetched_first_file = files_engine.get(first_file.get_id());
   // Checking if it's OK.
-  REQUIRE(fetched_first_file.get_title() == "");
+  REQUIRE(fetched_first_file.get_title() == "tocc_a_file_to_import");
   REQUIRE(fetched_first_file.get_traditional_path() == "");
   REQUIRE(fetched_first_file.get_tags().size() == 0);
 
