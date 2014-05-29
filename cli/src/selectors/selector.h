@@ -28,7 +28,7 @@ namespace tocccli
 {
 
   /*
-   * Base class for handlers of action parameters.
+   * Base class for handlers of Selector parameters.
    */
   class Selector
   {
