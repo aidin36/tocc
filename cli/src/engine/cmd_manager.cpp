@@ -26,6 +26,7 @@
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
 #include "selectors/import_file_selector.h"
+#include "selectors/query_selector.h"
 #include "actions/print_action.h"
 
 
@@ -48,6 +49,7 @@ namespace tocccli
      */
     this->selectors.push_back(new IDSelector(this->libtocc_manager));
     this->selectors.push_back(new ImportFileSelector(this->libtocc_manager));
+    this->selectors.push_back(new QuerySelector(this->libtocc_manager));
 
     /*
      * Instantiating all of available actions.
@@ -124,6 +126,13 @@ namespace tocccli
     params_iterator = cmd_parameters.begin();
     for (; params_iterator < cmd_parameters.end(); ++params_iterator)
     {
+      if ((*params_iterator).option == "-b" ||
+          (*params_iterator).option == "--base-path")
+      {
+        // This option already handled in `main'. Ignoring.
+        continue;
+      }
+
       // Will set to true if any Selector or Action found for this option.
       bool option_handler_found = false;
 
@@ -203,8 +212,10 @@ namespace tocccli
       std::cout << " " << (*actions_iterator)->get_help_text() << std::endl;
     }
 
-    std::cout << " " << "-h, --help\tPrints out this help and exits." << std::endl;
-    std::cout << " " << "-v, --version\tPrints out version info and exits." << std::endl;
+    // Printing other options.
+    std::cout << " -b, --base-path\tPath to where Tocc kept its files." << std::endl;
+    std::cout << " -h, --help\tPrints out this help and exits." << std::endl;
+    std::cout << " -v, --version\tPrints out version info and exits." << std::endl;
   }
 
   void CmdManager::print_version()
