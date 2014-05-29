@@ -801,7 +801,7 @@ namespace libtocc
 
     // Compiling the query to a Jx9.
     QueryCompiler compiler;
-    std::string jx9_script = compiler.compile(query);
+    std::string jx9_script = compiler.compile(query, result_variable_name);
 
     unqlite_vm* vm;
     // Auto release the pointer.
