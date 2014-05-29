@@ -23,7 +23,6 @@
  * Defines exceptions related to database layer.
  */
 
-#include <string>
 
 #include "libtocc/common/base_exception.h"
 
@@ -35,14 +34,14 @@ namespace libtocc
   class BaseDatabaseException : public BaseException
   {
   public:
-    BaseDatabaseException(std::string message) throw();
+    BaseDatabaseException(const char* message) throw();
 
     virtual ~BaseDatabaseException() throw();
 
     virtual const char* what() const throw();
 
   private:
-    std::string message;
+    const char* message;
   };
 
   /*
@@ -51,7 +50,7 @@ namespace libtocc
   class DatabaseInitializationError : public BaseDatabaseException
   {
   public:
-    DatabaseInitializationError(std::string message) throw();
+    DatabaseInitializationError(const char* message) throw();
   };
 
   /*
@@ -60,7 +59,7 @@ namespace libtocc
   class DatabaseScriptCompilationError : public BaseDatabaseException
   {
   public:
-    DatabaseScriptCompilationError(std::string message) throw();
+    DatabaseScriptCompilationError(const char* message) throw();
   };
 
   /*
@@ -69,7 +68,7 @@ namespace libtocc
   class DatabaseScriptExecutionError : public BaseDatabaseException
   {
   public:
-    DatabaseScriptExecutionError(std::string message) throw();
+    DatabaseScriptExecutionError(const char* message) throw();
   };
 
   /*
@@ -79,7 +78,7 @@ namespace libtocc
   class DatabaseScriptLogicalError : public BaseDatabaseException
   {
   public:
-    DatabaseScriptLogicalError(std::string message) throw();
+    DatabaseScriptLogicalError(const char* message) throw();
   };
 }
 

@@ -21,7 +21,7 @@
 namespace libtocc
 {
 
-  BaseDatabaseException::BaseDatabaseException(std::string message) throw()
+  BaseDatabaseException::BaseDatabaseException(const char* message) throw()
   {
     this->message = message;
   }
@@ -32,25 +32,25 @@ namespace libtocc
 
   const char* BaseDatabaseException::what() const throw()
   {
-    return this->message.c_str();
+    return this->message;
   }
 
-  DatabaseInitializationError::DatabaseInitializationError(std::string message) throw()
+  DatabaseInitializationError::DatabaseInitializationError(const char* message) throw()
     : BaseDatabaseException(message)
   {
   }
 
-  DatabaseScriptCompilationError::DatabaseScriptCompilationError(std::string message) throw()
+  DatabaseScriptCompilationError::DatabaseScriptCompilationError(const char* message) throw()
     : BaseDatabaseException(message)
   {
   }
 
-  DatabaseScriptExecutionError::DatabaseScriptExecutionError(std::string message) throw()
+  DatabaseScriptExecutionError::DatabaseScriptExecutionError(const char* message) throw()
     : BaseDatabaseException(message)
   {
   }
 
-  DatabaseScriptLogicalError::DatabaseScriptLogicalError(std::string message) throw()
+  DatabaseScriptLogicalError::DatabaseScriptLogicalError(const char* message) throw()
     : BaseDatabaseException(message)
   {
   }

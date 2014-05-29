@@ -23,8 +23,6 @@
  * Defines exceptions related to file system layer.
  */
 
-#include <string>
-
 #include "libtocc/common/base_exception.h"
 
 namespace libtocc
@@ -74,7 +72,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
  
   class BadFDError : public BaseFileSystemException
@@ -87,7 +85,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
 
   class BadAddressError : public BaseFileSystemException
@@ -100,7 +98,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
 
   class InfinitLinkLoopError : public BaseFileSystemException
@@ -113,7 +111,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
 
   class TooLongPathError : public BaseFileSystemException
@@ -132,7 +130,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
 
   class OutOfMemoryError : public BaseFileSystemException
@@ -163,7 +161,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    std::string file_path;
+    const char* file_path;
   };
 
   class ReadOnlyFileSystemError : public BaseFileSystemException

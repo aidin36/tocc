@@ -16,38 +16,14 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
-#define LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
+#ifndef LIBTOCC_FILE_FILE_UTILS_H_INCLUDED
+#define LIBTOCC_FILE_FILE_UTILS_H_INCLUDED
 
-#include "libtocc/common/base_exception.h"
+#include<string>
 
 namespace libtocc
 {
-
-  /*
-   * Base class of all the errors related to expressions.
-   */
-  class BaseExprException : public BaseException
-  {
-  public:
-    BaseExprException(const char* message) throw();
-
-    virtual ~BaseExprException() throw();
-
-    virtual const char* what() const throw();
-
-  private:
-    const char* message;
-  };
-
-  /*
-   * Raises if any errors occur during the compilation of expressions.
-   */
-  class ExprCompilerError : public BaseExprException
-  {
-  public:
-    ExprCompilerError(const char* message) throw();
-  };
+  std::string get_filename_from_path(std::string path);
 }
 
-#endif /* LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED */
+#endif

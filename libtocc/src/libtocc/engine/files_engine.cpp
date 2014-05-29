@@ -19,6 +19,7 @@
 #include <string>
 
 #include "libtocc/engine/files_engine.h"
+#include"libtocc/utilities/file_utils.h"
 
 namespace libtocc
 {
@@ -54,7 +55,8 @@ namespace libtocc
                                        std::string traditional_path,
                                        std::vector<std::string> tags)
   {
-    // TODO: If title is not specified, use file name.
+    if(title.empty())
+	title = get_filename_from_path(source_path);
 
     IntFileInfo new_file = this->database->create_file(tags, title,
                                                        traditional_path);

@@ -16,38 +16,24 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
-#define LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
-
-#include "libtocc/common/base_exception.h"
+#include"libtocc/utilities/file_utils.h"
 
 namespace libtocc
 {
-
-  /*
-   * Base class of all the errors related to expressions.
-   */
-  class BaseExprException : public BaseException
+  std::string get_filename_from_path(std::string path)
   {
-  public:
-    BaseExprException(const char* message) throw();
+      std::string filename;
+      //extract the file from path
+      int last_slash_index = path.rfind("/");
+      if(last_slash_index != std::string::npos)
+	  filename = path.substr(last_slash_index+1, path.length());
 
-    virtual ~BaseExprException() throw();
+      //remove the file extension
+      int last_point_index = filename.rfind(".");
+      if(last_point_index != std::string::npos && last_point_index != 0)
+	  filename = filename.substr(0, last_point_index);
 
-    virtual const char* what() const throw();
-
-  private:
-    const char* message;
-  };
-
-  /*
-   * Raises if any errors occur during the compilation of expressions.
-   */
-  class ExprCompilerError : public BaseExprException
-  {
-  public:
-    ExprCompilerError(const char* message) throw();
-  };
-}
-
-#endif /* LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED */
+      return filename;
+		
+  }
+}	

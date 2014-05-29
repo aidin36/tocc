@@ -20,7 +20,6 @@
 #define TOCCCLI_BASE_EXCEPTION_H_INCLUDED
 
 #include <exception>
-#include <string>
 
 namespace tocccli
 {
@@ -30,14 +29,14 @@ namespace tocccli
   class BaseException : public std::exception
   {
   public:
-    BaseException(std::string message) throw();
+    BaseException(const char* message) throw();
 
     virtual ~BaseException() throw();
 
     virtual const char* what() const throw();
 
   private:
-    std::string message;
+    const char* message;
   };
 
 }

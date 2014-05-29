@@ -16,38 +16,15 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
-#define LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED
+#include<catch.hpp>
+#include"libtocc/utilities/file_utils.h"
 
-#include "libtocc/common/base_exception.h"
-
-namespace libtocc
+TEST_CASE("utilities/file_utils: get file name from path")
 {
-
-  /*
-   * Base class of all the errors related to expressions.
-   */
-  class BaseExprException : public BaseException
-  {
-  public:
-    BaseExprException(const char* message) throw();
-
-    virtual ~BaseExprException() throw();
-
-    virtual const char* what() const throw();
-
-  private:
-    const char* message;
-  };
-
-  /*
-   * Raises if any errors occur during the compilation of expressions.
-   */
-  class ExprCompilerError : public BaseExprException
-  {
-  public:
-    ExprCompilerError(const char* message) throw();
-  };
+	REQUIRE( libtocc::get_filename_from_path("/home") == "home");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.ext") == "dummy");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.dump.ext") == "dummy.dump");
+	REQUIRE( libtocc::get_filename_from_path("/home.ext") == "home");
+	REQUIRE( libtocc::get_filename_from_path("/home/.act.ext") == ".act");
+	REQUIRE( libtocc::get_filename_from_path("/.home") == ".home");
 }
-
-#endif /* LIBTOCC_EXPR_EXCEPTIONS_H_INCLUDED */
