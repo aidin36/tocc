@@ -180,9 +180,9 @@ namespace tocccli
       if (!option_handler_found)
       {
         // It means that this parameter didn't match any of the known ones.
-	std::string _error("Unknown option: ");
-	_error += (*params_iterator).option;
-	throw InvalidParametersError(_error.c_str());
+	std::string error_message("Unknown option: ");
+	error_message += (*params_iterator).option;
+	throw InvalidParametersError(error_message.c_str());
       }
     }
 

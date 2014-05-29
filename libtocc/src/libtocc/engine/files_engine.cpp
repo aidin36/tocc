@@ -56,7 +56,9 @@ namespace libtocc
                                        std::vector<std::string> tags)
   {
     if(title.empty())
-	title = get_filename_from_path(source_path);
+    {
+      title = get_filename_from_path(source_path);
+    }
 
     IntFileInfo new_file = this->database->create_file(tags, title,
                                                        traditional_path);

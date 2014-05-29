@@ -17,7 +17,6 @@
  */
 
 #include <sstream>
-#include<cstring>
 
 #include "libtocc/database/database.h"
 #include "libtocc/database/base23.h"
@@ -145,9 +144,8 @@ namespace libtocc
 
       // Second variable is a pointer to int, which returns the length of the
       // string. Since we don't need it, we passed null.
-      std::string _res(unqlite_value_to_string(execution_error, NULL)); 
-      throw DatabaseScriptLogicalError(
-          _res.c_str());
+      std::string error_message(unqlite_value_to_string(execution_error, NULL));
+      throw DatabaseScriptLogicalError(error_message.c_str());
     }
   }
 
@@ -399,7 +397,7 @@ namespace libtocc
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
-   // FIXME: Memory leak here.
+    // FIXME: Memory leak here.
     // Seems that unqlite_vm_config doesn't copy the variable name. So,
     // If we pass c_str or we free `vname', it breaks.
     char* vname = new char[variable_name.length() + 1];
