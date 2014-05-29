@@ -345,10 +345,17 @@ namespace libtocc
 
     // Finalizing the script.
     script += "$filter_func = function($record) { ";
-    script += " " + tags_stream.str() +" }";
+
+    if (tags_stream.tellp() != 0)
+    {
+      // If `tags_stream' is not empty.
+      script += " " + tags_stream.str() +" }";
+    }
+
     script += " " + fields_stream.str();
     script += " return " + result.str() + ";";
     script += " }; ";
+
     // Applying filter on database's records, and putting the result in the
     // result variable.
     script += "$" + result_var_name + " = db_fetch_all('files', $filter_func);";
