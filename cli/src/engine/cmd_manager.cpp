@@ -215,7 +215,7 @@ namespace tocccli
     }
 
     // Printing other options.
-    std::cout << " -b, --base-path\tPath to where Tocc kept its files." << std::endl;
+    std::cout << " -b, --base-path=PATH\tPath to where Tocc kept its files." << std::endl;
     std::cout << " -h, --help\tPrints out this help and exits." << std::endl;
     std::cout << " -v, --version\tPrints out version info and exits." << std::endl;
   }
