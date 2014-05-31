@@ -21,7 +21,7 @@
 namespace tocccli
 {
 
-  CmdUsageBaseException::CmdUsageBaseException(const char* message) throw()
+  CmdUsageBaseException::CmdUsageBaseException(std::string message) throw()
     : BaseException(message)
   {
   }
@@ -31,7 +31,7 @@ namespace tocccli
   }
 
 
-  InvalidParametersError::InvalidParametersError(const char* message) throw()
+  InvalidParametersError::InvalidParametersError(std::string message) throw()
     : CmdUsageBaseException(message)
   {
   }

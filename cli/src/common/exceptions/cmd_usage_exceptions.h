@@ -30,7 +30,7 @@ namespace tocccli
   class CmdUsageBaseException : public BaseException
   {
   public:
-    CmdUsageBaseException(const char* message) throw();
+    CmdUsageBaseException(std::string message) throw();
 
     virtual ~CmdUsageBaseException() throw();
 
@@ -42,7 +42,7 @@ namespace tocccli
   class InvalidParametersError : public CmdUsageBaseException
   {
   public:
-    InvalidParametersError(const char* message) throw();
+    InvalidParametersError(std::string message) throw();
 
     virtual ~InvalidParametersError() throw();
   };
