@@ -28,6 +28,7 @@
 #include "selectors/import_file_selector.h"
 #include "selectors/query_selector.h"
 #include "actions/print_action.h"
+#include "actions/assign_action.h"
 
 
 // PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
@@ -55,6 +56,7 @@ namespace tocccli
      * Instantiating all of available actions.
      */
     this->actions.push_back(new PrintAction(this->libtocc_manager));
+    this->actions.push_back(new AssignAction(this->libtocc_manager));
   }
 
   CmdManager::~CmdManager()
