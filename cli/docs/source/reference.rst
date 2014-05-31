@@ -52,4 +52,13 @@ Some examples::
 
 Prints out the founded files.
 
+.. option:: -a, --assign=TAGS
+
+Assigns tags to files. TAGS is a list of space-separated strings.
+some examples::
+
+  tocc --import /media/music/rock/track01.ogg --assign music rock "favorite song"
+
+  tocc --query title = "The Art of Unix Programming" --assign "unix philosophy"
+
 
