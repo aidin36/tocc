@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libtocc-tests], [0.2], [aidin@t-o-c-c.com], [Tests of libtocc], [http://t-o-c-c.com])
+AC_INIT([libtocc-tests], [0.3.0], [aidin@t-o-c-c.com], [Tests of libtocc], [http://t-o-c-c.com])
 AC_CONFIG_SRCDIR([main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 
