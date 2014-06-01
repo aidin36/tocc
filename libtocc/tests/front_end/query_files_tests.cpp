@@ -16,8 +16,8 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <catch.hpp>
+#include <fstream>
 
 #include "libtocc/front_end/manager.h"
 #include "libtocc/front_end/file_info.h"
@@ -85,5 +85,36 @@ TEST_CASE("query_files_tests: simple tag search")
     libtocc::FileInfoCollection founded_files = manager.search_files(query);
 
     REQUIRE(founded_files.size() == 0);
+  }
+}
+
+TEST_CASE("query_files_tests: simple title search")
+{
+  libtocc::Manager manager("/tmp/");
+
+  SECTION("Import and query `IMG007'")
+  {
+    std::ofstream file_stream;
+    file_stream.open("/tmp/XlfYru129384PxQ");
+    file_stream << "Not a real photo!";
+    file_stream.close();
+
+    libtocc::FileInfo original_file = manager.import_file("/tmp/XlfYru129384PxQ", "IMG007");
+
+    libtocc::Title* title_expr = libtocc::Title::create("IMG007");
+    libtocc::And* main_and = libtocc::And::create(title_expr);
+
+    libtocc::Query query(main_and);
+
+    libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+    // Checking collection size.
+    REQUIRE(founded_files.size() == 1);
+
+    // Checking if it's the same file.
+    libtocc::FileInfoCollection::Iterator iterator(&founded_files);
+    const libtocc::FileInfo* founded_file = iterator.get();
+    REQUIRE(founded_file->get_title() == "IMG007");
+    REQUIRE(founded_file->get_id() == original_file.get_id());
   }
 }
