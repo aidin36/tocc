@@ -65,5 +65,15 @@ namespace libtocc
 
     return new_file;
   }
+  
+  bool FilesEngine::delete_file( const std::string& file_id )
+  {
+    if(this->database->remove_file(file_id))
+    {
+      this->file_manager->remove(file_id);
+      return true;
+    }
 
+    return false;
+  }
 }

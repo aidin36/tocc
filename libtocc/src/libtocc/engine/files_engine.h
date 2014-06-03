@@ -80,6 +80,14 @@ namespace libtocc
                             std::string traditional_path,
                             std::vector<std::string> tags);
 
+    /*
+     * Deletes a file from the Tocc managed file system.
+     *
+     * @param file_id: the id of the file to delete.
+     *
+     */
+    bool delete_file( const std::string& file_id );
+
   private:
     Database* database;
     FileManager* file_manager;

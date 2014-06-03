@@ -63,6 +63,7 @@ TEST_CASE("database: basic tests")
   ++file_3_tags_iterator;
   REQUIRE((*file_3_tags_iterator) == "b&w");
 
+ 
   // Fetching first file.
   libtocc::IntFileInfo fetched_file_1 = db.get(new_file_1.get_id());
   // Checking if it's OK.
@@ -91,5 +92,4 @@ TEST_CASE("database: basic tests")
   REQUIRE((*fetched_tags_iterator) == "abstract");
   ++fetched_tags_iterator;
   REQUIRE((*fetched_tags_iterator) == "b&w");
-
 }

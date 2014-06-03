@@ -127,6 +127,11 @@ namespace libtocc
     return to_external_file_info(&new_file_info);
   }
 
+  bool Manager::delete_file( const char* file_id )
+  {
+    return this->private_data->files_engine->delete_file(std::string(file_id));
+  }
+
   void Manager::assign_tags(const char* file_ids[],
                             int file_ids_size,
                             const TagsCollection* tags)

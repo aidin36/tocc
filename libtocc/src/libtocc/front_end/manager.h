@@ -64,6 +64,14 @@ namespace libtocc
                          const char* traditional_path="");
 
     /*
+     * Deletes a file from the Tocc managed file system.
+     *
+     * @param file_id: the id of the file to delete.
+     * @return: true if the file has been deleted, false otherwise.
+     */
+    bool delete_file( const char* file_id );
+
+    /*
      * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.

@@ -18,6 +18,7 @@
 
 #include <sstream>
 #include<cstring>
+#include<cassert>
 
 #include "libtocc/database/database.h"
 #include "libtocc/database/base23.h"
@@ -201,6 +202,31 @@ namespace libtocc
     UnqliteValueHolder holder(value, vm);
 
     return unqlite_value_to_int64(value);
+  }
+
+  /*
+   * Extracts a boolean from the specified VM.
+   *
+   * @param vm: pointer to VM.
+   * @param variable_name: Name of the variable to extract.
+   *
+   * @return: Extracted variable. It will return false
+   *   if variable does not exists.
+   */
+  bool extract_boolean_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    unqlite_value* value = unqlite_vm_extract_variable(vm,
+                                                       variable_name.c_str());
+
+    if (value == NULL)
+    {
+      return false;
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
+
+    return unqlite_value_to_bool(value);
   }
 
   /*
@@ -691,6 +717,25 @@ namespace libtocc
     execute_vm(vm);
 
     return extract_file_from_vm(vm, "result");
+  }
+
+  bool Database::remove_file(const std::string& file_id)
+  {
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    //VMPointerHolder holder(&vm);
+
+    // Executing script.
+    compile_jx9(this->db_pointer, REMOVE_FILE_SCRIPT, &vm);
+
+    std::string variable_file_id("file_id");
+    register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
+
+    execute_vm(vm);
+
+    std::string remove_operation_succeed("operation_succeed");
+
+    return extract_boolean_from_vm(vm, remove_operation_succeed);
   }
 
   IntFileInfo Database::get(std::string file_id)

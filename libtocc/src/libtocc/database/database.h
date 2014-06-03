@@ -75,6 +75,15 @@ namespace libtocc
                             std::string traditional_path="");
 
     /*
+     * Removes a file from database.
+     *
+     * @param file_id: the id of the file to remove.
+     *
+     * @return: true if the file is removed, false otherwise.
+     */
+    bool remove_file(const std::string& file_id);
+
+    /*
      * Gets a file by its ID.
      * Raises exception if file not found.
      *
