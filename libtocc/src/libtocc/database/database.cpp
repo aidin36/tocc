@@ -372,7 +372,7 @@ namespace libtocc
    * @param value: Value of the variable.
    */
   void register_variable_in_vm(unqlite_vm* vm,
-                               std::string variable_name,
+                               const std::string& variable_name,
                                std::string value)
   {
     // Creating a new scalar.
@@ -399,17 +399,10 @@ namespace libtocc
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
-   // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                scalar);
 
     if (result != UNQLITE_OK)
@@ -432,7 +425,7 @@ namespace libtocc
    * @param value: Value of the variable.
    */
   void register_variable_in_vm(unqlite_vm* vm,
-                               std::string variable_name,
+                               const std::string& variable_name,
                                unsigned long value)
   {
     // Creating a new scalar.
@@ -459,17 +452,10 @@ namespace libtocc
       throw DatabaseScriptExecutionError(message_stream.str().c_str());
     }
 
-    // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                scalar);
 
     if (result != UNQLITE_OK)
@@ -492,7 +478,7 @@ namespace libtocc
    * @param value: Value of the variable.
    */
   void register_variable_in_vm(unqlite_vm* vm,
-                               std::string variable_name,
+                               const std::string& variable_name,
                                std::vector<std::string> value)
   {
     // Creating a new array.
@@ -551,17 +537,10 @@ namespace libtocc
       }
     }
 
-    // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                array);
 
     if (result != UNQLITE_OK)
@@ -584,7 +563,7 @@ namespace libtocc
    * @param value: Value of the variable.
    */
   void register_variable_in_vm(unqlite_vm* vm,
-                               std::string variable_name,
+                               const std::string& variable_name,
                                std::vector<unsigned long> value)
   {
     // Creating a new array.
@@ -632,17 +611,10 @@ namespace libtocc
       }
     }
 
-    // FIXME: Memory leak here.
-    // Seems that unqlite_vm_config doesn't copy the variable name. So,
-    // If we pass c_str or we free `vname', it breaks.
-    char* vname = new char[variable_name.length() + 1];
-    std::strcpy(vname, variable_name.c_str());
-
     // Registering the variable.
     result = unqlite_vm_config(vm,
                                UNQLITE_VM_CONFIG_CREATE_VAR,
-                               //variable_name.c_str(),
-                               vname,
+                               variable_name.c_str(),
                                array);
 
     if (result != UNQLITE_OK)
@@ -708,10 +680,13 @@ namespace libtocc
 
     // Compiling the script (Which fills VM)
     compile_jx9(this->db_pointer, CREATE_FILE_SCRIPT, &vm);
-
-    register_variable_in_vm(vm, "tags", tags);
-    register_variable_in_vm(vm, "title", title);
-    register_variable_in_vm(vm, "traditional_path", traditional_path);
+    
+    std::string variable_tags("tags");
+    std::string variable_title("title");
+    std::string variable_traditional_path("traditional_path");
+    register_variable_in_vm(vm, variable_tags, tags);
+    register_variable_in_vm(vm, variable_title, title);
+    register_variable_in_vm(vm, variable_traditional_path, traditional_path);
 
     execute_vm(vm);
 
@@ -727,7 +702,8 @@ namespace libtocc
     // Executing script.
     compile_jx9(this->db_pointer, GET_FILE_SCRIPT, &vm);
 
-    register_variable_in_vm(vm, "file_id", from_base23(file_id));
+    std::string variable_file_id("file_id");
+    register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
 
     execute_vm(vm);
 
@@ -772,8 +748,11 @@ namespace libtocc
     }
 
     // Registering variables in VM
-    register_variable_in_vm(vm, "file_ids", converted_ids);
-    register_variable_in_vm(vm, "tags_to_assign", tags);
+    std::string variable_file_ids("file_ids");
+    std::string variable_tags_to_assign("tags_to_assign");
+    register_variable_in_vm(vm, variable_file_ids, converted_ids);
+    register_variable_in_vm(vm, variable_tags_to_assign, tags);
+
 
     // Executing VM
     execute_vm(vm);
@@ -789,8 +768,10 @@ namespace libtocc
     compile_jx9(this->db_pointer, UNASSIGN_TAGS_SCRIPT, &vm);
 
     // Registering variables in VM
-    register_variable_in_vm(vm, "file_id", file_id);
-    register_variable_in_vm(vm, "tag_to_unassign", tag);
+    std::string variable_file_id("file_id");
+    std::string variable_tag_to_unassign("tag_to_unassign");
+    register_variable_in_vm(vm, variable_file_id, file_id);
+    register_variable_in_vm(vm, variable_tag_to_unassign, tag);
 
     // Executing VM
     execute_vm(vm);
