@@ -18,7 +18,6 @@
 
 #include <sstream>
 #include<cstring>
-#include<cassert>
 
 #include "libtocc/database/database.h"
 #include "libtocc/database/base23.h"
