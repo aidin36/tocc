@@ -22,7 +22,6 @@
 
 #include "libtocc/front_end/manager.h"
 #include "libtocc/front_end/file_info.h"
-#include "libtocc/common/file_system_exceptions.h"
 #include "libtocc/common/database_exceptions.h"
 
 
