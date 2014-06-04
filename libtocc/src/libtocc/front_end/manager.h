@@ -64,12 +64,32 @@ namespace libtocc
                          const char* traditional_path="");
 
     /*
-     * Deletes a file from the Tocc managed file system.
+     * Deletes a file from the database and Tocc managed file system.
      *
      * @param file_id: the id of the file to delete.
-     * @return: true if the file has been deleted, false otherwise.
      */
-    bool delete_file( const char* file_id );
+    void remove_file(const char* file_id);
+
+     /*
+     * Deletes an array of file's ids from the database and Tocc managed file system.
+     *
+     * @param file_ids: an array of the ids of the files to delete.
+     */
+    void remove_files(const char* file_ids[], int file_ids_size);
+
+     /*
+     * Deletes a file from the database and Tocc managed file system.
+     *
+     * @param file_to_remove: the informations related to the file to delete.
+     */
+    void remove_file(FileInfo& file_to_remove);
+
+     /*
+     * Deletes a file from the database and Tocc managed file system.
+     *
+     * @param file_id: the id of the file to delete.
+     */
+    void remove_files(FileInfoCollection& files_to_remove);
 
     /*
      * Imports a file from the path to the Tocc managed file system.

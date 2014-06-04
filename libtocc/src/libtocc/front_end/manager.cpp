@@ -127,9 +127,34 @@ namespace libtocc
     return to_external_file_info(&new_file_info);
   }
 
-  bool Manager::delete_file( const char* file_id )
+  void Manager::remove_file(const char* file_id)
   {
-    return this->private_data->files_engine->delete_file(std::string(file_id));
+    this->private_data->files_engine->remove_file(std::string(file_id));
+  }
+
+  void Manager::remove_file(FileInfo& file_to_remove)
+  {
+    this->private_data->files_engine->remove_file(file_to_remove.get_id());
+  }
+
+  void Manager::remove_files(const char* file_ids[], int file_ids_size)
+  {
+    for(int i = 0; i<file_ids_size; i++)
+    {
+      remove_file(file_ids[i]);
+    }
+  }
+
+  void Manager::remove_files(FileInfoCollection& files_to_remove)
+  {
+    FileInfoCollection::Iterator file_info_collection_iterator(&files_to_remove);
+    for (; !file_info_collection_iterator.is_finished(); ++file_info_collection_iterator)
+    {
+      if(FileInfo* file_info = const_cast<FileInfo*>(file_info_collection_iterator.get()))
+      {
+        remove_file(*file_info);
+      }
+    }
   }
 
   void Manager::assign_tags(const char* file_ids[],

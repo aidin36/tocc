@@ -28,25 +28,134 @@
 TEST_CASE("front_end: delete file")
 {
   // Creating a file to import.
-  std::ofstream file_stream;
-  file_stream.open("/tmp/tocc_test_file_to_delete_1");
-  file_stream << "some data...";
-  file_stream.close();
+  std::ofstream file_stream1;
+  file_stream1.open("/tmp/tocc_test_file_to_delete_1");
+  file_stream1 << "data...";
+  file_stream1.close();
+
+  // Creating a file to import.
+  std::ofstream file_stream2;
+  file_stream2.open("/tmp/tocc_test_file_to_delete_2");
+  file_stream2 << "data...";
+  file_stream2.close();
+
+  //Creating files for collection
+  std::ofstream file_stream3;
+  file_stream3.open("/tmp/tocc_test_file_to_delete_3");
+  file_stream3 << "data...";
+  file_stream3.close();
+
+  std::ofstream file_stream4;
+  file_stream4.open("/tmp/tocc_test_file_to_delete_4");
+  file_stream4 << "data...";
+  file_stream4.close();
+
+  std::ofstream file_stream5;
+  file_stream5.open("/tmp/tocc_test_file_to_delete_5");
+  file_stream5 << "data...";
+  file_stream5.close();
+
+  //Creating files for array's ids
+  std::ofstream file_stream6;
+  file_stream6.open("/tmp/tocc_test_file_to_delete_6");
+  file_stream6 << "data...";
+  file_stream6.close();
+
+  std::ofstream file_stream7;
+  file_stream7.open("/tmp/tocc_test_file_to_delete_7");
+  file_stream7 << "data...";
+  file_stream7.close();
+
+  std::ofstream file_stream8;
+  file_stream8.open("/tmp/tocc_test_file_to_delete_8");
+  file_stream8 << "data...";
+  file_stream8.close();
 
   // Creating an instance of the manager.
   libtocc::Manager manager("/tmp/");
 
   // Importing the file
-    libtocc::FileInfo test_file =
-        manager.import_file("/tmp/tocc_test_file_to_delete_1");
+  libtocc::FileInfo test_file1 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_1");
+   
+  libtocc::FileInfo test_file2 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_2");
   
-  std::string file_id = test_file.get_id();
+  std::string file_id = test_file1.get_id();
+
+  //FileInfoCollection
+  libtocc::FileInfo test_file3 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_3");
+
+  libtocc::FileInfo test_file4 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_4");
+
+  libtocc::FileInfo test_file5 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_5");
+
+  libtocc::FileInfo test_file_infos[] = { test_file3, test_file4, test_file5 };
   
-  REQUIRE(manager.delete_file(file_id.c_str()) == true);
+  libtocc::FileInfoCollection test_file_info_collection(test_file_infos, 3);
+ 
+  //File ids array
+  libtocc::FileInfo test_file6 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_6");
+
+  libtocc::FileInfo test_file7 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_7");
+
+  libtocc::FileInfo test_file8 =
+      manager.import_file("/tmp/tocc_test_file_to_delete_8");
+
+  std::string file_id6 = test_file6.get_id();
+  std::string file_id7 = test_file7.get_id();
+  std::string file_id8 = test_file8.get_id();
+  
+  const char* file_ids[] = { file_id6.c_str(), file_id7.c_str(), file_id8.c_str() };
+
+  //Remove a file by its id
+  manager.remove_file(file_id.c_str());
+  
+  //Remove a file by FileInfo
+  manager.remove_file(test_file2);
+
+  //Remove FileInfoCollection
+  manager.remove_files(test_file_info_collection);
+
+  //Remove file ids array
+  manager.remove_files(file_ids, 3);
 
   //Deleting a file that doesn't exist
   REQUIRE_THROWS_AS(
-      manager.delete_file(file_id.c_str()), 
+      manager.remove_file(file_id.c_str()), 
+      libtocc::DatabaseScriptLogicalError);
+  
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file2), 
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file3),
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file4),
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file5),
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file6),
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file7),
+      libtocc::DatabaseScriptLogicalError);
+
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file8),
       libtocc::DatabaseScriptLogicalError);
 }
 

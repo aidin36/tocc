@@ -85,9 +85,8 @@ namespace libtocc
      *
      * @param file_id: the id of the file to delete.
      *
-     * @return: true if the file has been deleted, raise DatabaseScriptLogicalError exception otherwise.
      */
-    bool delete_file( const std::string& file_id );
+    void remove_file( const std::string& file_id );
 
   private:
     Database* database;
