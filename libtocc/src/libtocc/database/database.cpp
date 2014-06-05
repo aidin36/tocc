@@ -718,11 +718,11 @@ namespace libtocc
     return extract_file_from_vm(vm, "result");
   }
 
-  bool Database::remove_file(const std::string& file_id)
+  void Database::remove_file(const std::string& file_id)
   {
     unqlite_vm* vm;
     // Auto release the pointer.
-    //VMPointerHolder holder(&vm);
+    VMPointerHolder holder(&vm);
 
     // Executing script.
     compile_jx9(this->db_pointer, REMOVE_FILE_SCRIPT, &vm);
@@ -734,7 +734,7 @@ namespace libtocc
 
     std::string remove_operation_succeed("operation_succeed");
 
-    return extract_boolean_from_vm(vm, remove_operation_succeed);
+    extract_boolean_from_vm(vm, remove_operation_succeed);
   }
 
   IntFileInfo Database::get(std::string file_id)
