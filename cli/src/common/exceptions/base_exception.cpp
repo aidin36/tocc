@@ -21,7 +21,7 @@
 
 namespace tocccli
 {
-  BaseException::BaseException(const char* message) throw()
+  BaseException::BaseException(std::string message) throw()
   {
     this->message = message;
   }
@@ -32,6 +32,6 @@ namespace tocccli
 
   const char* BaseException::what() const throw()
   {
-    return this->message;
+    return this->message.c_str();
   }
 }

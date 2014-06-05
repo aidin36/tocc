@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://t-o-c-c.com>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
+ * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,52 +16,62 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
-#define TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
+#ifndef TOCCCLI_ASSIGN_ACTION_H_INCLUDED
+#define TOCCCLI_ASSIGN_ACTION_H_INCLUDED
 
 #include <string>
 #include <vector>
 
 #include <libtocc/front_end/file_info.h>
+#include <libtocc/front_end/manager.h>
+
+#include "common/cmd_param.h"
+#include "actions/action.h"
+
 
 namespace tocccli
 {
 
   /*
-   * Base class for handlers of Selector parameters.
+   * This action assign tags to files.
    */
-  class Selector
+  class AssignAction : public Action
   {
   public:
 
-    virtual ~Selector();
+    AssignAction(libtocc::Manager* manager);
+
+    ~AssignAction();
 
     /*
      * Returns short form of the parameter.
      */
-    virtual std::string get_short_form() = 0;
+    virtual std::string get_short_form();
 
     /*
      * Returns long form of the parameter.
      */
-    virtual std::string get_long_form() = 0;
+    virtual std::string get_long_form();
 
     /*
      * Returns the help text of the parameter.
      * (Full help text, include parameter itself.)
      */
-    virtual std::string get_help_text() = 0;
+    virtual std::string get_help_text();
 
     /*
-     * Executes the selector.
+     * Executes the action.
      *
-     * @param cmd_arguments: Arguments of this option that is passed to
+     * @param files: Files to do the action on.
+     * @param cmd_arguments: Arguments of this parameter that is passed to
      *   command line.
-     *
-     * @return: List of founded files.
      */
-    virtual std::vector<libtocc::FileInfo> execute(std::vector<std::string> cmd_arguments) = 0;
+    virtual void execute(std::vector<libtocc::FileInfo> files, std::vector<std::string> cmd_arguments);
+
+  private:
+
+    libtocc::Manager* libtocc_manager;
   };
 }
 
-#endif /* TOCCCLI_SELECTOR_HANDLER_H_INCLUDED */
+#endif /* TOCCCLI_ASSIGN_ACTION_H_INCLUDED */

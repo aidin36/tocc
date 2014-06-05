@@ -34,47 +34,14 @@ Quick Start
 ===========
 Compiling from Source
 ---------------------
-*libtocc* depends on `UnQlite <http://unqlite.org>`_. So, first get UnQlite
-and compile it on your system. Then, install it on your system libraries.
-(e.g. copy it to ``/usr/lib/``.)
+See :doc:`compile` for complete instruction of how to compile the *libtocc*.
+Usually, you can simply invoke these commands in order::
 
-**Note:** In current release of UnQlite (1.6.6) there's a bug that cause
-compilation fail when using in a ``C++`` application. You need to apply
-`this patch <http://bugs.symisc.net/index.php?do=details&task_id=111>`_ (which
-also mentioned in `their forum
-<http://unqlite.org/forum/compiler-error-when-building-for-c-g-v4-2-1>`_)
-first.
+  $ ./configure
+  $ make
+  $ make install
 
-Preparing
-^^^^^^^^^
-If you get one of the relased source packages, this step is already done. So
-you can skip this section. But if you have the latest code from Github,
-read on.
-
-You need Gnu Autotools (Libtool, Autoconf and Automake).
-Go to ``libtocc/src/`` directory, and run ``bootstrap``
-script in there. It will create ``configure`` script.
-
-Making Source
-^^^^^^^^^^^^^
-
-Go to ``libtocc/src`` directory, then run::
-
-  ./configure
-  make
-  make install
-
-Note that latest command needs super user privilage.
-
-This will install the compiled library in ``/usr/local/lib`` and
-header files in ``/usr/local/include`` by default.
-If you want to install it on another directory, pass ``--prefix`` option
-to ``configure`` script. i.e.::
-
-  ./configure --prefix=./output/
-
-Which installs compiled library in ``./output/lib/`` and headers in
-``./output/include/``.
+Note that latest command may need super user privilage.
 
 A Minimal Example
 -----------------

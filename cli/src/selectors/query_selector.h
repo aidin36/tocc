@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://t-o-c-c.com>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
+ * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,41 +16,46 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
-#define TOCCCLI_SELECTOR_HANDLER_H_INCLUDED
+#ifndef TOCCCLI_QUERY_SELECTOR_H_INCLUDED
+#define TOCCCLI_QUERY_SELECTOR_H_INCLUDED
 
-#include <string>
 #include <vector>
+#include <string>
 
-#include <libtocc/front_end/file_info.h>
+#include <libtocc/front_end/manager.h>
+
+#include "selectors/selector.h"
+
 
 namespace tocccli
 {
 
   /*
-   * Base class for handlers of Selector parameters.
+   * Selects files by query.
    */
-  class Selector
+  class QuerySelector : public Selector
   {
   public:
 
-    virtual ~Selector();
+    QuerySelector(libtocc::Manager* manager);
+
+    ~QuerySelector();
 
     /*
      * Returns short form of the parameter.
      */
-    virtual std::string get_short_form() = 0;
+    virtual std::string get_short_form();
 
     /*
      * Returns long form of the parameter.
      */
-    virtual std::string get_long_form() = 0;
+    virtual std::string get_long_form();
 
     /*
      * Returns the help text of the parameter.
      * (Full help text, include parameter itself.)
      */
-    virtual std::string get_help_text() = 0;
+    virtual std::string get_help_text();
 
     /*
      * Executes the selector.
@@ -60,8 +65,12 @@ namespace tocccli
      *
      * @return: List of founded files.
      */
-    virtual std::vector<libtocc::FileInfo> execute(std::vector<std::string> cmd_arguments) = 0;
+    virtual std::vector<libtocc::FileInfo> execute(std::vector<std::string> cmd_arguments);
+
+  private:
+    libtocc::Manager* libtocc_manager;
+
   };
 }
 
-#endif /* TOCCCLI_SELECTOR_HANDLER_H_INCLUDED */
+#endif /* TOCCCLI_QUERY_SELECTOR_H_INCLUDED */

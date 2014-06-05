@@ -26,7 +26,9 @@
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
 #include "selectors/import_file_selector.h"
+#include "selectors/query_selector.h"
 #include "actions/print_action.h"
+#include "actions/assign_action.h"
 
 
 // PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
@@ -48,11 +50,13 @@ namespace tocccli
      */
     this->selectors.push_back(new IDSelector(this->libtocc_manager));
     this->selectors.push_back(new ImportFileSelector(this->libtocc_manager));
+    this->selectors.push_back(new QuerySelector(this->libtocc_manager));
 
     /*
      * Instantiating all of available actions.
      */
     this->actions.push_back(new PrintAction(this->libtocc_manager));
+    this->actions.push_back(new AssignAction(this->libtocc_manager));
   }
 
   CmdManager::~CmdManager()
@@ -124,6 +128,13 @@ namespace tocccli
     params_iterator = cmd_parameters.begin();
     for (; params_iterator < cmd_parameters.end(); ++params_iterator)
     {
+      if ((*params_iterator).option == "-b" ||
+          (*params_iterator).option == "--base-path")
+      {
+        // This option already handled in `main'. Ignoring.
+        continue;
+      }
+
       // Will set to true if any Selector or Action found for this option.
       bool option_handler_found = false;
 
@@ -171,9 +182,9 @@ namespace tocccli
       if (!option_handler_found)
       {
         // It means that this parameter didn't match any of the known ones.
-	std::string _error("Unknown option: ");
-	_error += (*params_iterator).option;
-	throw InvalidParametersError(_error.c_str());
+	std::string error_message("Unknown option: ");
+	error_message += (*params_iterator).option;
+	throw InvalidParametersError(error_message.c_str());
       }
     }
 
@@ -205,8 +216,10 @@ namespace tocccli
       std::cout << " " << (*actions_iterator)->get_help_text() << std::endl;
     }
 
-    std::cout << " " << "-h, --help\tPrints out this help and exits." << std::endl;
-    std::cout << " " << "-v, --version\tPrints out version info and exits." << std::endl;
+    // Printing other options.
+    std::cout << " -b, --base-path=PATH\tPath to where Tocc kept its files." << std::endl;
+    std::cout << " -h, --help\tPrints out this help and exits." << std::endl;
+    std::cout << " -v, --version\tPrints out version info and exits." << std::endl;
   }
 
   void CmdManager::print_version()

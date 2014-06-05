@@ -20,7 +20,9 @@ pkgconfig_DATA = libtocc.pc
 
 # Libtool doesn't update ld's cache by default. This hook is added to ensure
 # that cache is updated after library is installed. Though it make the
-# installation a little slow...
+# installation a little slow.
+# Also, I ignored the errors. Because there maybe no `ldconfig' on the system
+# or corrent user don't have access to execute it.
 install-exec-hook:
-	ldconfig
+	-ldconfig
 

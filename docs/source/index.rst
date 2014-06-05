@@ -78,6 +78,7 @@ Documentation
 
  * :doc:`manual/index`
  * `libtocc (API) <libtocc/index.html>`_
+ * :doc:`developers/index`
 
 Contribution
 ============

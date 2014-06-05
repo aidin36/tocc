@@ -1,0 +1,10 @@
+
+v0.2.0:
+  * A memory leak in libtocc fixed.
+  * --assign added to CLI.
+  * --query added to CLI.
+  * Better build scripts.
+  * Minor bug fixes.
+
+-- Aidin Gharibnavaz <aidin@t-o-c-c.com> Sat, 31 May 2015 06:44:32 +0430
+

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libtocc-tests], [0.2], [aidin@t-o-c-c.com], [Tests of libtocc], [http://t-o-c-c.com])
+AC_INIT([libtocc-tests], [0.3.0], [aidin@t-o-c-c.com], [Tests of libtocc], [http://t-o-c-c.com])
 AC_CONFIG_SRCDIR([main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 
@@ -30,7 +30,7 @@ AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unql
 # Setting lang to C++, because followings all are C++.
 AC_LANG_PUSH(C++)
 # The fourth argument is: don't try to compile this header.
-AC_CHECK_HEADER([libtocc/front_end/manager.h], [], [AC_MSG_ERROR([Could not find libtocc/front_end/manager.h header. Tests included headers directly from the libtocc/src/ directory. Please make sure you have libtocc/src/ in you includes path. Refer to documents for more info.])], [-])
+AC_CHECK_HEADER([libtocc/exprs/compiler.h], [], [AC_MSG_ERROR([Could not find libtocc/exprs/compiler.h header. Tests included headers directly from the libtocc/src/ directory. Please make sure you have libtocc/src/ in you includes path. Refer to documents for more info.])], [-])
 # `libtocc_exists' function used to check for libtocc. See the documentation
 # about how to check for libtocc with Autoconf.
 AC_SEARCH_LIBS([libtocc_exists], [tocc], [], [AC_MSG_ERROR([Could not find libtocc library. Please make sure you have this library in your libs path. Refer to documentations for more info.])])

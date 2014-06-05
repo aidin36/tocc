@@ -33,7 +33,7 @@ namespace tocccli
 
   std::string IDSelector::get_short_form()
   {
-    return "-i";
+    return "-d";
   }
 
   std::string IDSelector::get_long_form()

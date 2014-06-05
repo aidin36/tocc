@@ -51,17 +51,17 @@ int main(int argc, char* argv[])
   std::vector<CmdParam>::iterator iterator = cmd_parameters.begin();
   for (; iterator != cmd_parameters.end(); ++iterator)
   {
-    if ((*iterator).option == "-p" ||
+    if ((*iterator).option == "-b" ||
         (*iterator).option == "--base-path")
     {
       if ((*iterator).arguments.empty())
       {
-        std::cout << "-p or --base-path must have an argument." << std::endl;
+        std::cout << "-b or --base-path must have an argument." << std::endl;
         return -101;
       }
       if ((*iterator).arguments.size() != 1)
       {
-        std::cout << "-p or --base-path take exactly one argument." << std::endl;
+        std::cout << "-b or --base-path take exactly one argument." << std::endl;
         return -102;
       }
 
