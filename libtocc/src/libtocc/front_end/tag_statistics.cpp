@@ -117,6 +117,12 @@ namespace libtocc
     this->private_data = new TagStatisticsCollection::PrivateData(statistics, size);
   }
 
+  TagStatisticsCollection::TagStatisticsCollection(const TagStatisticsCollection& source)
+  {
+    this->private_data = new TagStatisticsCollection::PrivateData();
+    this->private_data->collection = source.private_data->collection;
+  }
+
   TagStatisticsCollection::~TagStatisticsCollection()
   {
     delete this->private_data;
@@ -135,6 +141,18 @@ namespace libtocc
   bool TagStatisticsCollection::is_empty() const
   {
     return this->private_data->collection.empty();
+  }
+
+  TagStatisticsCollection& TagStatisticsCollection::operator=(const TagStatisticsCollection& source)
+  {
+    if (this == &source)
+    {
+      return *this;
+    }
+
+    this->private_data->collection = source.private_data->collection;
+
+    return *this;
   }
 
   class TagStatisticsCollection::Iterator::PrivateData
@@ -169,9 +187,9 @@ namespace libtocc
             this->private_data->collection->private_data->collection.end());
   }
 
-  const TagStatistics* TagStatisticsCollection::Iterator::get()
+  TagStatistics TagStatisticsCollection::Iterator::get()
   {
-    return &*this->private_data->collection_iterator;
+    return *this->private_data->collection_iterator;
   }
 
   void TagStatisticsCollection::Iterator::reset()
@@ -186,12 +204,12 @@ namespace libtocc
     return *this;
   }
 
-  const TagStatistics* TagStatisticsCollection::Iterator::operator*()
+  TagStatistics TagStatisticsCollection::Iterator::operator*()
   {
     return this->get();
   }
 
-  const TagStatistics* TagStatisticsCollection::Iterator::operator->()
+  TagStatistics TagStatisticsCollection::Iterator::operator->()
   {
     return this->get();
   }

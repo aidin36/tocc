@@ -85,6 +85,11 @@ namespace libtocc
      */
     TagStatisticsCollection(TagStatistics statistics[], int size=-1);
 
+    /*
+     * Copy constructor.
+     */
+    TagStatisticsCollection(const TagStatisticsCollection& source);
+
     ~TagStatisticsCollection();
 
     /*
@@ -102,6 +107,8 @@ namespace libtocc
      * Returns `true' if no element is inside the collection.
      */
     bool is_empty() const;
+
+    TagStatisticsCollection& operator=(const TagStatisticsCollection& source);
 
   private:
     class PrivateData;
@@ -147,7 +154,7 @@ namespace libtocc
        * Gets the tag statistics that iterator points to.
        * It will be NULL if iterator passed end of the collection.
        */
-      const TagStatistics* get();
+      TagStatistics get();
 
       /*
        * Resets the iterator. (Iterator will be points to the first element).
@@ -163,13 +170,13 @@ namespace libtocc
        * Gets the tag statistics that iterator points to.
        * It will be NULL if iterator passed end of the collection.
        */
-      const TagStatistics* operator*();
+      TagStatistics operator*();
 
       /*
        * Gets the tag statistics that iterator points to.
        * It will be NULL if iterator passed end of the collection.
        */
-      const TagStatistics* operator->();
+      TagStatistics operator->();
 
     private:
       class PrivateData;
