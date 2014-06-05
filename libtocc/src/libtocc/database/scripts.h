@@ -127,6 +127,27 @@ namespace libtocc
       "{"\
       "   $error = 'file '..$file_id..' does not exists.'; "\
       "}";
+
+  /*
+   * Loops through all the records, and calculates statistics of each tag.
+   */
+  const std::string COLLECT_TAGS_STATISTICS = \
+      "$statistics = {};"\
+      " "\
+      "$filter_func = function($record) "\
+      "{"\
+      "  uplink $statistics;"\
+      "  foreach ($record.tags as $tag)"\
+      "  {"\
+      "    if (!array_key_exists($tag, $statistics))"\
+      "    {"\
+      "      $statistics[$tag] = 0;"\
+      "    }"\
+      "    $statistics[$tag] += 1;"\
+      "  }"\
+      "  return FALSE;"\
+      "}; "\
+      "db_fetch_all('files', $filter_func);";
 }
 
 #endif /* LIBTOCC_SCRIPTS_H_INCLUDED */

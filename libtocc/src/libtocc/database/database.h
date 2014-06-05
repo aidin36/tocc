@@ -24,6 +24,7 @@
 
 #include "libtocc/exprs/query.h"
 #include "libtocc/common/int_file_info.h"
+#include "libtocc/front_end/tag_statistics.h"
 
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others
@@ -47,7 +48,7 @@ namespace libtocc
      * @param database_file: database to work with.
      */
     Database(std::string database_file);
-    
+
     ~Database();
 
     /*
@@ -110,6 +111,12 @@ namespace libtocc
      * Searching the files by executing the specified query.
      */
     std::vector<IntFileInfo> search_files(Query& query);
+
+    /*
+     * Collects statistics (how many files assigned to each tag) and
+     * returns it.
+     */
+    TagStatisticsCollection get_tags_statistics();
 
   private:
     /*
