@@ -43,4 +43,9 @@ namespace libtocc
     this->database->assign_tag(file_id, tag);
   }
 
+  TagStatisticsCollection TagsEngine::get_tags_statistics()
+  {
+    return this->database->get_tags_statistics();
+  }
+
 }
