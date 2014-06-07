@@ -74,7 +74,7 @@ namespace libtocc
     this->database->remove_files(files_to_remove, founded_files);
     
     //Delete the founded files
-    for(int i = 0; i<founded_files.size(); i++)
+    for(int i = 0; i < founded_files.size(); i++)
     {
       const std::string& file_id = std::string(founded_files[i].get_id());
       this->file_manager->remove(file_id.c_str());

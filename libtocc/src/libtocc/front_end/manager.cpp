@@ -146,7 +146,7 @@ namespace libtocc
     //Converting file_ids to vector
     std::vector<std::string> file_ids_vector;
     
-    for(int i = 0; i<file_ids_size; i++)
+    for(int i = 0; i < file_ids_size; i++)
     {
       file_ids_vector.push_back(std::string(file_ids[i]));
     }
