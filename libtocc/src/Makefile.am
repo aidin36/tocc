@@ -9,7 +9,7 @@ libtocc_la_SOURCES = libtocc/check_exists.cpp libtocc/common/database_exceptions
 
 # Installing headers
 front_end_includedir = $(includedir)/libtocc/front_end
-front_end_include_HEADERS = libtocc/front_end/file_info.h libtocc/front_end/manager.h
+front_end_include_HEADERS = libtocc/front_end/file_info.h libtocc/front_end/manager.h libtocc/front_end/tag_statistics.h
 common_includedir = $(includedir)/libtocc/common/
 common_include_HEADERS = libtocc/common/base_exception.h libtocc/common/database_exceptions.h libtocc/common/expr_exceptions.h libtocc/common/file_system_exceptions.h libtocc/common/runtime_exceptions.h
 exprs_includedir = $(includedir)/libtocc/exprs/
