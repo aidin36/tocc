@@ -24,6 +24,7 @@
 #include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
 
+
 extern "C"
 {
 #include "unqlite.h"
@@ -105,7 +106,7 @@ namespace libtocc
       const char* log_buf;
       int log_len;
       unqlite_config(db_pointer, UNQLITE_CONFIG_JX9_ERR_LOG, &log_buf, &log_len);
-      
+
       std::string error_message = "unknown error";
       if (log_len > 0)
       {
@@ -358,6 +359,76 @@ namespace libtocc
     // Walking over the array.
     unqlite_array_walk(files_array,
                        files_array_walk_callback,
+                       &result);
+
+    return result;
+  }
+
+  /*
+   * Call back for unqlite_array_walk. Used in extract_tag_statistics_from_vm.
+   *
+   * @param key: key of the array element.
+   * @param value: value of the array element.
+   * @param vector_to_fill: a pointer to a TagStatisticsCollection to fill
+   *   array's elements into.
+   */
+  int statistics_array_walk_callback(unqlite_value* key, unqlite_value* value,
+                                     void* collection)
+  {
+    // Casting key and value to their true types.
+    const char* tag = unqlite_value_to_string(key, NULL);
+    int assigned_files = unqlite_value_to_int(value);
+
+    // Adding new statistics to the collection.
+    TagStatistics statistics(tag, assigned_files);
+    ((TagStatisticsCollection*)collection)->add_statistics(statistics);
+
+    return UNQLITE_OK;
+  }
+
+
+  TagStatisticsCollection extract_tag_statistics_from_vm(unqlite_vm* vm,
+                                                         std::string variable_name)
+  {
+    // Extracting variable from VM.
+    unqlite_value* statistics_object =
+        unqlite_vm_extract_variable(vm, variable_name.c_str());
+
+    if (statistics_object == NULL)
+    {
+      std::stringstream message_stream;
+      message_stream << "Error when extracting tag statistics from VM: ";
+      message_stream << "Variable \"" << variable_name << "\" does not exists.";
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(statistics_object, vm);
+
+    // Checking health of the variable.
+    if (!unqlite_value_is_json_array(statistics_object))
+    {
+      std::stringstream message_stream;
+      message_stream << "In `extract_tag_statistics_from_vm': ";
+      message_stream << "Extracted variable was not an array. ";
+      message_stream << "Variable name: \"" << variable_name << "\"";
+      throw DatabaseScriptExecutionError(message_stream.str().c_str());
+    }
+
+    int array_count = unqlite_array_count(statistics_object);
+    if (array_count == 0)
+    {
+      // Returning an empty result.
+      TagStatisticsCollection result;
+      return result;
+    }
+
+    // Creating a new collection, pre-reserving size.
+    TagStatisticsCollection result(array_count);
+
+    // Walking over the array and filling the collection.
+    unqlite_array_walk(statistics_object,
+                       statistics_array_walk_callback,
                        &result);
 
     return result;
@@ -796,4 +867,20 @@ namespace libtocc
 
     return extract_files_list_from_vm(vm, result_variable_name);
   }
+
+  TagStatisticsCollection Database::get_tags_statistics()
+  {
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    VMPointerHolder holder(&vm);
+
+    // Compiling Jx9
+    compile_jx9(this->db_pointer, COLLECT_TAGS_STATISTICS, &vm);
+
+    // Executing vm.
+    execute_vm(vm);
+
+    return extract_tag_statistics_from_vm(vm, "statistics");
+  }
+
 }

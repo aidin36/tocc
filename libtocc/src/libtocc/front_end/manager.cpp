@@ -170,4 +170,10 @@ namespace libtocc
 
     return to_external_file_infos(founded_files);
   }
+
+  TagStatisticsCollection Manager::get_tags_statistics()
+  {
+    return this->private_data->tags_engine->get_tags_statistics();
+  }
+
 }

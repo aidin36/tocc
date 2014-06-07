@@ -23,6 +23,8 @@
 #include <vector>
 
 #include "libtocc/database/database.h"
+#include "libtocc/front_end/tag_statistics.h"
+
 
 namespace libtocc
 {
@@ -62,6 +64,12 @@ namespace libtocc
      * @param tag: Tag to assign to file.
      */
     void assign_tags(std::string file_id, std::string tag);
+
+    /*
+     * Collects statistics (how many files assigned to each tag) and
+     * returns it.
+     */
+    TagStatisticsCollection get_tags_statistics();
 
   private:
     /*

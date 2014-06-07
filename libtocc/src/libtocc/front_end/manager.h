@@ -20,6 +20,7 @@
 #define LIBTOCC_MANAGER_H_INCLUDED
 
 #include "libtocc/front_end/file_info.h"
+#include "libtocc/front_end/tag_statistics.h"
 #include "libtocc/exprs/query.h"
 
 
@@ -122,6 +123,12 @@ namespace libtocc
      *   an empty collection will return.
      */
     FileInfoCollection search_files(Query& query);
+
+    /*
+     * Collects statistics (how many files assigned to each tag) and
+     * returns it.
+     */
+    TagStatisticsCollection get_tags_statistics();
 
   private:
     /*
