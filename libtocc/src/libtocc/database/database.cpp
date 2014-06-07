@@ -718,23 +718,30 @@ namespace libtocc
     return extract_file_from_vm(vm, "result");
   }
 
-  void Database::remove_file(const std::string& file_id)
+  void Database::remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files)
   {
     unqlite_vm* vm;
-    // Auto release the pointer.
-    VMPointerHolder holder(&vm);
+    VMPointerHolder vm_holder(&vm);
 
-    // Executing script.
-    compile_jx9(this->db_pointer, REMOVE_FILE_SCRIPT, &vm);
+    //Executing script
+    compile_jx9(this->db_pointer, REMOVE_FILES_SCRIPT, &vm);
+    
+    //Convert string ids to base23
+    std::vector<unsigned long> converted_ids;
+    std::vector<std::string>::const_iterator iterator = file_ids.begin();
+    for(; iterator != file_ids.end(); ++iterator)
+    {
+      converted_ids.push_back(from_base23(*iterator));
+    }
 
-    std::string variable_file_id("file_id");
-    register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
-
+    //Register the converted_ids in VM
+    std::string variable_file_ids("file_ids");
+    register_variable_in_vm(vm, variable_file_ids, converted_ids);
+   
     execute_vm(vm);
 
-    std::string remove_operation_succeed("operation_succeed");
-
-    extract_boolean_from_vm(vm, remove_operation_succeed);
+    std::string founded_files_variable("founded_files");
+    founded_files = extract_files_list_from_vm(vm, founded_files_variable);
   }
 
   IntFileInfo Database::get(std::string file_id)

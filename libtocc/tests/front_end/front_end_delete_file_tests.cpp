@@ -81,7 +81,7 @@ TEST_CASE("front_end: delete file")
   libtocc::FileInfo test_file2 =
       manager.import_file("/tmp/tocc_test_file_to_delete_2");
   
-  std::string file_id = test_file1.get_id();
+  std::string file_id = std::string(test_file1.get_id());
 
   //FileInfoCollection
   libtocc::FileInfo test_file3 =
@@ -91,11 +91,11 @@ TEST_CASE("front_end: delete file")
       manager.import_file("/tmp/tocc_test_file_to_delete_4");
 
   libtocc::FileInfo test_file5 =
-      manager.import_file("/tmp/tocc_test_file_to_delete_5");
+      manager.import_file("/tmp/tocc_test_file_to_delete_5"); 
 
-  libtocc::FileInfo test_file_infos[] = { test_file3, test_file4, test_file5 };
+  libtocc::FileInfo test_file_infos[] = { test_file3, test_file4 };
   
-  libtocc::FileInfoCollection test_file_info_collection(test_file_infos, 3);
+  libtocc::FileInfoCollection test_file_info_collection(test_file_infos, 2);
  
   //File ids array
   libtocc::FileInfo test_file6 =
@@ -106,12 +106,10 @@ TEST_CASE("front_end: delete file")
 
   libtocc::FileInfo test_file8 =
       manager.import_file("/tmp/tocc_test_file_to_delete_8");
-
-  std::string file_id6 = test_file6.get_id();
-  std::string file_id7 = test_file7.get_id();
-  std::string file_id8 = test_file8.get_id();
   
-  const char* file_ids[] = { file_id6.c_str(), file_id7.c_str(), file_id8.c_str() };
+  std::string file_id6 = std::string(test_file6.get_id());
+  std::string file_id7 = std::string(test_file7.get_id());
+  const char* file_ids[] = { file_id6.c_str(), file_id7.c_str() };
 
   //Remove a file by its id
   manager.remove_file(file_id.c_str());
@@ -123,7 +121,7 @@ TEST_CASE("front_end: delete file")
   manager.remove_files(test_file_info_collection);
 
   //Remove file ids array
-  manager.remove_files(file_ids, 3);
+  manager.remove_files(file_ids, 2);
 
   //Deleting a file that doesn't exist
   REQUIRE_THROWS_AS(
@@ -143,10 +141,6 @@ TEST_CASE("front_end: delete file")
       libtocc::DatabaseScriptLogicalError);
 
   REQUIRE_THROWS_AS(
-      manager.remove_file(test_file5),
-      libtocc::DatabaseScriptLogicalError);
-
-  REQUIRE_THROWS_AS(
       manager.remove_file(test_file6),
       libtocc::DatabaseScriptLogicalError);
 
@@ -154,8 +148,32 @@ TEST_CASE("front_end: delete file")
       manager.remove_file(test_file7),
       libtocc::DatabaseScriptLogicalError);
 
+  //file ids array with an already removed file and the other not yet removed
+  //Notice file_test6 has been removed, test_file8 is not yet removed
+  const char* file_ids2[] = { test_file6.get_id(), test_file8.get_id() };
+
+  REQUIRE_THROWS_AS(
+     manager.remove_files(file_ids2, 2),
+     libtocc::DatabaseScriptLogicalError);
+
+  //The once not yet removed file is now removed
   REQUIRE_THROWS_AS(
       manager.remove_file(test_file8),
+      libtocc::DatabaseScriptLogicalError);
+
+  //Collection with already removed files, not yet removed files mixed up
+  //Notice : test_file3 has been removed, test_file5 is not yet removed
+  libtocc::FileInfo test_file_infos2[] = { test_file3, test_file5 };
+  
+  libtocc::FileInfoCollection test_file_info_collection2(test_file_infos2, 2);
+
+  REQUIRE_THROWS_AS(
+     manager.remove_files(test_file_info_collection2),
+     libtocc::DatabaseScriptLogicalError);
+
+  //The once not yet removed file is now removed
+  REQUIRE_THROWS_AS(
+      manager.remove_file(test_file5),
       libtocc::DatabaseScriptLogicalError);
 }
 

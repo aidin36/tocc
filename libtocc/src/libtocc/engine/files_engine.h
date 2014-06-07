@@ -81,12 +81,12 @@ namespace libtocc
                             std::vector<std::string> tags);
 
     /*
-     * Deletes a file from the Tocc managed file system.
+     * Deletes an array of files from the Tocc managed file system.
      *
-     * @param file_id: the id of the file to delete.
+     * @param files_to_remove: a vector of file ids.
      *
      */
-    void remove_file( const std::string& file_id );
+    void remove_files(const std::vector<std::string>& files_to_remove);
 
   private:
     Database* database;
