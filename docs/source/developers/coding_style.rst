@@ -14,6 +14,7 @@ keep a cleaner and more maintainable code.
 
 And remember: Special cases are not special enough to break the rules.
 
+
 Apperance
 ---------
 
@@ -38,6 +39,9 @@ Apperance
     int y = 7;
     Point point(x, y * 2);
 
+* There shouldn't be any trailing space in the source file. You can
+  use ``git diff --check`` before any commit to check that.
+
 
 Naming
 ------
@@ -53,4 +57,16 @@ Naming
 * Everything else (methods, variables, name spaces, file names, etc) must be
   all in lower case. Examples: ``tags_list``, ``get_absolute_path``.
 
+
+Unit Tests
+----------
+
+* Developers must write a Unit Test for every functionality they add.
+
+
+Commit Messages
+---------------
+
+* Include related issue number (if any) in the commit message. In the form
+  ``issue #52``.
 
