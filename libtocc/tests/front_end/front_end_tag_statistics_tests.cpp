@@ -35,12 +35,13 @@ TEST_CASE("Tag Statistics")
     /*
      * Preparing test data.
      */
-    std::ofstream file_to_import("/tmp/tocc_statistics_test_file.tmp");
+    const char* file_path = "/tmp/tocc_statistics_test_file.tmp";
+
+    std::ofstream file_to_import(file_path);
     file_to_import << "some data...";
     file_to_import.close();
 
-    libtocc::FileInfo test_file =
-        manager.import_file("/tmp/tocc_statistics_test_file");
+    libtocc::FileInfo test_file = manager.import_file(file_path);
 
     libtocc::TagsCollection tags;
     tags.add_tag("tag_statistics_test_01");
