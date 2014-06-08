@@ -76,7 +76,7 @@ namespace libtocc
     //If no file has been found
     if(founded_files.size() == 0)
     {
-      std::string output_message("file(s) to remove don't(doesn't) exist\n");
+      std::string output_message("file(s) to remove doesn't (don't) exist\n");
       throw DatabaseScriptLogicalError(output_message.c_str());
     }
 
