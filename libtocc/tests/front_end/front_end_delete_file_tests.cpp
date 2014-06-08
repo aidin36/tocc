@@ -152,9 +152,7 @@ TEST_CASE("front_end: delete file")
   //Notice file_test6 has been removed, test_file8 is not yet removed
   const char* file_ids2[] = { test_file6.get_id(), test_file8.get_id() };
 
-  REQUIRE_THROWS_AS(
-     manager.remove_files(file_ids2, 2),
-     libtocc::DatabaseScriptLogicalError);
+  manager.remove_files(file_ids2, 2);
 
   //The once not yet removed file is now removed
   REQUIRE_THROWS_AS(
@@ -167,9 +165,7 @@ TEST_CASE("front_end: delete file")
   
   libtocc::FileInfoCollection test_file_info_collection2(test_file_infos2, 2);
 
-  REQUIRE_THROWS_AS(
-     manager.remove_files(test_file_info_collection2),
-     libtocc::DatabaseScriptLogicalError);
+  manager.remove_files(test_file_info_collection2);
 
   //The once not yet removed file is now removed
   REQUIRE_THROWS_AS(

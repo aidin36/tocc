@@ -158,16 +158,7 @@ namespace libtocc
   void Manager::remove_files(FileInfoCollection& files_to_remove)
   {
     //Converting the FileInfoCollection to a vector of file ids
-    std::vector<std::string> file_ids;
-    
-    FileInfoCollection::Iterator file_info_collection_iterator(&files_to_remove);
-    for (; !file_info_collection_iterator.is_finished(); ++file_info_collection_iterator)
-    {
-      if(FileInfo* file_info = const_cast<FileInfo*>(file_info_collection_iterator.get()))
-      {
-        file_ids.push_back(std::string(file_info->get_id()));
-      }
-    }
+    std::vector<std::string> file_ids = file_info_collection_to_vector_ids(files_to_remove);
 
     //Remove the files
     this->private_data->files_engine->remove_files(file_ids);

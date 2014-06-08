@@ -73,18 +73,18 @@ namespace libtocc
 
     this->database->remove_files(files_to_remove, founded_files);
     
+    //If no file has been found
+    if(founded_files.size() == 0)
+    {
+      std::string output_message("file(s) to remove don't(doesn't) exist\n");
+      throw DatabaseScriptLogicalError(output_message.c_str());
+    }
+
     //Delete the founded files
     for(int i = 0; i < founded_files.size(); i++)
     {
       const std::string& file_id = std::string(founded_files[i].get_id());
       this->file_manager->remove(file_id.c_str());
-    }
-
-    //Raise exception for the not founded files, further printing their paths
-    if(founded_files.size() <  files_to_remove.size())
-    {
-      std::string output_message("some files don't exist\n");
-      throw DatabaseScriptLogicalError(output_message.c_str());
     }
   }
 }
