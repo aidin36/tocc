@@ -201,6 +201,7 @@ namespace libtocc
     std::string file_id;
     std::string title;
     std::string traditional_path;
+    std::string physical_path;
     std::vector<std::string> tags;
   };
 
@@ -210,27 +211,32 @@ namespace libtocc
     this->private_data->file_id = file_id;
     this->private_data->title = "";
     this->private_data->traditional_path = "";
-  }
-
-  FileInfo::FileInfo(const char* file_id,
-                     const char* title,
-                     const char* traditional_path)
-  {
-    this->private_data = new PrivateData();
-    this->private_data->file_id = file_id;
-    this->private_data->title = title;
-    this->private_data->traditional_path = traditional_path;
+    this->private_data->physical_path = "";
   }
 
   FileInfo::FileInfo(const char* file_id,
                      const char* title,
                      const char* traditional_path,
+                     const char* physical_path)
+  {
+    this->private_data = new PrivateData();
+    this->private_data->file_id = file_id;
+    this->private_data->title = title;
+    this->private_data->traditional_path = traditional_path;
+    this->private_data->physical_path = physical_path;
+  }
+
+  FileInfo::FileInfo(const char* file_id,
+                     const char* title,
+                     const char* traditional_path,
+                     const char* physical_path,
                      const char* tags[])
   {
     this->private_data = new PrivateData();
     this->private_data->file_id = file_id;
     this->private_data->title = title;
     this->private_data->traditional_path = traditional_path;
+    this->private_data->physical_path = physical_path;
 
     this->private_data->tags.assign(tags, tags + (sizeof(tags) / sizeof(tags[0])));
   }
@@ -238,12 +244,14 @@ namespace libtocc
   FileInfo::FileInfo(const char* file_id,
                      const char* title,
                      const char* traditional_path,
+                     const char* physical_path,
                      const TagsCollection* tags)
   {
     this->private_data = new PrivateData();
     this->private_data->file_id = file_id;
     this->private_data->title = title;
     this->private_data->traditional_path = traditional_path;
+    this->private_data->physical_path = physical_path;
     this->private_data->tags = tags->private_data->tags;
   }
 
@@ -253,6 +261,7 @@ namespace libtocc
     this->private_data->file_id = source.private_data->file_id;
     this->private_data->title = source.private_data->title;
     this->private_data->traditional_path = source.private_data->traditional_path;
+    this->private_data->physical_path = source.private_data->physical_path;
     this->private_data->tags = source.private_data->tags;
   }
 
@@ -282,6 +291,11 @@ namespace libtocc
   const char* FileInfo::get_traditional_path() const
   {
     return this->private_data->traditional_path.c_str();
+  }
+
+  const char* FileInfo::get_physical_path() const
+  {
+    return this->private_data->physical_path.c_str();
   }
 
   std::ostream& operator<<(std::ostream& stream, const FileInfo& file_info)
@@ -317,6 +331,7 @@ namespace libtocc
     this->private_data->file_id = source.private_data->file_id;
     this->private_data->title = source.private_data->title;
     this->private_data->traditional_path = source.private_data->traditional_path;
+    this->private_data->physical_path = source.private_data->physical_path;
     this->private_data->tags = source.private_data->tags;
 
     return *this;

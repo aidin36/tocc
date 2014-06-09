@@ -24,14 +24,16 @@
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/front_end/file_info.h"
+#include "libtocc/file_system/file_manager.h"
+
 
 namespace libtocc
 {
-  FileInfo to_external_file_info(const IntFileInfo* internal_file_info);
+  FileInfo to_external_file_info(const IntFileInfo* internal_file_info, FileManager* file_manager);
 
   IntFileInfo to_internal_file_info(const FileInfo* external_file_info);
 
-  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos);
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos, FileManager* file_manager);
 
   std::vector<std::string> tags_to_vector(const TagsCollection* collection);
 
