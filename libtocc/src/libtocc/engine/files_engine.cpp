@@ -20,7 +20,6 @@
 
 #include "libtocc/engine/files_engine.h"
 #include"libtocc/utilities/file_utils.h"
-#include "libtocc/common/database_exceptions.h"
 
 namespace libtocc
 {
@@ -73,13 +72,6 @@ namespace libtocc
 
     this->database->remove_files(files_to_remove, founded_files);
     
-    //If no file has been found
-    if(founded_files.size() == 0)
-    {
-      std::string output_message("file(s) to remove doesn't (don't) exist\n");
-      throw DatabaseScriptLogicalError(output_message.c_str());
-    }
-
     //Delete the founded files
     for(int i = 0; i < founded_files.size(); i++)
     {
