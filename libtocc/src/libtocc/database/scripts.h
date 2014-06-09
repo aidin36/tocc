@@ -108,6 +108,27 @@ namespace libtocc
       "  $result = $new_file; "\
       "}";
 
+  const std::string REMOVE_FILES_SCRIPT = \
+      "$founded_files = {};"\
+      "$found_something =false;"\
+      "while(($record = db_fetch('files')) != NULL)"\
+      "{"\
+      "  if(in_array($record.file_id, $file_ids))"\
+      "  {"\
+      "    if(!$found_something)"\
+      "    {"\
+      "      $found_something = true;"\
+      "    }"\
+      "    array_push($founded_files, $record);"\
+      "    db_drop_record('files', $record.__id);"\
+      "  }"\
+      "}"\
+      "if(!$found_something)"\
+      "{"\
+      "  $error = 'file(s) doesn t(don t) exist';"\
+      "}";
+
+
   const std::string GET_FILE_SCRIPT = \
       "/* Manually looping over records, so we can break the loop"\
       " When the file found. */ "\

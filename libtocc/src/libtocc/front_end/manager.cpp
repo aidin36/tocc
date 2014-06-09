@@ -127,6 +127,43 @@ namespace libtocc
     return to_external_file_info(&new_file_info);
   }
 
+  void Manager::remove_file(const char* file_id)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_id));
+    this->private_data->files_engine->remove_files(file_ids);
+  }
+
+  void Manager::remove_file(FileInfo& file_to_remove)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_to_remove.get_id()));
+    this->private_data->files_engine->remove_files(file_ids);
+  }
+
+  void Manager::remove_files(const char* file_ids[], int file_ids_size)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> file_ids_vector;
+    
+    for(int i = 0; i < file_ids_size; i++)
+    {
+      file_ids_vector.push_back(std::string(file_ids[i]));
+    }
+
+    //Remove the files
+    this->private_data->files_engine->remove_files(file_ids_vector);
+  }
+
+  void Manager::remove_files(FileInfoCollection& files_to_remove)
+  {
+    //Converting the FileInfoCollection to a vector of file ids
+    std::vector<std::string> file_ids = file_info_collection_to_vector_ids(files_to_remove);
+
+    //Remove the files
+    this->private_data->files_engine->remove_files(file_ids);
+  }
+
   void Manager::assign_tags(const char* file_ids[],
                             int file_ids_size,
                             const TagsCollection* tags)
