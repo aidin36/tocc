@@ -118,6 +118,13 @@ namespace libtocc
      */
     TagStatisticsCollection get_tags_statistics();
 
+    /*
+    * Sets a new title to a file
+    *@param file_id : the id of the file
+    *@param new_title : the new file's title
+    */
+    void set_title(const std::string& file_id, const std::string& new_title);
+
   private:
     /*
      * Database handler.
