@@ -39,6 +39,7 @@ namespace libtocc
 
   TagsCollection vector_to_tags(const std::vector<std::string>* vector);
 
+  std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection);
 }
 
 #endif /* LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED */

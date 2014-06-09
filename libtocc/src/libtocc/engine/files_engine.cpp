@@ -68,4 +68,17 @@ namespace libtocc
     return new_file;
   }
 
+  void FilesEngine::remove_files(const std::vector<std::string>& files_to_remove)
+  {
+    std::vector<IntFileInfo> founded_files;
+
+    this->database->remove_files(files_to_remove, founded_files);
+
+    //Delete the founded files
+    for(int i = 0; i < founded_files.size(); i++)
+    {
+      const std::string& file_id = std::string(founded_files[i].get_id());
+      this->file_manager->remove(file_id.c_str());
+    }
+  }
 }

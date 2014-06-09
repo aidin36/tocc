@@ -105,4 +105,19 @@ namespace libtocc
     return TagsCollection(tags, vector->size());
   }
 
+  std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection)
+  {
+    std::vector<std::string> file_ids;
+
+    FileInfoCollection::Iterator file_info_collection_iterator(&file_info_collection);
+    for (; !file_info_collection_iterator.is_finished(); ++file_info_collection_iterator)
+    {
+      if(FileInfo* file_info = const_cast<FileInfo*>(file_info_collection_iterator.get()))
+      {
+        file_ids.push_back(std::string(file_info->get_id()));
+      }
+    }
+    return file_ids;
+  }
+
 }
