@@ -86,7 +86,7 @@ namespace libtocc
     void remove_file(FileInfo& file_to_remove);
 
      /*
-     * Deletes an array of files from the database and Tocc managed file system.
+     * Deletes a collection of FileInfos from the database and Tocc managed file system.
      *
      * @param files_to_remove: collection of the files to remove.
      */
