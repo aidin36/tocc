@@ -175,7 +175,7 @@ namespace libtocc
       "}"\
       "if(!$found_something)"\
       "{"\
-      "  $error = 'the file doesn t exist';"\
+      "  $error = 'Error while trying to set title of file: file ['..$file_id..'] not found.';"\
       "}";
 }
 
