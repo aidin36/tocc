@@ -794,7 +794,7 @@ namespace libtocc
 
     //Executing script
     compile_jx9(this->db_pointer, REMOVE_FILES_SCRIPT, &vm);
-    
+
     //Convert string ids to base23
     std::vector<unsigned long> converted_ids;
     std::vector<std::string>::const_iterator iterator = file_ids.begin();
@@ -806,7 +806,7 @@ namespace libtocc
     //Register the converted_ids in VM
     std::string variable_file_ids("file_ids");
     register_variable_in_vm(vm, variable_file_ids, converted_ids);
-   
+
     execute_vm(vm);
 
     std::string founded_files_variable("founded_files");

@@ -24,7 +24,8 @@
 namespace libtocc
 {
 
-  FileInfo to_external_file_info(const IntFileInfo* internal_file_info)
+  FileInfo to_external_file_info(const IntFileInfo* internal_file_info,
+                                 FileManager* file_manager)
   {
     // FileInfo copies each of these parameters. So, we just passed a
     // pointer to the internal variable of each string.
@@ -35,6 +36,7 @@ namespace libtocc
     FileInfo result(internal_file_info->get_id().c_str(),
                     internal_file_info->get_title().c_str(),
                     internal_file_info->get_traditional_path().c_str(),
+                    file_manager->get_physical_path(internal_file_info->get_id()).c_str(),
                     &tags);
     return result;
   }
@@ -52,7 +54,8 @@ namespace libtocc
     return result;
   }
 
-  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos)
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos,
+                                            FileManager* file_manager)
   {
     if (internal_file_infos.empty())
     {
@@ -66,7 +69,7 @@ namespace libtocc
     std::vector<IntFileInfo>::iterator iterator = internal_file_infos.begin();
     for (; iterator != internal_file_infos.end(); ++iterator)
     {
-      result.add_file_info(to_external_file_info(&*iterator));
+      result.add_file_info(to_external_file_info(&*iterator, file_manager));
     }
 
     return result;
@@ -101,11 +104,11 @@ namespace libtocc
 
     return TagsCollection(tags, vector->size());
   }
- 
+
   std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection)
   {
     std::vector<std::string> file_ids;
-    
+
     FileInfoCollection::Iterator file_info_collection_iterator(&file_info_collection);
     for (; !file_info_collection_iterator.is_finished(); ++file_info_collection_iterator)
     {
@@ -115,6 +118,6 @@ namespace libtocc
       }
     }
     return file_ids;
-  } 
+  }
 
 }

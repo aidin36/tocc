@@ -133,6 +133,11 @@ namespace libtocc
     close(dest);
   }
 
+  std::string FileManager::get_physical_path(std::string file_id)
+  {
+    return id_to_file_path(file_id);
+  }
+
   void FileManager::ensure_path_exists(std::string id)
   {
     // There's a big chance that path is already exists or
@@ -191,9 +196,9 @@ namespace libtocc
   std::string FileManager::id_to_dir_path(std::string id)
   {
     // TODO: Raise exception if ID is not valid (e.g. its length is incorrect.)
-    
+
     std::string result(this->base_path);
-    
+
     result += "/";
     result += id.substr(0, 1);
     result += "/";
@@ -201,16 +206,16 @@ namespace libtocc
     result += "/";
     result += id.substr(3, 2);
     result += "/";
-    
+
     return result;
   }
-  
+
   std::string FileManager::id_to_file_path(std::string id)
   {
     std::string result(id_to_dir_path(id));
-    
+
     result += id.substr(5, 2);
-    
+
     return result;
   }
 

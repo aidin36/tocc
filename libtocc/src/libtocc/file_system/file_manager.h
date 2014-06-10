@@ -74,6 +74,11 @@ namespace libtocc
      */
     void copy(std::string source_path, std::string file_id);
 
+    /*
+     * Gets the path of the file on the Tocc-managed file system.
+     */
+    std::string get_physical_path(std::string file_id);
+
   private:
     std::string base_path;
 

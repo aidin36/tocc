@@ -97,7 +97,7 @@ namespace libtocc
   {
     IntFileInfo info = this->private_data->database->get(file_id);
 
-    return to_external_file_info(&info);
+    return to_external_file_info(&info, this->private_data->file_manager);
   }
 
   FileInfo Manager::import_file(const char* source_path,
@@ -108,7 +108,7 @@ namespace libtocc
         this->private_data->files_engine->import_file(source_path,
                                                       title, traditional_path);
 
-    return to_external_file_info(&new_file_info);
+    return to_external_file_info(&new_file_info, this->private_data->file_manager);
   }
 
   FileInfo Manager::import_file(const char* source_path,
@@ -124,7 +124,7 @@ namespace libtocc
                                                       traditional_path,
                                                       tags_vector);
 
-    return to_external_file_info(&new_file_info);
+    return to_external_file_info(&new_file_info, this->private_data->file_manager);
   }
 
   void Manager::remove_file(const char* file_id)
@@ -145,7 +145,7 @@ namespace libtocc
   {
     //Converting file_ids to vector
     std::vector<std::string> file_ids_vector;
-    
+
     for(int i = 0; i < file_ids_size; i++)
     {
       file_ids_vector.push_back(std::string(file_ids[i]));
@@ -205,7 +205,7 @@ namespace libtocc
     std::vector<IntFileInfo> founded_files =
         this->private_data->database->search_files(query);
 
-    return to_external_file_infos(founded_files);
+    return to_external_file_infos(founded_files, this->private_data->file_manager);
   }
 
   TagStatisticsCollection Manager::get_tags_statistics()

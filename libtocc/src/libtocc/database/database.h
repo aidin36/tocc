@@ -82,7 +82,6 @@ namespace libtocc
      * @param OUT: the founded files(among the files passed in file_ids) in the database
      *
      */
-
     void remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files);
 
     /*
