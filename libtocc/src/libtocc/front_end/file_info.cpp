@@ -304,6 +304,7 @@ namespace libtocc
     stream << "  file_id: " << file_info.get_id() << std::endl;
     stream << "  title: " << file_info.get_title() << std::endl;
     stream << "  traditional_path: " << file_info.get_traditional_path() << std::endl;
+    stream << "  physical_path: " << file_info.get_physical_path() << std::endl;
     stream << "  tags: [";
 
     std::vector<std::string>::iterator iterator =
