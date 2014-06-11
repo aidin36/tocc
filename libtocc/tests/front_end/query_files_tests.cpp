@@ -18,6 +18,7 @@
 
 #include <catch.hpp>
 #include <fstream>
+#include <string.h>
 
 #include "libtocc/front_end/manager.h"
 #include "libtocc/front_end/file_info.h"
@@ -114,7 +115,7 @@ TEST_CASE("query_files_tests: simple title search")
     // Checking if it's the same file.
     libtocc::FileInfoCollection::Iterator iterator(&founded_files);
     const libtocc::FileInfo* founded_file = iterator.get();
-    REQUIRE(founded_file->get_title() == "IMG007");
-    REQUIRE(founded_file->get_id() == original_file.get_id());
+    REQUIRE(strcmp(founded_file->get_title(), "IMG007") == 0);
+    REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
   }
 }
