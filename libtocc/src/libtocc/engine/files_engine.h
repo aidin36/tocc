@@ -79,13 +79,6 @@ namespace libtocc
                             std::string title,
                             std::string traditional_path,
                             std::vector<std::string> tags);
- 
-    /*
-    * Sets a new title to a file
-    * @param file_id : the id of the file
-    * @param new_title : the new file's title
-    */
-    void set_title(const char* file_id, const char* new_title);
 
     /*
     * Sets a new title to a file
