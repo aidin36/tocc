@@ -166,7 +166,7 @@ namespace libtocc
 
   std::string Title::get_field_name()
   {
-    return "$record.$title";
+    return "$record.title";
   }
 
 };
