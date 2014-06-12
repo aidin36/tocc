@@ -80,6 +80,7 @@ namespace libtocc
       const std::string& file_id = std::string(founded_files[i].get_id());
       this->file_manager->remove(file_id.c_str());
     }
+  }
 
   void FilesEngine::set_title(const char* file_id, const char* new_title)
   {
