@@ -213,4 +213,8 @@ namespace libtocc
     return this->private_data->tags_engine->get_tags_statistics();
   }
 
+  void Manager::set_title(const char* file_id, const char* new_title)
+  {
+    this->private_data->files_engine->set_title(file_id, new_title);
+  }
 }

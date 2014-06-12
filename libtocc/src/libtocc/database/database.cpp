@@ -933,4 +933,21 @@ namespace libtocc
     return extract_tag_statistics_from_vm(vm, "statistics");
   }
 
+  void Database::set_title(const std::string& file_id, const std::string& new_title)
+  {
+    unqlite_vm* vm;
+    VMPointerHolder vm_holder(&vm);
+
+    //Executing set_title script
+    compile_jx9(this->db_pointer, SET_TITLE_SCRIPT, &vm);
+
+   //Register the variables in VM
+   std::string variable_file_id("file_id");
+   std::string variable_new_title("new_title");
+   register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
+   register_variable_in_vm(vm, variable_new_title, new_title);
+
+   //Execute script
+   execute_vm(vm);
+  }
 }
