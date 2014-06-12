@@ -937,7 +937,7 @@ namespace libtocc
   {
     unqlite_vm* vm;
     VMPointerHolder vm_holder(&vm);
-   
+
     //Executing set_title script
     compile_jx9(this->db_pointer, SET_TITLE_SCRIPT, &vm);
 
@@ -946,7 +946,7 @@ namespace libtocc
    std::string variable_new_title("new_title");
    register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
    register_variable_in_vm(vm, variable_new_title, new_title);
-   
+
    //Execute script
    execute_vm(vm);
   }

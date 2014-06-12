@@ -34,7 +34,7 @@ TEST_CASE("database: set file's title tests")
 
   // Checking if it's the title's right.
   REQUIRE(new_file.get_title() == "Title");
-  
+
   //Setting the file's title with a new title
   db.set_title(std::string(new_file.get_id()), "new title");
 

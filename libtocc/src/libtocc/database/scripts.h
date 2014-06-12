@@ -186,7 +186,7 @@ namespace libtocc
       "    /*if the new title isn t the same as the title's file*/"\
       "    if($record.title != $new_title)"\
       "    {"\
-      "      $record.title = $new_title;"\     
+      "      $record.title = $new_title;"\
       "      /*Updating the record*/"\
       "      db_drop_record('files', $record.__id);"\
       "      db_store('files', $record);"\
