@@ -169,6 +169,35 @@ namespace libtocc
       "  return FALSE;"\
       "}; "\
       "db_fetch_all('files', $filter_func);";
+
+  /*
+   * Sets a file's title
+   */
+  const std::string SET_TITLE_SCRIPT = \
+      "$found_something = false;"\
+      "while(($record = db_fetch('files')) != NULL)"\
+      "{"\
+      "  if($record.file_id == $file_id)"\
+      "  {"\
+      "    if(!$found_something)"\
+      "    {"\
+      "      $found_something = true;"\
+      "    }"\
+      "    /*if the new title isn t the same as the title's file*/"\
+      "    if($record.title != $new_title)"\
+      "    {"\
+      "      $record.title = $new_title;"\     
+      "      /*Updating the record*/"\
+      "      db_drop_record('files', $record.__id);"\
+      "      db_store('files', $record);"\
+      "    }"\
+      "    break;"\
+      "  }"\
+      "}"\
+      "if(!$found_something)"\
+      "{"\
+      "  $error = 'Error while trying to set title of file: file ['..$file_id..'] not found.';"\
+      "}";
 }
 
 #endif /* LIBTOCC_SCRIPTS_H_INCLUDED */
