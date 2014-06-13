@@ -248,6 +248,10 @@ namespace tocccli
           state = make_template_states::NONE;
         }
       }
+
+      // Arguments are split by spaces. We want these spaces appear
+      // in the output.
+      current_element += " ";
     }
 
     if (state != make_template_states::NONE)
