@@ -65,6 +65,22 @@ namespace libtocc
                          const char* traditional_path="");
 
     /*
+     * Imports a file from the path to the Tocc managed file system.
+     *
+     * @param source_path: Path to the source file.
+     * @param title: title of the file.
+     * @param traditional_path: traditional path of the file.
+     *   (Can be empty string.)
+     * @param tags: Tags to assign to the file.
+     *
+     * @return: Information of the newly created file.
+     */
+    FileInfo import_file(const char* source_path,
+                         const char* title,
+                         const char* traditional_path,
+                         const TagsCollection* tags);
+
+    /*
      * Deletes a file from the database and Tocc managed file system.
      *
      * @param file_id: the id of the file to delete.
@@ -92,22 +108,6 @@ namespace libtocc
      * @param files_to_remove: collection of the files to remove.
      */
     void remove_files(FileInfoCollection& files_to_remove);
-
-    /*
-     * Imports a file from the path to the Tocc managed file system.
-     *
-     * @param source_path: Path to the source file.
-     * @param title: title of the file.
-     * @param traditional_path: traditional path of the file.
-     *   (Can be empty string.)
-     * @param tags: Tags to assign to the file.
-     *
-     * @return: Information of the newly created file.
-     */
-    FileInfo import_file(const char* source_path,
-                         const char* title,
-                         const char* traditional_path,
-                         const TagsCollection* tags);
 
     /*
      * Assigns specified tags to all files in the specified list of files.
