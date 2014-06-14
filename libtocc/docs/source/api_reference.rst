@@ -81,6 +81,27 @@ Overload of the previous function that accepts a file and a list of tags.
 
 Overload of the previous function that accepts a single file and a single tag.
 
+.. function:: void remove_file(const char* file_id)
+
+Removes the file that its ID is ``file_id``.
+
+.. function:: void remove_files(const char* file_ids[], int file_ids_size)
+
+Removes an array of files.
+
+``file_ids`` is an array of IDs of files to remove. ``file_id_size`` is
+the size of the ``file_ids`` array. If you pass zero or a negative number as
+``file_id_size``, the method itself will calculate the size. If you have the
+size in your hand, it's better to pass it.
+
+.. function:: void remove_file(FileInfo& file_to_remove)
+
+Removes the specified file.
+
+.. function:: void remove_files(FileInfoCollection& files_to_remove)
+
+Removes all the files in the specified collection.
+
 
 FileInfo Class
 --------------
@@ -109,6 +130,11 @@ Returns title of the file.
 .. function:: const char* get_traditional_path() const
 
 Returns traditional path of the file.
+
+.. function:: const char* get_physical_path() const
+
+Returns physical path of the file (where file exists on the Tocc-managed
+file system).
 
 .. function:: std::ostream& operator<<
 
