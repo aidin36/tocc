@@ -770,7 +770,7 @@ namespace libtocc
   {
     unqlite_vm* vm;
     // Auto release the pointer.
-    //VMPointerHolder holder(&vm);
+    VMPointerHolder holder(&vm);
 
     // Compiling the script (Which fills VM)
     compile_jx9(this->db_pointer, CREATE_FILE_SCRIPT, &vm);
