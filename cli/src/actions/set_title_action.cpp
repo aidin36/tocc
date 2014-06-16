@@ -46,7 +46,7 @@ namespace tocccli
 
   std::string SetTitleAction::get_help_text()
   {
-    return "-t, --set-title\tSets the title of the file on the output.";
+    return "-t, --set-title=TITLE\tSets the title of files. TITLE is the title to set to files.";
   }
 
   void SetTitleAction::execute(std::vector<libtocc::FileInfo> files,
@@ -54,7 +54,7 @@ namespace tocccli
   {
     if (cmd_arguments.empty())
     {
-      throw InvalidParametersError("-t, --set-title = TITLE\tSets the title of files. TITLE is the title to set to files.");
+      throw InvalidParametersError("-i and --import must have an argument.");
     }
 
     //extract file ids to an array
