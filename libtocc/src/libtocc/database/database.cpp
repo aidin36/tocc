@@ -933,7 +933,7 @@ namespace libtocc
     return extract_tag_statistics_from_vm(vm, "statistics");
   }
 
-  void Database::set_title(const std::string& file_id, const std::string& new_title)
+  void Database::set_titles(const std::vector<std::string>& file_ids, const std::string& new_title)
   {
     unqlite_vm* vm;
     VMPointerHolder vm_holder(&vm);
@@ -941,10 +941,18 @@ namespace libtocc
     //Executing set_title script
     compile_jx9(this->db_pointer, SET_TITLE_SCRIPT, &vm);
 
+    // Converting IDs.
+    std::vector<unsigned long> converted_ids;
+    std::vector<std::string>::const_iterator iterator = file_ids.begin();
+    for(; iterator != file_ids.end(); ++iterator)
+    {
+      converted_ids.push_back(from_base23(*iterator));
+    }
+
    //Register the variables in VM
-   std::string variable_file_id("file_id");
+   std::string variable_file_id("file_ids");
    std::string variable_new_title("new_title");
-   register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
+   register_variable_in_vm(vm, variable_file_id, converted_ids);
    register_variable_in_vm(vm, variable_new_title, new_title);
 
    //Execute script
