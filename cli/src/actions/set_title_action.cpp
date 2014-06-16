@@ -54,17 +54,19 @@ namespace tocccli
   {
     if (cmd_arguments.empty())
     {
-      throw InvalidParametersError("`-t, --set-title' needs a title as argument.");
+      throw InvalidParametersError("-t, --set-title = TITLE\tSets the title of files. TITLE is the title to set to files.");
     }
 
-    //Sets the title only for the first file with the first argument of the command
-    //it silently ignores the other files and arguments of the command
-    std::vector<libtocc::FileInfo>::iterator iterator = files.begin();
-    std::vector<std::string>::iterator cmd_arguments_iterator = cmd_arguments.begin();
+    //extract file ids to an array
+    const char* file_ids[files.size()];
+    for(int i = 0; i < files.size(); i++)
+    {
+      file_ids[i] = files[i].get_id();
+    }
   
     if(this->libtocc_manager != 0)
     {
-      this->libtocc_manager->set_title((*iterator).get_id(), (*cmd_arguments_iterator).c_str());
+      this->libtocc_manager->set_titles(file_ids, files.size(), cmd_arguments.front().c_str());
     }
   }
 }

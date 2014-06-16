@@ -35,7 +35,8 @@ namespace libtocc
 namespace tocccli
 {
    /*
-   * This action sets the title of the file on the output.
+   * This action sets the title of the files on the output,
+   * it silently ignores the files that don't exist.
    */
   class SetTitleAction : public Action
   {
