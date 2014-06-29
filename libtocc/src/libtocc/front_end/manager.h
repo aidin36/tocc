@@ -160,9 +160,17 @@ namespace libtocc
     TagStatisticsCollection get_tags_statistics();
 
     /*
+     * Sets a new title to a group of files, all the files will be having the same title
+     * @param file_ids: An array of ids of the files to set a title to.
+     * @param file_ids_size: the size of the array of file ids.
+     * @param new_title : the new files title
+     */
+    void set_titles(const char* file_ids[], int file_ids_size, const char* new_title);
+
+    /*
      * Sets a new title to a file
-     * @param file_id : the id of the file
-     * @param new_title : the new file's title
+     * @param file_id: the id of the file we want to set a title to
+     * @param new_title: the new file's title
      */
     void set_title(const char* file_id, const char* new_title);
 

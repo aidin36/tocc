@@ -31,6 +31,7 @@
 #include "actions/assign_action.h"
 #include "actions/all_tags_action.h"
 #include "actions/remove_action.h"
+#include "actions/set_title_action.h"
 
 
 // PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
@@ -61,6 +62,7 @@ namespace tocccli
     this->actions.push_back(new AssignAction(this->libtocc_manager));
     this->actions.push_back(new AllTagsAction(this->libtocc_manager));
     this->actions.push_back(new RemoveAction(this->libtocc_manager));
+    this->actions.push_back(new SetTitleAction(this->libtocc_manager));
   }
 
   CmdManager::~CmdManager()

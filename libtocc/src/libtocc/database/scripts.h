@@ -177,7 +177,7 @@ namespace libtocc
       "$found_something = false;"\
       "while(($record = db_fetch('files')) != NULL)"\
       "{"\
-      "  if($record.file_id == $file_id)"\
+      "  if(in_array($record.file_id, $file_ids))"\
       "  {"\
       "    if(!$found_something)"\
       "    {"\
@@ -191,7 +191,6 @@ namespace libtocc
       "      db_drop_record('files', $record.__id);"\
       "      db_store('files', $record);"\
       "    }"\
-      "    break;"\
       "  }"\
       "}"\
       "if(!$found_something)"\

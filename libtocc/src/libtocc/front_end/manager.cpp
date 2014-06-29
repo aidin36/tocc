@@ -144,12 +144,7 @@ namespace libtocc
   void Manager::remove_files(const char* file_ids[], int file_ids_size)
   {
     //Converting file_ids to vector
-    std::vector<std::string> file_ids_vector;
-
-    for(int i = 0; i < file_ids_size; i++)
-    {
-      file_ids_vector.push_back(std::string(file_ids[i]));
-    }
+    std::vector<std::string> file_ids_vector = const_char_array_to_vector(file_ids, file_ids_size);
 
     //Remove the files
     this->private_data->files_engine->remove_files(file_ids_vector);
@@ -213,8 +208,18 @@ namespace libtocc
     return this->private_data->tags_engine->get_tags_statistics();
   }
 
+  void Manager::set_titles(const char* file_ids[], int file_ids_size, const char* new_title)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> vector_file_ids = const_char_array_to_vector(file_ids, file_ids_size);
+
+    this->private_data->files_engine->set_titles(vector_file_ids , new_title);
+  }
+  
   void Manager::set_title(const char* file_id, const char* new_title)
   {
-    this->private_data->files_engine->set_title(file_id, new_title);
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_id));
+    this->private_data->files_engine->set_titles(file_ids , new_title);
   }
 }
