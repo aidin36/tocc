@@ -29,9 +29,12 @@
 TEST_CASE("database: expr tests")
 {
   // Compiling a simple expression.
-  libtocc::And* all_expressions = libtocc::And::create(libtocc::Tag::create("book"));
-  all_expressions->add(libtocc::Tag::create("2010"));
-  all_expressions->add(libtocc::Title::create("Programming"));
+  libtocc::Tag book_tag("book");
+  libtocc::And all_expressions(book_tag);
+  libtocc::Tag year_tag("2010");
+  all_expressions.add(year_tag);
+  libtocc::Title title("Programming");
+  all_expressions.add(title);
 
   libtocc::Query query_object(all_expressions);
 
@@ -40,14 +43,19 @@ TEST_CASE("database: expr tests")
   std::string compiled_expression = compiler.compile(query_object);
 
   // Compiling a little more complex expression.
-  libtocc::And* main_and = libtocc::And::create(libtocc::Tag::create("photo"));
-  libtocc::Or* first_or = libtocc::Or::create(libtocc::Tag::create("b&w"));
-  first_or->add(libtocc::Tag::create("abstract"));
-  libtocc::Or* second_or = libtocc::Or::create(libtocc::Tag::create("hdr"));
-  second_or->add(libtocc::Tag::create("landscape"));
-  libtocc::And* internal_and = libtocc::And::create(first_or);
-  internal_and->add(second_or);
-  main_and->add(internal_and);
+  libtocc::Tag photo_tag("photo");
+  libtocc::And main_and(photo_tag);
+  libtocc::Tag bw_tag("b&w");
+  libtocc::Or first_or(bw_tag);
+  libtocc::Tag abstract_tag("abstract");
+  first_or.add(abstract_tag);
+  libtocc::Tag hdr_tag("hdr");
+  libtocc::Or second_or(hdr_tag);
+  libtocc::Tag landscape_tag("landscape");
+  second_or.add(landscape_tag);
+  libtocc::And internal_and(first_or);
+  internal_and.add(second_or);
+  main_and.add(internal_and);
 
   libtocc::Query complex_query_object(main_and);
 

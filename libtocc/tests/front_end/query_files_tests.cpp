@@ -35,8 +35,8 @@ TEST_CASE("query_files_tests: simple tag search")
   {
     manager.assign_tags("0000001", "test_tag_0xUi7");
 
-    libtocc::Tag* tag_expr = libtocc::Tag::create("test_tag_0xUi7");
-    libtocc::And* main_and = libtocc::And::create(tag_expr);
+    libtocc::Tag tag_expr("test_tag_0xUi7");
+    libtocc::And main_and(tag_expr);
 
     libtocc::Query query(main_and);
 
@@ -49,10 +49,10 @@ TEST_CASE("query_files_tests: simple tag search")
   {
     manager.assign_tags("0000001", "test_tag_zE1jIqw");
 
-    libtocc::Tag* tag_expr = libtocc::Tag::create("test_tag_0xUi7");
-    libtocc::Tag* second_tag_expr = libtocc::Tag::create("test_tag_zE1jIqw");
-    libtocc::And* main_and = libtocc::And::create(tag_expr);
-    main_and->add(second_tag_expr);
+    libtocc::Tag tag_expr("test_tag_0xUi7");
+    libtocc::Tag second_tag_expr("test_tag_zE1jIqw");
+    libtocc::And main_and(tag_expr);
+    main_and.add(second_tag_expr);
 
     libtocc::Query query(main_and);
 
@@ -63,11 +63,11 @@ TEST_CASE("query_files_tests: simple tag search")
 
   SECTION("Or two tags")
   {
-    libtocc::Tag* tag_expr = libtocc::Tag::create("test_tag_0xUi7");
-    libtocc::Tag* second_tag_expr = libtocc::Tag::create("not-existed-tag:jFi92Xhd");
+    libtocc::Tag tag_expr("test_tag_0xUi7");
+    libtocc::Tag second_tag_expr("not-existed-tag:jFi92Xhd");
 
-    libtocc::Or* main_or = libtocc::Or::create(tag_expr);
-    main_or->add(second_tag_expr);
+    libtocc::Or main_or(tag_expr);
+    main_or.add(second_tag_expr);
 
     libtocc::Query query(main_or);
 
@@ -78,8 +78,8 @@ TEST_CASE("query_files_tests: simple tag search")
 
   SECTION("Query a not existed file")
   {
-    libtocc::Tag* tag_expr = libtocc::Tag::create("a-not-existed-tag:anFhdu89");
-    libtocc::And* main_and = libtocc::And::create(tag_expr);
+    libtocc::Tag tag_expr("a-not-existed-tag:anFhdu89");
+    libtocc::And main_and(tag_expr);
 
     libtocc::Query query(main_and);
 
@@ -102,8 +102,8 @@ TEST_CASE("query_files_tests: simple title search")
 
     libtocc::FileInfo original_file = manager.import_file("/tmp/XlfYru129384PxQ", "IMG007");
 
-    libtocc::Title* title_expr = libtocc::Title::create("IMG007");
-    libtocc::And* main_and = libtocc::And::create(title_expr);
+    libtocc::Title title_expr("IMG007");
+    libtocc::And main_and(title_expr);
 
     libtocc::Query query(main_and);
 
