@@ -22,24 +22,25 @@
 namespace libtocc
 {
 
-  expr_type::ExprType ConnectiveExpr::get_type()
+  ConnectiveExpr::ConnectiveExpr(ConnectiveExpr& expression)
   {
-    return expr_type::CONNECTIVE;
+    this->expressions.push_back(expression.clone());
   }
 
-  void ConnectiveExpr::add(ConnectiveExpr* expression)
+  ConnectiveExpr::ConnectiveExpr(FieldExpr& expression)
   {
-    this->expressions.push_back(expression);
+    this->expressions.push_back(expression.clone());
   }
 
-  void ConnectiveExpr::add(FieldExpr* expression)
+  ConnectiveExpr::ConnectiveExpr(const ConnectiveExpr& source)
   {
-    this->expressions.push_back(expression);
-  }
-
-  ConnectiveExpr::ConnectiveExpr(Expr* expression)
-  {
-    this->expressions.push_back(expression);
+    // Looping through the source's expression, and copying each element
+    // to our private list.
+    std::list<Expr*>::const_iterator iterator = source.expressions.begin();
+    for (; iterator != source.expressions.end(); iterator++)
+    {
+      this->expressions.push_back((*iterator)->clone());
+    }
   }
 
   ConnectiveExpr::~ConnectiveExpr()
@@ -47,8 +48,24 @@ namespace libtocc
     // Iterating over internal expressions, deleting each one.
     while (!this->expressions.empty())
     {
+      delete this->expressions.back();
       this->expressions.pop_back();
     }
+  }
+
+  expr_type::ExprType ConnectiveExpr::get_type()
+  {
+    return expr_type::CONNECTIVE;
+  }
+
+  void ConnectiveExpr::add(ConnectiveExpr& expression)
+  {
+    this->expressions.push_back(expression.clone());
+  }
+
+  void ConnectiveExpr::add(FieldExpr& expression)
+  {
+    this->expressions.push_back(expression.clone());
   }
 
   std::list<CompiledExpr> ConnectiveExpr::compile()
@@ -84,34 +101,29 @@ namespace libtocc
     return result;
   }
 
-  And* And::create(ConnectiveExpr* expression)
-  {
-    return new And(expression);
-  }
-
-  And* And::create(FieldExpr* expression)
-  {
-    return new And(expression);
-  }
-
   std::string And::get_connective_string()
   {
     return "&&";
   }
 
-  And::And(Expr* expression)
+  And::And(ConnectiveExpr& expression)
     : ConnectiveExpr(expression)
   {
   }
 
-  Or* Or::create(ConnectiveExpr* expression)
+  And::And(FieldExpr& expression)
+    : ConnectiveExpr(expression)
   {
-    return new Or(expression);
   }
 
-  Or* Or::create(FieldExpr* expression)
+  And::And(const And& source)
+    : ConnectiveExpr(source)
   {
-    return new Or(expression);
+  }
+
+  Expr* And::clone()
+  {
+    return new And(*this);
   }
 
   std::string Or::get_connective_string()
@@ -119,9 +131,24 @@ namespace libtocc
     return "||";
   }
 
-  Or::Or(Expr* expression)
+  Or::Or(ConnectiveExpr& expression)
     : ConnectiveExpr(expression)
   {
+  }
+
+  Or::Or(FieldExpr& expression)
+    : ConnectiveExpr(expression)
+  {
+  }
+
+  Or::Or(const Or& expression)
+    : ConnectiveExpr(expression)
+  {
+  }
+
+  Expr* Or::clone()
+  {
+    return new Or(*this);
   }
 
 };

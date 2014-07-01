@@ -35,6 +35,8 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     virtual std::string compile();
+
+    virtual Expr* clone();
   };
 
 };

@@ -40,6 +40,31 @@ namespace libtocc
   {
   public:
     /*
+     * Represents a field that exactly matches the
+     * specified string.
+     */
+    FieldExpr(const char* value);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(FunctionExpr& expression);
+
+    /*
+     * Represents a field that matches with the specified
+     * expression.
+     */
+    FieldExpr(OperandExpr& expression);
+
+    /*
+     * Copy constructor.
+     */
+    FieldExpr(const FieldExpr& source);
+
+    virtual ~FieldExpr();
+
+    /*
      * Returns the type of this expression, which is
      * expr_type::FIELD.
      */
@@ -49,6 +74,11 @@ namespace libtocc
      * Compiles the expression.
      */
     virtual CompiledExpr compile();
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
 
   protected:
     /*
@@ -67,26 +97,6 @@ namespace libtocc
     OperandExpr* operand;
 
     /*
-     * Represents a field that exactly matches the
-     * specified string.
-     */
-    FieldExpr(const char* value);
-
-    /*
-     * Represents a field that matches with the specified
-     * expression.
-     */
-    FieldExpr(FunctionExpr* expression);
-
-    /*
-     * Represents a field that matches with the specified
-     * expression.
-     */
-    FieldExpr(OperandExpr* expression);
-
-    virtual ~FieldExpr();
-
-    /*
      * (Should be override by the subclass.)
      * Returns name of this field that should be appear in the
      * compiled string.
@@ -99,61 +109,13 @@ namespace libtocc
     virtual compiled_expr::ExprType get_compiled_expr_type();
   };
 
+
   /*
    * Represents a Tag.
    */
   class Tag : public FieldExpr
   {
   public:
-    /*
-     * Creates an instance of Tag expression, which matches
-     * exactly with the specified string.
-     *
-     * @param tag: Tag to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Tag* create(const char* tag);
-
-    /*
-     * Creates an instance of a tag that matches with the
-     * specified expression.
-     *
-     * Example of usage:
-     *   Tag(Regex("..."))
-     *
-     * @param expression: Expression to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Tag* create(FunctionExpr* expression);
-
-    /*
-     * Creates an instance of a tag that matches with the
-     * specified expression.
-     *
-     * Example of usage:
-     *   Tag(Regex("..."))
-     *
-     * @param expression: Expression to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Tag* create(OperandExpr* expression);
-
-  protected:
     /*
      * Represents a Tag that exactly matches the
      * specified string.
@@ -164,13 +126,25 @@ namespace libtocc
      * Represents a Tag that matches with the specified
      * expression.
      */
-    Tag(FunctionExpr* expression);
+    Tag(FunctionExpr& expression);
 
     /*
      * Represents a Tag that matches with the specified
      * expression.
      */
-    Tag(OperandExpr* expression);
+    Tag(OperandExpr& expression);
+
+    /*
+     * Copy constructor.
+     */
+    Tag(const Tag& source);
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
+
+  protected:
 
     /*
      * Returns name of this field that should be appear in the
@@ -184,58 +158,13 @@ namespace libtocc
     virtual compiled_expr::ExprType get_compiled_expr_type();
   };
 
+
   /*
    * Represents Title of a file.
    */
   class Title : public FieldExpr
   {
   public:
-    /*
-     * Creates an instance of a Title that exactly matches
-     * the specified string.
-     *
-     * @param expression: Expression to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Title* create(const char* tag);
-
-    /*
-     * Creates an instance of a Title that matches with the
-     * specified expression.
-     *
-     * Example of usage:
-     *   Title(Regex("..."))
-     *
-     * @param expression: Expression to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Title* create(FunctionExpr* expression);
-
-    /*
-     * Creates an instance of a Title that matches with the
-     * specified expression.
-     *
-     * @param expression: Expression to match.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
-     */
-    static Title* create(OperandExpr* expression);
-
-  protected:
     /*
      * Represents a Title that exactly matches the
      * specified string.
@@ -246,14 +175,25 @@ namespace libtocc
      * Represents a Title that matches with the specified
      * expression.
      */
-    Title(FunctionExpr* expression);
+    Title(FunctionExpr& expression);
 
     /*
      * Represents a Title that matches with the specified
      * expression.
      */
-    Title(OperandExpr* expression);
+    Title(OperandExpr& expression);
 
+    /*
+     * Copy constructor.
+     */
+    Title(const Title& source);
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
+
+  protected:
 
     /*
      * Returns name of this field that should be appear in the

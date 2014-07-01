@@ -40,6 +40,29 @@ namespace libtocc
 
   public:
     /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: First internal element of this
+     *   connective expression.
+     */
+    ConnectiveExpr(ConnectiveExpr& expression);
+
+    /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: First internal element of this
+     *   connective expression.
+     */
+    ConnectiveExpr(FieldExpr& expression);
+
+    /*
+     * Copy constructor.
+     */
+    ConnectiveExpr(const ConnectiveExpr& source);
+
+    virtual ~ConnectiveExpr();
+
+    /*
      * Returns the type of this expression.
      */
     virtual expr_type::ExprType get_type();
@@ -47,12 +70,12 @@ namespace libtocc
     /*
      * Adds the specified expression.
      */
-    void add(ConnectiveExpr* expression);
+    void add(ConnectiveExpr& expression);
 
     /*
      * Adds the specified expression.
      */
-    void add(FieldExpr* expression);
+    void add(FieldExpr& expression);
 
     /*
      * Compiled the expression and the ones inside it.
@@ -60,16 +83,12 @@ namespace libtocc
      */
     virtual std::list<CompiledExpr> compile();
 
-  protected:
     /*
-     * Creates new instance of the expr.
-     *
-     * @param expression: an instance of one of the
-     *   ConnectiveExpr or FieldExpr.
+     * Clones this instance.
      */
-    ConnectiveExpr(Expr* expression);
+    virtual Expr* clone() = 0;
 
-    virtual ~ConnectiveExpr();
+  protected:
 
     /*
      * Returns the equivalent string of this connective expression.
@@ -92,48 +111,36 @@ namespace libtocc
   {
   public:
     /*
-     * Creates an instance of the And Expression. With another
-     * connective expression inside it.
+     * Creates new instance of the expr.
      *
-     * @param expression: A pointer to a ConnectiveExpr.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
+     * @param expression: First internal element of this
+     *   connective expression.
      */
-    static And* create(ConnectiveExpr* expression);
+    And(ConnectiveExpr& expression);
 
     /*
-     * Creates an instance of the And Expression. With a
-     * field expression inside it.
+     * Creates new instance of the expr.
      *
-     * @param expression: A pointer to a FieldExpr.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
+     * @param expression: First internal element of this
+     *   connective expression.
      */
-    static And* create(FieldExpr* expression);
+    And(FieldExpr& expression);
+
+    /*
+     * Copy constructor.
+     */
+    And(const And& source);
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
 
   protected:
     /*
      * Returns the equivalent string of this connective expression.
      */
     virtual std::string get_connective_string();
-
-  private:
-    /*
-     * Creates new instance of the And expr.
-     *
-     * @param expression: an instance of one of the
-     *   ConnectiveExpr or FieldExpr.
-     */
-    And(Expr* expression);
-
   };
 
 
@@ -147,47 +154,36 @@ namespace libtocc
   {
   public:
     /*
-     * Creates an instance of the Or Expression. With another
-     * connective expression inside it.
+     * Creates new instance of the expr.
      *
-     * @param expression: A pointer to a ConnectiveExpr.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
+     * @param expression: First internal element of this
+     *   connective expression.
      */
-    static Or* create(ConnectiveExpr* expression);
+    Or(ConnectiveExpr& expression);
 
     /*
-     * Creates an instance of the And Expression. With a
-     * field expression inside it.
+     * Creates new instance of the expr.
      *
-     * @param expression: A pointer to a FieldExpr.
-     *
-     * @return: A pointer to the newly created expression.
-     *
-     * @note: You cannot free the pointer you received. It
-     *   will be freed as soon as its related Query object
-     *   releases. (see the documentation)
+     * @param expression: First internal element of this
+     *   connective expression.
      */
-    static Or* create(FieldExpr* expression);
+    Or(FieldExpr& expression);
+
+    /*
+     * Copy constructor.
+     */
+    Or(const Or& source);
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
 
   protected:
     /*
      * Returns the equivalent string of this connective expression.
      */
     virtual std::string get_connective_string();
-
-  private:
-    /*
-     * Creates new instance of the Or expr.
-     *
-     * @param expression: an instance of one of the
-     *   ConnectiveExpr or FieldExpr.
-     */
-    Or(Expr* expression);
 
   };
 

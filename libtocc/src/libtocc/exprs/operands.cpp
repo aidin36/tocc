@@ -32,4 +32,8 @@ namespace libtocc
     return "Not Implemented";
   }
 
+  Expr* OperandExpr::clone()
+  {
+    return new OperandExpr(*this);
+  }
 };

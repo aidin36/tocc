@@ -48,6 +48,11 @@ namespace libtocc
      */
     virtual expr_type::ExprType get_type() = 0;
 
+    /*
+     * Returns a deep copy of this instance.
+     */
+    virtual Expr* clone() = 0;
+
   protected:
     virtual ~Expr() {}
   };

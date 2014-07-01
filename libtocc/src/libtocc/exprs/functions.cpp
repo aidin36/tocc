@@ -30,4 +30,9 @@ namespace libtocc
   {
     return "Not Implemented";
   }
+
+  Expr* FunctionExpr::clone()
+  {
+    return new FunctionExpr(*this);
+  }
 };

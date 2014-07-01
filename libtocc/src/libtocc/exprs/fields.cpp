@@ -23,36 +23,58 @@
 namespace libtocc
 {
 
-  FieldExpr::FieldExpr(const char* tag)
+  FieldExpr::FieldExpr(const char* value)
   {
-    this->value = tag;
+    this->value = value;
     this->internal_type = 0;
     this->operand = NULL;
     this->function = NULL;
   }
 
-  FieldExpr::FieldExpr(FunctionExpr* expression)
+  FieldExpr::FieldExpr(FunctionExpr& expression)
   {
-    this->function = expression;
+    this->function = (FunctionExpr*)expression.clone();
     this->internal_type = 1;
     this->operand = NULL;
   }
 
-  FieldExpr::FieldExpr(OperandExpr* expression)
+  FieldExpr::FieldExpr(OperandExpr& expression)
   {
-    this->operand = expression;
+    this->operand = (OperandExpr*)expression.clone();
     this->internal_type = 2;
     this->function = NULL;
   }
 
+  FieldExpr::FieldExpr(const FieldExpr& source)
+  {
+    this->value = source.value;
+    this->internal_type = source.internal_type;
+    if (source.operand != NULL)
+    {
+      this->operand = (OperandExpr*)source.operand->clone();
+    }
+    else
+    {
+      this->operand = NULL;
+    }
+    if (source.function != NULL)
+    {
+      this->function = (FunctionExpr*)source.function->clone();
+    }
+    else
+    {
+      this->function = NULL;
+    }
+  }
+
   FieldExpr::~FieldExpr()
   {
-    if (this->internal_type == 1)
+    if (this->function != NULL)
     {
       delete this->function;
       this->function = NULL;
     }
-    else if (this->internal_type == 2)
+    else if (this->operand != NULL)
     {
       delete this->operand;
       this->operand = NULL;
@@ -74,19 +96,24 @@ namespace libtocc
     else if (this->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-			  this->function->compile(get_field_name()).c_str());
+                          this->function->compile(get_field_name()).c_str());
     }
     else
     {
       std::string result(get_field_name() + this->operand->compile());
       return CompiledExpr(get_compiled_expr_type(),
-			  result.c_str());
+                          result.c_str());
     }
+  }
+
+  Expr* FieldExpr::clone()
+  {
+    return new FieldExpr(*this);
   }
 
   std::string FieldExpr::get_field_name()
   {
-    return "Have to be overrided!";
+    return "Have to be override!";
   }
 
   compiled_expr::ExprType FieldExpr::get_compiled_expr_type()
@@ -94,34 +121,29 @@ namespace libtocc
     return compiled_expr::FIELD;
   }
 
-  Tag* Tag::create(const char* tag)
-  {
-    return new Tag(tag);
-  }
-
-  Tag* Tag::create(FunctionExpr* expression)
-  {
-    return new Tag(expression);
-  }
-
-  Tag* Tag::create(OperandExpr* expression)
-  {
-    return new Tag(expression);
-  }
-
   Tag::Tag(const char* tag)
     : FieldExpr(tag)
   {
   }
 
-  Tag::Tag(FunctionExpr* expression)
+  Tag::Tag(FunctionExpr& expression)
     : FieldExpr(expression)
   {
   }
 
-  Tag::Tag(OperandExpr* expression)
+  Tag::Tag(OperandExpr& expression)
     : FieldExpr(expression)
   {
+  }
+
+  Tag::Tag(const Tag& source)
+    : FieldExpr(source)
+  {
+  }
+
+  Expr* Tag::clone()
+  {
+    return new Tag(*this);
   }
 
   compiled_expr::ExprType Tag::get_compiled_expr_type()
@@ -134,34 +156,29 @@ namespace libtocc
     return "$tag";
   }
 
-  Title* Title::create(const char* tag)
-  {
-    return new Title(tag);
-  }
-
-  Title* Title::create(FunctionExpr* expression)
-  {
-    return new Title(expression);
-  }
-
-  Title* Title::create(OperandExpr* expression)
-  {
-    return new Title(expression);
-  }
-
   Title::Title(const char* tag)
     : FieldExpr(tag)
   {
   }
 
-  Title::Title(FunctionExpr* expression)
+  Title::Title(FunctionExpr& expression)
     : FieldExpr(expression)
   {
   }
 
-  Title::Title(OperandExpr* expression)
+  Title::Title(OperandExpr& expression)
     : FieldExpr(expression)
   {
+  }
+
+  Title::Title(const Title& source)
+    : FieldExpr(source)
+  {
+  }
+
+  Expr* Title::clone()
+  {
+    return new Title(*this);
   }
 
   std::string Title::get_field_name()
