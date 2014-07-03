@@ -43,6 +43,9 @@ namespace libtocc
     friend class ConnectiveExpr;
 
   public:
+
+    virtual ~Expr() {}
+
     /*
      * Returns the type of the expression.
      */
@@ -53,8 +56,6 @@ namespace libtocc
      */
     virtual Expr* clone() = 0;
 
-  protected:
-    virtual ~Expr() {}
   };
 
 };
