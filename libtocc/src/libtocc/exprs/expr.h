@@ -43,13 +43,19 @@ namespace libtocc
     friend class ConnectiveExpr;
 
   public:
+
+    virtual ~Expr() {}
+
     /*
      * Returns the type of the expression.
      */
     virtual expr_type::ExprType get_type() = 0;
 
-  protected:
-    virtual ~Expr() {}
+    /*
+     * Returns a deep copy of this instance.
+     */
+    virtual Expr* clone() = 0;
+
   };
 
 };

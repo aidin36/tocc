@@ -18,6 +18,7 @@
 
 #include <utility> // std::pair
 #include <sstream>
+#include <vector>
 
 #include <libtocc/exprs/query.h>
 #include <libtocc/exprs/expr.h>
@@ -36,6 +37,39 @@ namespace tocccli
   libtocc::ConnectiveExpr* extract_next_term(std::vector<std::string>& arguments, int& index);
 
   /*
+   * Holds a list of Expr pointers, and release them when destroys.
+   */
+  class ExprPointerHolder
+  {
+  public:
+    ExprPointerHolder(libtocc::Expr* pointer_to_hold)
+    {
+      this->pointers.push_back(pointer_to_hold);
+    }
+
+    ~ExprPointerHolder()
+    {
+      // Deleting all pointers.
+      std::vector<libtocc::Expr*>::iterator iterator = this->pointers.begin();
+      for (; iterator != this->pointers.end(); iterator++)
+      {
+        delete *iterator;
+      }
+    }
+
+    /*
+     * Adds a pointer to the holder.
+     */
+    void add(libtocc::Expr* pointer_to_hold)
+    {
+      this->pointers.push_back(pointer_to_hold);
+    }
+
+  private:
+    std::vector<libtocc::Expr*> pointers;
+  };
+
+  /*
    * Pointer to functions that creates a field.
    */
   typedef libtocc::Expr* (*FieldCreatorFunction)(std::string opt, std::string value);
@@ -50,7 +84,8 @@ namespace tocccli
   {
     if (opt == "=")
     {
-      return libtocc::Tag::create(value.c_str());
+
+      return new libtocc::Tag(value.c_str());
     }
 
     // Nothing matched.
@@ -67,7 +102,7 @@ namespace tocccli
   {
     if (opt == "=")
     {
-      return libtocc::Title::create(value.c_str());
+      return new libtocc::Title(value.c_str());
     }
 
     // Nothing matched.
@@ -270,11 +305,11 @@ namespace tocccli
     {
       if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
       {
-        return libtocc::And::create((libtocc::ConnectiveExpr*)operand);
+        return new libtocc::And((libtocc::ConnectiveExpr&)*operand);
       }
       else
       {
-        return libtocc::And::create((libtocc::FieldExpr*)operand);
+        return new libtocc::And((libtocc::FieldExpr&)*operand);
       }
     }
 
@@ -282,11 +317,11 @@ namespace tocccli
     {
       if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
       {
-        return libtocc::Or::create((libtocc::ConnectiveExpr*)operand);
+        return new libtocc::Or((libtocc::ConnectiveExpr&)*operand);
       }
       else
       {
-        return libtocc::Or::create((libtocc::FieldExpr*)operand);
+        return new libtocc::Or((libtocc::FieldExpr&)*operand);
       }
     }
 
@@ -310,6 +345,8 @@ namespace tocccli
 
     // The first argument must be an operand.
     libtocc::Expr* first_operand = extract_next_operand(arguments, index);
+    // Auto releasing pointer.
+    ExprPointerHolder expr_pointer_holder(first_operand);
 
     if (index >= arguments.size())
     {
@@ -335,6 +372,8 @@ namespace tocccli
       }
 
       libtocc::Expr* operand = extract_next_operand(arguments, index);
+      // Auto release this pointer.
+      expr_pointer_holder.add(operand);
 
       index++;
       if (index >= arguments.size())
@@ -342,11 +381,11 @@ namespace tocccli
         // End of the string. Adding the operand to the previous operator.
         if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
         {
-          last_operator.second->add((libtocc::ConnectiveExpr*)operand);
+          last_operator.second->add((libtocc::ConnectiveExpr&)*operand);
         }
         else
         {
-          last_operator.second->add((libtocc::FieldExpr*)operand);
+          last_operator.second->add((libtocc::FieldExpr&)*operand);
         }
 
         // Ending the loop.
@@ -358,18 +397,21 @@ namespace tocccli
         // It's same as the previous operator. No need to create a new one.
         if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
         {
-          last_operator.second->add((libtocc::ConnectiveExpr*)operand);
+          last_operator.second->add((libtocc::ConnectiveExpr&)*operand);
         }
         else
         {
-          last_operator.second->add((libtocc::FieldExpr*)operand);
+          last_operator.second->add((libtocc::FieldExpr&)*operand);
         }
       }
       else
       {
         // Making a new operator and add it to the previous one.
         libtocc::ConnectiveExpr* new_operator = make_operator(arguments[index], operand);
-        last_operator.second->add(new_operator);
+        // Auto release pointer.
+        expr_pointer_holder.add(new_operator);
+
+        last_operator.second->add((libtocc::ConnectiveExpr&)*new_operator);
         last_operator =
             std::make_pair(arguments[index],
                            new_operator);
@@ -407,7 +449,12 @@ namespace tocccli
   std::vector<libtocc::FileInfo> QuerySelector::execute(std::vector<std::string> cmd_arguments)
   {
     int index = 0;
-    libtocc::Query query(extract_next_term(cmd_arguments, index));
+
+    libtocc::ConnectiveExpr* main_expr = extract_next_term(cmd_arguments, index);
+    // Auto releasing pointer.
+    ExprPointerHolder holder(main_expr);
+
+    libtocc::Query query(*main_expr);
 
     libtocc::FileInfoCollection founded_files = this->libtocc_manager->search_files(query);
 

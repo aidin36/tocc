@@ -42,6 +42,11 @@ namespace libtocc
      *   compile("tag") -> "Regex("tag", "...")
      */
     virtual std::string compile(std::string base_arg);
+
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
   };
 
 };

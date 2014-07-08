@@ -37,7 +37,7 @@ namespace libtocc
      *   i.e. the expression that will be executed when
      *   this query object executes.
      */
-    Query(ConnectiveExpr* expression);
+    Query(ConnectiveExpr& expression);
 
     ~Query();
 
