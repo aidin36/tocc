@@ -85,7 +85,7 @@ namespace libtocc
     * @param file_ids : A vector of file ids to set title to
     * @param new_title : the new files title
     */
-    void set_titles(const std::vector<std::string>& file_ids, const char* new_title);
+    void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
 
     /*
      * Deletes an array of files from the Tocc managed file system.

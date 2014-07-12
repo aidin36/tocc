@@ -22,8 +22,6 @@
 #include <string>
 #include <vector>
 
-#include <libtocc/front_end/file_info.h>
-
 #include "common/cmd_param.h"
 #include "actions/action.h"
 
