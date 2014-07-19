@@ -81,11 +81,11 @@ Overload of the previous function that accepts a file and a list of tags.
 
 Overload of the previous function that accepts a single file and a single tag.
 
-.. function:: void remove_file(const char* file_id)
+.. function:: void libtocc::Manager::remove_file(const char* file_id)
 
 Removes the file that its ID is ``file_id``.
 
-.. function:: void remove_files(const char* file_ids[], int file_ids_size)
+.. function:: void libtocc::Manager::remove_files(const char* file_ids[], int file_ids_size)
 
 Removes an array of files.
 
@@ -94,13 +94,21 @@ the size of the ``file_ids`` array. If you pass zero or a negative number as
 ``file_id_size``, the method itself will calculate the size. If you have the
 size in your hand, it's better to pass it.
 
-.. function:: void remove_file(FileInfo& file_to_remove)
+.. function:: void libtocc::Manager::remove_file(FileInfo& file_to_remove)
 
 Removes the specified file.
 
-.. function:: void remove_files(FileInfoCollection& files_to_remove)
+.. function:: void libtocc::Manager::remove_files(FileInfoCollection& files_to_remove)
 
 Removes all the files in the specified collection.
+
+.. function:: void libtocc::Manager::set_titles(const char* file_ids[], int file_ids_size, const char* new_title)
+
+Sets the specified title for all of the files in the specified list.
+
+.. function:: void libtocc::Manager::set_title(const char* file_id, const char* new_title)
+
+Sets the specified title to the specified file.
 
 
 FileInfo Class

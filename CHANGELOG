@@ -1,4 +1,12 @@
 
+v0.3.0:
+  * --set-title added to CLI.
+  * --remove added to CLI.
+  * --print now accepts formatting.
+  * --all-tags added to CLI.
+  * `physical_path' property added to FileInfo class.
+  * Better memory management in Query and Expr classes.
+
 v0.2.0:
   * A memory leak in libtocc fixed.
   * --assign added to CLI.

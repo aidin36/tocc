@@ -99,4 +99,14 @@ Example::
 
 Which removes all the files tagged *useless*.
 
+.. option:: -t, --set-title=TITLE
+
+Sets title of files. For example::
+
+  # Setting title of the file with 0013a4b ID to Archive01
+  tocc --id 0013a4b --set-title Archive01
+
+  # Setting title of all files tagged photo and 2014-03-07, to "A Jungle Trip".
+  tocc --query tag = photo and tag = 2014-03-07 --set-title "A Jungle Trip"
+
 
