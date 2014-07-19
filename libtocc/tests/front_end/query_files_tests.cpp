@@ -119,3 +119,49 @@ TEST_CASE("query_files_tests: simple title search")
     REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
   }
 }
+
+TEST_CASE("query_files_tests: long query test")
+{
+  libtocc::Manager manager("/tmp/");
+
+  std::string test_file = "/tmp/iU83FpdAdjcAppfkdj";
+
+  std::ofstream file_stream;
+  file_stream.open(test_file.c_str());
+  file_stream << "Empty file.";
+  file_stream.close();
+
+  // Importing the file.
+  libtocc::FileInfo original_file = manager.import_file(test_file.c_str(), "Empty File No. 157895");
+
+  // Assigning tags to it.
+  manager.assign_tags(original_file.get_id(), "empty-file");
+  manager.assign_tags(original_file.get_id(), "type: text");
+  manager.assign_tags(original_file.get_id(), "test");
+  manager.assign_tags(original_file.get_id(), "2014-07-19");
+
+  // Querying the file again.
+  libtocc::Title title_expr("Empty File No. 157895");
+  libtocc::Tag tag_expr_1("empty-file");
+  libtocc::Tag tag_expr_2("type: text");
+  libtocc::Tag tag_expr_3("test");
+  libtocc::Tag tag_expr_4("2014-07-19");
+
+  libtocc::And main_and(title_expr);
+  main_and.add(tag_expr_1);
+  main_and.add(tag_expr_2);
+  main_and.add(tag_expr_3);
+  main_and.add(tag_expr_4);
+
+  libtocc::Query query(main_and);
+
+  libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+  // Checking collection size.
+  REQUIRE(founded_files.size() == 1);
+  // Checking if it's the same file.
+  libtocc::FileInfoCollection::Iterator iterator(&founded_files);
+  const libtocc::FileInfo* founded_file = iterator.get();
+  REQUIRE(strcmp(founded_file->get_title(), "Empty File No. 157895") == 0);
+  REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
+}
