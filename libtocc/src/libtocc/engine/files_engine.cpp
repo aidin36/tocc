@@ -82,8 +82,8 @@ namespace libtocc
     }
   }
 
-  void FilesEngine::set_title(const char* file_id, const char* new_title)
+  void FilesEngine::set_titles(const std::vector<std::string>& file_ids, const std::string& new_title)
   {
-    this->database->set_title(std::string(file_id), std::string(new_title));
+    this->database->set_titles(file_ids, new_title);
   }
 }

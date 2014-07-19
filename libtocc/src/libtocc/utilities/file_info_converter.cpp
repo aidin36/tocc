@@ -120,4 +120,15 @@ namespace libtocc
     return file_ids;
   }
 
+  std::vector<std::string> const_char_array_to_vector(const char* char_array[], int char_array_size)
+  {
+    std::vector<std::string> char_array_vector;
+
+    for(int i = 0; i < char_array_size; i++)
+    {
+      char_array_vector.push_back(std::string(char_array[i]));
+    }
+
+    return char_array_vector;
+  }
 }
