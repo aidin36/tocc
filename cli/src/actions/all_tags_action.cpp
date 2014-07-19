@@ -49,7 +49,7 @@ namespace tocccli
 
   std::string AllTagsAction::get_help_text()
   {
-    return "--all-tags\tPrints all tags, and number of files "\
+    return "--all-tags\tPrints all tags, and number of files\n"\
            "          \teach tag assigned to.";
   }
 

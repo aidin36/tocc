@@ -44,8 +44,8 @@ namespace tocccli
 
   std::string ImportFileSelector::get_help_text()
   {
-    return "-i, --import=PATH\tImports a file from the specified path "
-        "to the Tocc managed file system.";
+    return "-i, --import=PATH\tImports a file from the specified path to the \n"
+           "                 \tTocc managed file system.";
   }
 
   std::vector<libtocc::FileInfo> ImportFileSelector::execute(std::vector<std::string> cmd_arguments)
