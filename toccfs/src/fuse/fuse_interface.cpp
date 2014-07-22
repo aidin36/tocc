@@ -18,6 +18,7 @@
 
 #include "fuse/fuse_interface.h"
 
+#include <errno.h>
 #include <vector>
 #include <cstring>
 #include <string>
@@ -36,19 +37,37 @@ namespace toccfs
 
   int getattr(const char* path, struct stat* stbuf)
   {
-    // TEMPORARY CODE
-    if (strcmp(path, "/") == 0)
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    std::vector<libtocc::FileInfo> founded_files = fs_handler->get_by_path(path);
+
+    if (founded_files.size() != 1)
     {
+      // No file or too many files found. Pretending that it's a directory.
+      memset(stbuf, 0, sizeof(struct stat));
       stbuf->st_mode = S_IFDIR | 0755;
-      stbuf->st_nlink = 2;
+      stbuf->st_nlink = 2 + founded_files.size();
       return 0;
     }
-    return -1;
+
+    // Getting stat of the pysical file, from the OS.
+    int stat_result = lstat(founded_files.back().get_physical_path(),
+                            stbuf);
+    if (stat_result < 0)
+    {
+      // Returning happened error.
+      return -errno;
+    }
+
+    // Returning OK.
+    return 0;
   }
 
   int readdir(const char* path, void* buffer, fuse_fill_dir_t filler,
               off_t offset, struct fuse_file_info* fileinfo)
   {
+    // TODO: If path was root, return all tags.
+
     struct FSHandler* fs_handler = get_fs_handler();
 
     std::vector<libtocc::FileInfo> founded_files = fs_handler->get_by_path(path);
@@ -62,13 +81,7 @@ namespace toccfs
     std::vector<libtocc::FileInfo>::iterator files_iterator = founded_files.begin();
     for (; files_iterator != founded_files.end(); files_iterator++)
     {
-      // Format of the output is something like "[0001c43]Track03"
-      std::string file_name;
-      file_name += "[";
-      file_name += files_iterator->get_id();
-      file_name += "]";
-      file_name += files_iterator->get_title();
-      filler(buffer, file_name.c_str(), NULL, 0);
+      filler(buffer, files_iterator->get_title(), NULL, 0);
     }
 
     // Returning OK.
