@@ -200,7 +200,7 @@ namespace tocccli
       actions_iterator = actions_to_execute.begin();
     for (; actions_iterator < actions_to_execute.end(); ++actions_iterator)
     {
-        (*actions_iterator).first->execute(selected_files, (*actions_iterator).second); 
+      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second); 
     }
   }
 

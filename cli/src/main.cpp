@@ -37,13 +37,15 @@ int main(int argc, char* argv[])
 {
 
   std::vector<CmdParam> cmd_parameters;
-  try{
+  try
+  {
     // Parsing passed parameters.
     cmd_parameters = parse_cmd(argc, argv);
   }
-  catch (InvalidParametersError e){
-      std::cout << "Invalid parameter" << std::endl;
-      std::cout << e.what() << std::endl;
+  catch (InvalidParametersError e)
+  {
+    std::cout << "Invalid parameter" << std::endl;
+    std::cout << e.what() << std::endl;
   }
 
   // Finding the current directory (default of Base Path).
@@ -81,11 +83,13 @@ int main(int argc, char* argv[])
 
   // Executing.
   CmdManager cmd_manager(base_path);
-  try{
+  try
+  {
     cmd_manager.execute(cmd_parameters);
   }
-  catch (InvalidParametersError e){
-      std::cout << "Invalid parameter" << std::endl;
-      std::cout << e.what() << std::endl;
+  catch (InvalidParametersError e)
+  {
+    std::cout << "Invalid parameter" << std::endl;
+    std::cout << e.what() << std::endl;
   }
 }
