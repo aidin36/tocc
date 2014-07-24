@@ -28,6 +28,7 @@
 #include "utilities/cmd_parser.h"
 #include "utilities/errno_translator.h"
 #include "engine/cmd_manager.h"
+#include "common/exceptions/cmd_usage_exceptions.h"
 
 
 using namespace tocccli;
@@ -35,8 +36,15 @@ using namespace tocccli;
 int main(int argc, char* argv[])
 {
 
-  // Parsing passed parameters.
-  std::vector<CmdParam> cmd_parameters = parse_cmd(argc, argv);
+  std::vector<CmdParam> cmd_parameters;
+  try{
+    // Parsing passed parameters.
+    cmd_parameters = parse_cmd(argc, argv);
+  }
+  catch (InvalidParametersError e){
+      std::cout << "Invalid parameter" << std::endl;
+      std::cout << e.what() << std::endl;
+  }
 
   // Finding the current directory (default of Base Path).
   char path_buffer[FILENAME_MAX];
