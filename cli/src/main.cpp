@@ -81,5 +81,11 @@ int main(int argc, char* argv[])
 
   // Executing.
   CmdManager cmd_manager(base_path);
-  cmd_manager.execute(cmd_parameters);
+  try{
+    cmd_manager.execute(cmd_parameters);
+  }
+  catch (InvalidParametersError e){
+      std::cout << "Invalid parameter" << std::endl;
+      std::cout << e.what() << std::endl;
+  }
 }
