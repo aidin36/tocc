@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     // Parsing passed parameters.
     cmd_parameters = parse_cmd(argc, argv);
   }
-  catch (InvalidParametersError e)
+  catch (const InvalidParametersError& e)
   {
     std::cout << "Invalid parameter" << std::endl;
     std::cout << e.what() << std::endl;
@@ -87,9 +87,15 @@ int main(int argc, char* argv[])
   {
     cmd_manager.execute(cmd_parameters);
   }
-  catch (InvalidParametersError e)
+  catch (const InvalidParametersError& e)
   {
     std::cout << "Invalid parameter" << std::endl;
     std::cout << e.what() << std::endl;
+  }
+  catch (const std::exception& ex)
+  {
+    // other exceptions
+    std::cout << "Error" << std::endl;
+    std::cout << ex.what() << std::endl;
   }
 }
