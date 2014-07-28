@@ -69,12 +69,22 @@ namespace libtocc
       "}";
 
   /*
-   * Removes a tag from the list of tags of a file.
+   * Removes a tag or a list of tags from a list of files.
    */
-  // TODO: Implement this. Right now Unqlite doesn't supports removing an
-  //       element from an array. Wait until then, or find a workaround.
   const std::string UNASSIGN_TAGS_SCRIPT =  \
-      "";
+      "$filter_func = function($record) "\
+      "{"\
+      "  return in_array($record.file_id, $file_ids);"\
+      "};"\
+      "/* Finding records that should  be updated */"\
+      "$records_to_update = db_fetch_all('files', $filter_func); "\
+      "foreach ($records_to_update as $record) "\
+      "{"\
+      "  $record.tags = array_diff($record.tags, $tags_to_unassign);"\
+      "  /* Updating the record (removing and adding it again). */"\
+      "  db_drop_record('files', $record.__id);"\
+      "  db_store('files', $record);"\
+      "}";
 
   // TODO: Find an empty ID instead of max one.
   const std::string CREATE_FILE_SCRIPT = \

@@ -43,6 +43,21 @@ namespace libtocc
     this->database->assign_tag(file_id, tag);
   }
 
+  void TagsEngine::unassign_tag(const std::string& file_id, const std::string& tag)
+  {
+    this->database->unassign_tag(file_id, tag);
+  }
+
+  void TagsEngine::unassign_tags(const std::string& file_id, const std::vector<std::string>& tags)
+  {
+    this->database->unassign_tags(file_id, tags);
+  }
+
+  void TagsEngine::unassign_tags(const std::vector<std::string>& file_ids, const std::vector<std::string>& tags)
+  {
+    this->database->unassign_tags(file_ids, tags);
+  }
+
   TagStatisticsCollection TagsEngine::get_tags_statistics()
   {
     return this->database->get_tags_statistics();

@@ -144,6 +144,30 @@ namespace libtocc
     void assign_tags(const char* file_id, const char* tag);
 
     /*
+     * Unassign tag from a file
+     *
+     * @param file_id: the id of the file to unassign tag from
+     * @param tag: tag to unassign
+     */
+    void unassign_tag(const char* file_id, const char* tag);
+
+    /*
+     * Unassign a collection of tags from the specified files
+     *
+     * @param file_ids: An array of ids of the files to unassign tags from.
+     * @param tags: A list of tags to unassign
+     */
+    void unassign_tags(const char* file_ids[], int file_ids_size, const TagsCollection* tags);
+
+    /*
+     * Unassign a collection of tags from the specified file
+     *
+     * @param file_id: the ID of the file to unassign tags from.
+     * @param tags: A list of tags to unassign.
+     */
+    void unassign_tags(const char* file_id, const TagsCollection* tags); 
+
+    /*
      * Search files according to the specified query.
      *
      * @param query: Query to execute.
