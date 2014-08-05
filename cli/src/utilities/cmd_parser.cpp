@@ -42,7 +42,7 @@ namespace tocccli
       {
         if (result.empty())
         {
-          throw new InvalidParametersError(
+          throw InvalidParametersError(
               "First parameter have to be an option (e.g. starts with a dash)");
         }
 

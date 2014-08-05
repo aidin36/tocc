@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "libtocc/utilities/file_info_converter.h"
+#include "libtocc/database/base23.h"
 
 namespace libtocc
 {
@@ -130,5 +131,17 @@ namespace libtocc
     }
 
     return char_array_vector;
+  }
+
+  std::vector<unsigned long> string_vector_to_ulong_vector(const std::vector<std::string> vect_of_strings)
+  {
+    std::vector<unsigned long> converted_strings;
+    std::vector<std::string>::const_iterator iterator = vect_of_strings.begin();
+    for(; iterator != vect_of_strings.end(); ++iterator)
+    {
+      converted_strings.push_back(from_base23(*iterator));
+    }
+
+    return converted_strings;
   }
 }
