@@ -55,4 +55,15 @@ cli/src/configure
 cli/src/depcomp
 cli/src/install-sh
 cli/src/missing
+toccfs/src/.deps/
+toccfs/src/Makefile
+toccfs/src/Makefile.in
+toccfs/src/aclocal.m4
+toccfs/src/autom4te.cache/
+toccfs/src/config.log
+toccfs/src/config.status
+toccfs/src/configure
+toccfs/src/depcomp
+toccfs/src/install-sh
+toccfs/src/missing
 
