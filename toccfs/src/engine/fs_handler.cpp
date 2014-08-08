@@ -1,0 +1,140 @@
+/*
+ * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
+ *
+ * Tocc is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Tocc is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "engine/fs_handler.h"
+
+#include "libtocc/exprs/connectives.h"
+#include "libtocc/exprs/query.h"
+
+#include "utils/string_utils.h"
+
+
+namespace toccfs
+{
+
+  FSHandler::FSHandler(std::string base_path)
+  {
+    this->libtocc_manager = new libtocc::Manager(base_path.c_str());
+  }
+
+  FSHandler::~FSHandler()
+  {
+    delete this->libtocc_manager;
+  }
+
+  std::vector<libtocc::FileInfo> FSHandler::get_by_path(std::string path)
+  {
+    // Here how it works.
+    // First, we check if the specified path matches exactly with a
+    // Traditional Path. If it is, we return that file.
+    // Then, we check if the path contains tags and title of a file. We assume
+    // each directory in the path is a tag, and the last element is title of
+    // a file. If it matches a single file, we return that.
+    // Then, we assume that each element of the path is a tag, and return
+    // everything matches with it.
+
+    /*
+     * First try: Checking if path exactly matches a Traditional Path.
+     */
+    // TODO: First, check the traditional path.
+
+    /*
+     * Second try: Last element is the file title and others are tags.
+     */
+    std::vector<std::string> path_items = split_string(path, '/');
+
+    if (path_items.empty())
+    {
+      // Returning an empty result.
+      std::vector<libtocc::FileInfo> result;
+      return result;
+    }
+
+    // Assume the last element is the file title.
+    libtocc::Title title_expr(path_items.back().c_str());
+    path_items.pop_back();
+    libtocc::And main_and(title_expr);
+
+    if (!path_items.empty())
+    {
+      // Each of the items considered a tag.
+      std::vector<std::string>::iterator path_items_iterator = path_items.begin();
+      for (; path_items_iterator != path_items.end(); path_items_iterator++)
+      {
+        libtocc::Tag tag_expr(path_items_iterator->c_str());
+        main_and.add(tag_expr);
+      }
+    }
+
+    // Executing the query.
+    libtocc::Query second_query(main_and);
+    libtocc::FileInfoCollection second_query_result =
+        this->libtocc_manager->search_files(second_query);
+
+    if (second_query_result.size() == 1)
+    {
+      // If exactly one file found, this is what we wanted.
+      std::vector<libtocc::FileInfo> result;
+      libtocc::FileInfoCollection::Iterator query_result_iterator(&second_query_result);
+      result.push_back(*query_result_iterator.get());
+
+      return result;
+    }
+
+    /*
+     * Third try: Assuming all the path elements are tags.
+     */
+    path_items = split_string(path, '/');
+
+    // The previous step didn't find the correct result. Now, assuming
+    // that all the elements in path are tags.
+    std::vector<std::string>::iterator path_items_iterator = path_items.begin();
+
+    // Adding first element to the And.
+    libtocc::Tag first_tag(path_items_iterator->c_str());
+    libtocc::And third_main_and(first_tag);
+    path_items_iterator++;
+
+    for (; path_items_iterator != path_items.end(); path_items_iterator++)
+    {
+      libtocc::Tag tag_expr(path_items_iterator->c_str());
+      third_main_and.add(tag_expr);
+    }
+
+    // Executing the query.
+    libtocc::Query third_query(third_main_and);
+    libtocc::FileInfoCollection third_query_result =
+        this->libtocc_manager->search_files(third_query);
+
+    if (third_query_result.size() > 0)
+    {
+      std::vector<libtocc::FileInfo> result;
+      libtocc::FileInfoCollection::Iterator query_result_iterator(&third_query_result);
+      for (; !query_result_iterator.is_finished(); query_result_iterator.next())
+      {
+        result.push_back(*query_result_iterator.get());
+      }
+
+      return result;
+    }
+
+    // Nothing found? Returning an empty result.
+    std::vector<libtocc::FileInfo> result;
+    return result;
+  }
+}
