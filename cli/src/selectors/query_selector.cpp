@@ -375,7 +375,6 @@ namespace tocccli
       // Auto release this pointer.
       expr_pointer_holder.add(operand);
 
-      index++;
       if (index >= arguments.size())
       {
         // End of the string. Adding the operand to the previous operator.
@@ -403,6 +402,7 @@ namespace tocccli
         {
           last_operator.second->add((libtocc::FieldExpr&)*operand);
         }
+        index++;
       }
       else
       {
