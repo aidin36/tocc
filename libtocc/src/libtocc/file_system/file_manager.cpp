@@ -199,7 +199,10 @@ namespace libtocc
 
     std::string result(this->base_path);
 
-    result += "/";
+    if (result.at(result.length()- 1) != '/')
+    {
+      result += "/";
+    }
     result += id.substr(0, 1);
     result += "/";
     result += id.substr(1, 2);
