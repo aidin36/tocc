@@ -36,11 +36,18 @@ namespace toccfs
     ~FSHandler();
 
     /*
+     * Gets a file by a path.
+     * It assume the last element in the path is the file title, and
+     * other elements are tags.
+     */
+    libtocc::FileInfo get_by_path(std::string path);
+
+    /*
      * Finds files using the specified path.
      * It converts the path to a Tocc query, and returns files founded
      * using that query.
      */
-    std::vector<libtocc::FileInfo> get_by_path(std::string path);
+    std::vector<libtocc::FileInfo> query_by_path(std::string path);
 
   private:
     libtocc::Manager* libtocc_manager;

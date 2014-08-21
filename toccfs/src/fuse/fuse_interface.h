@@ -28,10 +28,41 @@
 namespace toccfs
 {
 
-  int getattr(const char* path, struct stat* stbuf);
+  int toccfs_fuse_getattr(const char* path, struct stat* stbuf);
 
-  int readdir(const char* path, void* buffer, fuse_fill_dir_t filler,
-              off_t offset, struct fuse_file_info* fileinfo);
+  int toccfs_fuse_readdir(const char* path, void* buffer, fuse_fill_dir_t filler,
+                          off_t offset, struct fuse_file_info* fileinfo);
+
+  int toccfs_fuse_read(const char* path, char* buffer, size_t size, off_t offset,
+                       struct fuse_file_info* file_info);
+
+  int toccfs_fuse_access(const char* path, int mask);
+
+  int toccfs_fuse_statfs(const char* path, struct statvfs* stbuf);
+
+  int toccfs_fuse_mkdir(const char* path, mode_t mode);
+
+  int toccfs_fuse_rmdir(const char* path);
+
+  int toccfs_fuse_unlink(const char* path);
+
+  int toccfs_fuse_mknod(const char* path, mode_t mode, dev_t rdev);
+
+  int toccfs_fuse_symlink(const char* from, const char* to);
+
+  int toccfs_fuse_rename(const char* from, const char* to);
+
+  int toccfs_fuse_link(const char* from, const char* to);
+
+  int toccfs_fuse_chmod(const char* path, mode_t mode);
+
+  int toccfs_fuse_chown(const char* path, uid_t uid, gid_t gid);
+
+  int toccfs_fuse_truncate(const char* path, off_t size);
+
+  int toccfs_fuse_write(const char* path, const char* buf, size_t size,
+                        off_t offset, struct fuse_file_info* fi);
+
 }
 
 #endif /* TOCCFS_FUSE_INTERFACE_H_INCLUDED */

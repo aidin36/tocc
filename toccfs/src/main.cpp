@@ -75,8 +75,23 @@ int main(int argc, char* argv[])
   }
 
   // Initializing Fuse operations structure.
-  operations_struct.getattr = getattr;
-  operations_struct.readdir = readdir;
+  operations_struct.getattr = toccfs_fuse_getattr;
+  operations_struct.readdir = toccfs_fuse_readdir;
+  operations_struct.read = toccfs_fuse_read;
+  operations_struct.access = toccfs_fuse_access;
+  operations_struct.statfs = toccfs_fuse_statfs;
+  operations_struct.unlink = toccfs_fuse_unlink;
+  operations_struct.mkdir = toccfs_fuse_mkdir;
+  operations_struct.rmdir = toccfs_fuse_rmdir;
+  operations_struct.unlink = toccfs_fuse_unlink;
+  operations_struct.mknod = toccfs_fuse_mknod;
+  operations_struct.symlink = toccfs_fuse_symlink;
+  operations_struct.rename = toccfs_fuse_rename;
+  operations_struct.link = toccfs_fuse_link;
+  operations_struct.chmod = toccfs_fuse_chmod;
+  operations_struct.chown = toccfs_fuse_chown;
+  operations_struct.truncate = toccfs_fuse_truncate;
+  operations_struct.write = toccfs_fuse_write;
 
   // Initializing our File Syste Handler.
   char* fuse_args[argc - 1];

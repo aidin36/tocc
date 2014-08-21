@@ -27,6 +27,12 @@
 namespace toccfs
 {
 
+  libtocc::FileInfo get_empty_file_info()
+  {
+    // A work-around for not having a NULL FileInfo.
+    return libtocc::FileInfo("-1");
+  }
+
   FSHandler::FSHandler(std::string base_path)
   {
     this->libtocc_manager = new libtocc::Manager(base_path.c_str());
@@ -37,16 +43,13 @@ namespace toccfs
     delete this->libtocc_manager;
   }
 
-  std::vector<libtocc::FileInfo> FSHandler::get_by_path(std::string path)
+  libtocc::FileInfo FSHandler::get_by_path(std::string path)
   {
-    // Here how it works.
     // First, we check if the specified path matches exactly with a
     // Traditional Path. If it is, we return that file.
     // Then, we check if the path contains tags and title of a file. We assume
     // each directory in the path is a tag, and the last element is title of
     // a file. If it matches a single file, we return that.
-    // Then, we assume that each element of the path is a tag, and return
-    // everything matches with it.
 
     /*
      * First try: Checking if path exactly matches a Traditional Path.
@@ -60,9 +63,8 @@ namespace toccfs
 
     if (path_items.empty())
     {
-      // Returning an empty result.
-      std::vector<libtocc::FileInfo> result;
-      return result;
+      // Returning a NULL file info.
+      return get_empty_file_info();
     }
 
     // Assume the last element is the file title.
@@ -89,17 +91,24 @@ namespace toccfs
     if (second_query_result.size() == 1)
     {
       // If exactly one file found, this is what we wanted.
-      std::vector<libtocc::FileInfo> result;
       libtocc::FileInfoCollection::Iterator query_result_iterator(&second_query_result);
-      result.push_back(*query_result_iterator.get());
+      // Copying the pointer.
+      libtocc::FileInfo result(*query_result_iterator.get());
 
       return result;
     }
 
-    /*
-     * Third try: Assuming all the path elements are tags.
-     */
-    path_items = split_string(path, '/');
+    // Nothing found. Returning a NULL FileInfo.
+    return get_empty_file_info();
+  }
+
+
+  std::vector<libtocc::FileInfo> FSHandler::query_by_path(std::string path)
+  {
+    // We assume that each element of the path is a tag, and return
+    // everything matches with it.
+
+    std::vector<std::string> path_items = split_string(path, '/');
 
     // The previous step didn't find the correct result. Now, assuming
     // that all the elements in path are tags.
@@ -137,4 +146,5 @@ namespace toccfs
     std::vector<libtocc::FileInfo> result;
     return result;
   }
+
 }
