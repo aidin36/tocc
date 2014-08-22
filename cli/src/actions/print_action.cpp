@@ -100,15 +100,19 @@ namespace tocccli
       {
         return file_info.get_id();
       }
-      if (this->element == "title")
+      else if (this->element == "title")
       {
         return file_info.get_title();
       }
-      if (this->element == "physical_path")
+      else if (this->element == "physical_path")
       {
         return file_info.get_physical_path();
       }
-      if (this->element == "tags")
+      else if (this->element == "traditional_path")
+      {
+        return file_info.get_traditional_path();
+      }
+      else if (this->element == "tags")
       {
         std::string result = "[";
         libtocc::TagsCollection tags = file_info.get_tags();
