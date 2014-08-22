@@ -68,6 +68,9 @@ TEST_CASE("Tag Statistics")
     }
 
     REQUIRE(assigned_files == 1);
+
+    // clean-up after tests
+    manager.remove_file(test_file.get_id());
   }
 
   SECTION("Multiple Files")
@@ -130,5 +133,10 @@ TEST_CASE("Tag Statistics")
 
     REQUIRE(tags_1_assigned_files == 3);
     REQUIRE(tags_2_assigned_files == 1);
+
+    // clean-up after tests
+    manager.remove_file(test_file_01.get_id());
+    manager.remove_file(test_file_02.get_id());
+    manager.remove_file(test_file_03.get_id());
   }
 }
