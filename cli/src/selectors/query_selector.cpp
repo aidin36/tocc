@@ -448,6 +448,11 @@ namespace tocccli
 
   std::vector<libtocc::FileInfo> QuerySelector::execute(std::vector<std::string> cmd_arguments)
   {
+    if (cmd_arguments.size() == 0)
+    {
+      throw InvalidParametersError("--query must have at least one argument.");
+    }
+
     int index = 0;
 
     libtocc::ConnectiveExpr* main_expr = extract_next_term(cmd_arguments, index);
