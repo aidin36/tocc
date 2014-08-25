@@ -174,13 +174,24 @@ namespace libtocc
       "$filter_func = function($record) "\
       "{"\
       "  uplink $statistics;"\
-      "  foreach ($record.tags as $tag)"\
+      "  if (count($record.tags) == 0)"\
       "  {"\
-      "    if (!array_key_exists($tag, $statistics))"\
+      "    if (!array_key_exists(\"*no tag*\", $statistics))"\
       "    {"\
-      "      $statistics[$tag] = 0;"\
+      "      $statistics[\"*no tag*\"] = 0;"\
       "    }"\
-      "    $statistics[$tag] += 1;"\
+      "    $statistics[\"*no tag*\"] += 1;"\
+      "  }"\
+      "  else"\
+      "  {"\
+      "    foreach ($record.tags as $tag)"\
+      "    {"\
+      "      if (!array_key_exists($tag, $statistics))"\
+      "      {"\
+      "        $statistics[$tag] = 0;"\
+      "      }"\
+      "      $statistics[$tag] += 1;"\
+      "    }"\
       "  }"\
       "  return FALSE;"\
       "}; "\
