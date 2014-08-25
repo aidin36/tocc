@@ -26,7 +26,6 @@
 #include "libtocc/exprs/connectives.h"
 #include "libtocc/exprs/fields.h"
 
-
 TEST_CASE("query_files_tests: simple tag search")
 {
   libtocc::Manager manager("/tmp/");
@@ -117,6 +116,9 @@ TEST_CASE("query_files_tests: simple title search")
     const libtocc::FileInfo* founded_file = iterator.get();
     REQUIRE(strcmp(founded_file->get_title(), "IMG007") == 0);
     REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
+
+    // clean up after test
+    manager.remove_file(founded_file->get_id());
   }
 }
 
@@ -164,4 +166,7 @@ TEST_CASE("query_files_tests: long query test")
   const libtocc::FileInfo* founded_file = iterator.get();
   REQUIRE(strcmp(founded_file->get_title(), "Empty File No. 157895") == 0);
   REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
+
+  // clean up after test
+  manager.remove_file(founded_file->get_id());
 }
