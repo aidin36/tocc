@@ -20,8 +20,8 @@
 #ifndef LIBTOCC_OPERAND_H_INCLUDED
 #define LIBTOCC_OPERAND_H_INCLUDED
 
-#include <string>
 #include "libtocc/exprs/expr.h"
+
 
 namespace libtocc
 {
@@ -29,16 +29,60 @@ namespace libtocc
   /*
    * Base class of all operand expressions.
    */
-  class OperandExpr : public Expr
+  class OperationExpr : public Expr
   {
   public:
+    /*
+     * @param operand: Operand of this operation.
+     *   For example: NotEqual("bad-photo")
+     */
+    OperationExpr(const char* operand);
+
+    /*
+     * Copy constructor.
+     */
+    OperationExpr(const OperationExpr& source);
+
+    virtual ~OperationExpr();
+
+    /*
+     * Gets the type of this expression.
+     */
     virtual expr_type::ExprType get_type();
 
-    virtual std::string compile();
+    /*
+     * Compiles the expression into a string.
+     */
+    virtual const char* compile();
 
+    /*
+     * Creates a copy of the expression.
+     */
     virtual Expr* clone();
+
+  protected:
+    class ProtectedData;
+    ProtectedData* protected_data;
   };
 
+
+  class NotEqual : public OperationExpr
+  {
+  public:
+    NotEqual(const char* operand);
+
+    NotEqual(const NotEqual& source);
+
+    /*
+     * Compiles the expression into a string.
+     */
+    virtual const char* compile();
+
+    /*
+     * Creates a copy of the expression.
+     */
+    virtual Expr* clone();
+  };
 };
 
 #endif /* LIBTOCC_OPERAND_H_INCLUDED */

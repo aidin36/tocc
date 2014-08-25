@@ -31,7 +31,7 @@ namespace libtocc
    */
   namespace expr_type
   {
-    enum ExprType { CONNECTIVE, FUNCTION, OPERAND, FIELD };
+    enum ExprType { CONNECTIVE, FUNCTION, OPERATION, FIELD };
   }
 
   /*

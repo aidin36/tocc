@@ -25,6 +25,7 @@
 #include "libtocc/exprs/query.h"
 #include "libtocc/exprs/connectives.h"
 #include "libtocc/exprs/fields.h"
+#include "libtocc/exprs/operations.h"
 
 
 TEST_CASE("query_files_tests: simple tag search")
@@ -164,4 +165,69 @@ TEST_CASE("query_files_tests: long query test")
   const libtocc::FileInfo* founded_file = iterator.get();
   REQUIRE(strcmp(founded_file->get_title(), "Empty File No. 157895") == 0);
   REQUIRE(strcmp(founded_file->get_id(), original_file.get_id()) == 0);
+}
+
+TEST_CASE("query_files_tests: Not Equal tests")
+{
+  libtocc::Manager manager("/tmp/");
+
+  // Creating two test files.
+  std::string test_file_1 = "/tmp/libtocctests_Unx12Pfiedkc";
+  std::string test_file_2 = "/tmp/libtocctests_fPe98ncloEqs";
+
+  std::ofstream file_stream;
+  file_stream.open(test_file_1.c_str());
+  file_stream << "Random data.";
+  file_stream.close();
+
+  std::ofstream file_stream_2;
+  file_stream_2.open(test_file_2.c_str());
+  file_stream_2 << "Random data.";
+  file_stream_2.close();
+
+  // Importing files.
+  libtocc::FileInfo original_file_1 = manager.import_file(test_file_1.c_str(), "Random Title Unx12Pfiedkc");
+  libtocc::FileInfo original_file_2 = manager.import_file(test_file_2.c_str(), "Random Title fPe98ncloEqs");
+
+  // Assigning tags to it.
+  manager.assign_tags(original_file_1.get_id(), "random aw3r445");
+  manager.assign_tags(original_file_2.get_id(), "random aw3r445");
+  manager.assign_tags(original_file_2.get_id(), "random cfE394a");
+
+  // Query files. First, checking NotEqual on a Title.
+  libtocc::Tag tag_expr("random aw3r445");
+  libtocc::NotEqual not_equal_expr("Random Title fPe98ncloEqs");
+  libtocc::Title title_expr(not_equal_expr);
+
+  libtocc::And main_and(tag_expr);
+  main_and.add(title_expr);
+
+  libtocc::Query query(main_and);
+
+  libtocc::FileInfoCollection founded_files = manager.search_files(query);
+
+  // Checking collection size.
+  REQUIRE(founded_files.size() == 1);
+  // Checking if it's the first file.
+  libtocc::FileInfoCollection::Iterator iterator(&founded_files);
+  const libtocc::FileInfo* founded_file = iterator.get();
+  REQUIRE(strcmp(founded_file->get_id(), original_file_1.get_id()) == 0);
+
+  // Query files. Second, using NotEqual on a Tag.
+  libtocc::NotEqual not_equal_tag_expr("random cfE394a");
+  libtocc::Tag second_tag_expr(not_equal_tag_expr);
+
+  libtocc::And second_and(tag_expr);
+  second_and.add(second_tag_expr);
+
+  libtocc::Query second_query(main_and);
+
+  founded_files = manager.search_files(second_query);
+
+  // Checking collection size.
+  REQUIRE(founded_files.size() == 1);
+  // Checking if it's the first file.
+  libtocc::FileInfoCollection::Iterator second_iterator(&founded_files);
+  founded_file = second_iterator.get();
+  REQUIRE(strcmp(founded_file->get_id(), original_file_1.get_id()) == 0);
 }
