@@ -27,7 +27,7 @@
 
 TEST_CASE("database: tag operation tests")
 {
-  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::Database db("/tmp/tocctests/tocc.test.db");
 
   SECTION("Assigning a single tag")
   {

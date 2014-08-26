@@ -30,9 +30,9 @@
 
 TEST_CASE("file_system: basic tests")
 {
-  std::string base_path = "/tmp/";
+  std::string base_path = "/tmp/tocctests/";
   std::string file_id = "t00f4ia";
-  std::string equivalent_path = "/tmp/t/00/fa/ia";
+  std::string equivalent_path = "/tmp/tocctests/t/00/fa/ia";
   libtocc::FileManager file_manager(base_path);
 
   /*
@@ -72,10 +72,10 @@ TEST_CASE("file_system: basic tests")
    */
   // Creating a test file to copy.
   std::ofstream file_stream;
-  file_stream.open("/tmp/tocc_test_file_to_copy");
+  file_stream.open("/tmp/tocctests/tocc_test_file_to_copy");
   file_stream << "some data...";
   file_stream.close();
 
   // Coping the file.
-  file_manager.copy("/tmp/tocc_test_file_to_copy", "ta59800");
+  file_manager.copy("/tmp/tocctests/tocc_test_file_to_copy", "ta59800");
 }

@@ -28,7 +28,7 @@
 TEST_CASE("database: find empty ID")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::Database db("/tmp/tocctests/tocc.test.db");
 
   // Creating files
   libtocc::IntFileInfo new_file_1 = db.create_file("file__1", "/old/path");

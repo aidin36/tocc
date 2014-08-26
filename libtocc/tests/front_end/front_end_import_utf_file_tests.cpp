@@ -29,18 +29,18 @@ TEST_CASE("front_end: UTF file import")
 {
   // Creating a file to import.
   std::ofstream file_stream;
-  file_stream.open("/tmp/测试导入文件");
+  file_stream.open("/tmp/tocctests/测试导入文件");
   file_stream << "some data...";
   file_stream.close();
 
   // Creating an instance of the manager.
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   SECTION("Importing a UTF file with no property")
   {
     // Importing the file with no property.
     libtocc::FileInfo test_file =
-        manager.import_file("/tmp/测试导入文件");
+        manager.import_file("/tmp/tocctests/测试导入文件");
     // Checking if it's OK.
     REQUIRE(strcmp(test_file.get_title(), "测试导入文件") == 0);
     REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
@@ -57,7 +57,7 @@ TEST_CASE("front_end: UTF file import")
   SECTION("Importing the UTF file with Title and Traditional Path")
   {
     libtocc::FileInfo test_file_2 =
-        manager.import_file("/tmp/测试导入文件",
+        manager.import_file("/tmp/tocctests/测试导入文件",
                             "测试",
                             "/home/someone/测试文件");
     // Checking if it's OK.
@@ -79,7 +79,7 @@ TEST_CASE("front_end: UTF file import")
     tags.add_tag("اختبار");
     tags.add_tag("L'Hôpital");
     libtocc::FileInfo test_file_3 =
-        manager.import_file("/tmp/测试导入文件",
+        manager.import_file("/tmp/tocctests/测试导入文件",
                             "検査",
                             "/home/L'Hôpital/тестирование",
                             &tags);
@@ -118,7 +118,7 @@ TEST_CASE("front_end: UTF file import")
 TEST_CASE("Importing a not-existed UTF file")
 {
   // Creating an instance of the manager.
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   REQUIRE_THROWS_AS(
       manager.import_file("/مجلد/από/ոչ/存在的/फ़ाइल/fうんこ"),

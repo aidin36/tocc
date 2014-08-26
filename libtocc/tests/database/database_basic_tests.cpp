@@ -27,7 +27,7 @@
 TEST_CASE("database: basic tests")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::Database db("/tmp/tocctests/tocc.test.db");
 
   // Creating a file with no property.
   libtocc::IntFileInfo new_file_1 = db.create_file();

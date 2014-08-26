@@ -23,7 +23,7 @@
 TEST_CASE("database: get file tests")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocc.test.db");
+  libtocc::Database db("/tmp/tocctests/tocc.test.db");
 
   // Getting a not-existed file.
   REQUIRE_THROWS(db.get("ffr98a0"));

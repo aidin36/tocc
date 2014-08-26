@@ -27,7 +27,7 @@
  */
 TEST_CASE("front_end: assign tag wrong tests")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
                     libtocc::DatabaseScriptExecutionError);
