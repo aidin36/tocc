@@ -31,22 +31,63 @@ namespace libtocc
   class FunctionExpr : public Expr
   {
   public:
+    /*
+     * @param arg: Argument of this function. For example:
+     *   WildCard("*book*")
+     */
+    FunctionExpr(const char* arg);
+
+    /*
+     * Copy Constructor.
+     */
+    FunctionExpr(FunctionExpr& source);
+
     virtual expr_type::ExprType get_type();
 
     /*
-     * Compiled the function.
+     * Compiles the function.
      *
-     * @param base_arg: This will be used as the first argument
-     *   that passes to the function.
-     *   for example:
-     *   compile("tag") -> "Regex("tag", "...")
+     * @param base_arg: Second argument of the function.
+     *  For example:
+     *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
      */
-    virtual std::string compile(std::string base_arg);
+    virtual const char* compile(const char* second_arg);
 
     /*
      * Clones this instance.
      */
     virtual Expr* clone();
+
+  protected:
+    /*
+     * Returns the function name as string.
+     */
+    virtual const char* get_func_name();
+
+    class ProtectedData;
+    ProtectedData* protected_data;
+  };
+
+  class WildCardExpr : public FunctionExpr
+  {
+  public:
+    /*
+     * @param arg: Argument of this function. For example:
+     *   WildCard("*book*")
+     */
+    WildCardExpr(const char* arg);
+
+    /*
+     * Copy Constructor.
+     */
+    WildCardExpr(WildCardExpr& source);
+    /*
+     * Clones this instance.
+     */
+    virtual Expr* clone();
+
+  protected:
+    virtual const char* get_func_name();
   };
 
 };

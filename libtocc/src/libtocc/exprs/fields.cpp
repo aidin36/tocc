@@ -96,7 +96,7 @@ namespace libtocc
     else if (this->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-                          this->function->compile(get_field_name()).c_str());
+                          this->function->compile(get_field_name().c_str()));
     }
     else
     {

@@ -16,6 +16,10 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/database/funcs.h"
+
+#include <sstream>
+
 
 namespace libtocc
 {
@@ -92,4 +96,49 @@ namespace libtocc
     return false;
   }
 
+  int wild_card_compare_unqlite_func(unqlite_context* context,
+                                     int argc,
+                                     unqlite_value** argv)
+  {
+    // Checking arguments.
+    if (argc != 2)
+    {
+      // Invalid number of arguments.
+      std::stringstream error_message;
+      error_message << "`wild_card_compare' expected two arguments, received ";
+      error_message << argc;
+      unqlite_context_throw_error(context, UNQLITE_CTX_WARNING,
+                                  error_message.str().c_str());
+    }
+
+    // First argument is the pattern.
+    int string_length;
+    const char* pattern = unqlite_value_to_string(argv[0], &string_length);
+    if (string_length <= 0 || !pattern)
+    {
+      // Invalid argument.
+      unqlite_context_throw_error(context, UNQLITE_CTX_WARNING,
+          "wild_card_compare: first argument was an invalid string");
+      return UNQLITE_ABORT;
+    }
+
+    // Second argument is the string.
+    const char* string = unqlite_value_to_string(argv[1], &string_length);
+    if (string_length <= 0 || !pattern)
+    {
+      // Invalid argument.
+      unqlite_context_throw_error(context, UNQLITE_CTX_WARNING,
+          "wild_card_compare: second argument was an invalid string");
+      return UNQLITE_ABORT;
+    }
+
+    // Calling compare method.
+    bool result = wild_card_compare(pattern, string);
+
+    // Filling result of the Jx9 function.
+    unqlite_result_bool(context, result);
+
+    // Returning OK
+    return UNQLITE_OK;
+  }
 }

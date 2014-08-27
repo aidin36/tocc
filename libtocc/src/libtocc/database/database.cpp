@@ -21,6 +21,7 @@
 #include "libtocc/database/database.h"
 #include "libtocc/database/base23.h"
 #include "libtocc/database/scripts.h"
+#include "libtocc/database/funcs.h"
 #include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
 #include "libtocc/utilities/file_info_converter.h"
@@ -723,6 +724,25 @@ namespace libtocc
     }
   }
 
+  /*
+   * Registers available functions in Unqlite Virtual Machine.
+   */
+  void register_funcs_in_vm(unqlite_vm* vm)
+  {
+    int result = unqlite_create_function(vm,
+                                         "wild_card_compare",
+                                         wild_card_compare_unqlite_func,
+                                         NULL);
+    if (result != 0)
+    {
+      std::stringstream error_message;
+      error_message << "Could not register `wild_card_compare' function.";
+      error_message << " Error number: ";
+      error_message << result;
+      throw DatabaseScriptCompilationError(error_message.str().c_str());
+    }
+  }
+
   Database::Database(std::string database_file)
   {
     int result;
@@ -866,7 +886,7 @@ namespace libtocc
     {
       converted_ids.push_back(from_base23(*iterator));
     }
- 
+
     // Registering variables in VM
     std::string variable_file_ids("file_ids");
     std::string variable_tags_to_assign("tags_to_assign");
@@ -932,6 +952,9 @@ namespace libtocc
 
     // Compiling Jx9
     compile_jx9(this->db_pointer, jx9_script, &vm);
+
+    // Registers external functions.
+    register_funcs_in_vm(vm);
 
     // Executing vm.
     execute_vm(vm);

@@ -19,6 +19,11 @@
 #ifndef LIBTOCC_FUNCS_H_INCLUDED
 #define LIBTOCC_FUNCS_H_INCLUDED
 
+// `unqlite.h' is a C header, thus included inside a "C" scope.
+extern "C"
+{
+#include <unqlite.h>
+}
 
 namespace libtocc
 {
@@ -29,6 +34,13 @@ namespace libtocc
    * Returns true if two matches, false otherwise.
    */
   bool wild_card_compare(const char* pattern, const char* string);
+
+  /*
+   * It's an adapter for calling `wild_card_compare' from Jx9 scripts.
+   */
+  int wild_card_compare_unqlite_func(unqlite_context* context,
+                                     int argc,
+                                     unqlite_value** argv);
 }
 
 #endif /* LIBTOCC_FUNCS_H_INCLUDED */

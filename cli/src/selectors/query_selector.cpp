@@ -84,8 +84,11 @@ namespace tocccli
   {
     if (opt == "=")
     {
+      // By default, "=" operation will compile to WildCardExpr. So, user
+      // can simply invoke a query like "tag = 2014*"
 
-      return new libtocc::Tag(value.c_str());
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      return new libtocc::Tag(wild_card_expr);
     }
 
     // Nothing matched.
@@ -102,7 +105,11 @@ namespace tocccli
   {
     if (opt == "=")
     {
-      return new libtocc::Title(value.c_str());
+      // By default, "=" operation will compile to WildCardExpr. So, user
+      // can simply invoke a query like "tag = 2014*"
+
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      return new libtocc::Title(wild_card_expr);
     }
 
     // Nothing matched.
