@@ -783,8 +783,18 @@ namespace libtocc
     register_variable_in_vm(vm, variable_traditional_path, traditional_path);
 
     execute_vm(vm);
+    bool duplicated_traditional_path = unqlite_value_to_bool(
+        unqlite_vm_extract_variable(vm, "duplicated_traditional_path"));
 
-    return extract_file_from_vm(vm, "result");
+    if (duplicated_traditional_path)
+    {
+      throw DatabaseScriptExecutionError(
+              "Error: file with identical tradional path has been found.");
+    }
+    else
+    {
+      return extract_file_from_vm(vm, "result");
+    }
   }
 
   void Database::remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files)

@@ -31,8 +31,8 @@ TEST_CASE("database: find empty ID")
   libtocc::Database db("/tmp/tocctests/tocc.test.db");
 
   // Creating files
-  libtocc::IntFileInfo new_file_1 = db.create_file("file__1", "/old/path");
-  libtocc::IntFileInfo new_file_2 = db.create_file("file__2", "/old/path");
+  libtocc::IntFileInfo new_file_1 = db.create_file("file__1", "/old/path/file__1");
+  libtocc::IntFileInfo new_file_2 = db.create_file("file__2", "/old/path/file__2");
 
   //delete file 1
   std::vector<std::string> ids_to_delete;
@@ -42,7 +42,7 @@ TEST_CASE("database: find empty ID")
   db.remove_files(ids_to_delete, founded_files);
 
   //create a new file
-  libtocc::IntFileInfo new_file_3 = db.create_file("file__3", "/old/path");
+  libtocc::IntFileInfo new_file_3 = db.create_file("file__3", "/old/path/file__3");
   
   REQUIRE(atoi(new_file_1.get_id().c_str()) == atoi(new_file_3.get_id().c_str()));
 
@@ -55,9 +55,9 @@ TEST_CASE("database: find empty ID")
  
   //create new files
   // Note file__4 has the file__1 first id
-  libtocc::IntFileInfo new_file_4 = db.create_file("file__4", "/old/path");
+  libtocc::IntFileInfo new_file_4 = db.create_file("file__4", "/old/path/file__4");
   REQUIRE(atoi(new_file_4.get_id().c_str()) == atoi(new_file_3.get_id().c_str()));
 
-  libtocc::IntFileInfo new_file_5 = db.create_file("file__5", "/old/path");
+  libtocc::IntFileInfo new_file_5 = db.create_file("file__5", "/old/path/file__5");
   REQUIRE(atoi(new_file_5.get_id().c_str()) == atoi(new_file_2.get_id().c_str()));
 }
