@@ -100,39 +100,38 @@ namespace libtocc
       "    $record.traditional_path == $traditional_path)"\
       "  {"\
       "    $duplicated_traditional_path = true;"\
-      "    break;"
+      "    $error = \"Error: file with identical traditional path found.\"; "\
+      "    exit; "\
       "  }"\
       "  array_push($array_ids, $record.file_id);"\
       "  $record = db_fetch('files');"\
       "}"\
-      "if (!$duplicated_traditional_path) "\
-      "{ "\
-      "  /* make sure all ids are sorted */"\
-      "  sort($array_ids);"\
-      "  $current_record_id = current($array_ids);"\
-      "  $previous_record_id = 0;"\
-      "  while($current_record_id - $previous_record_id == 1)"\
-      "  {"\
-      "    $previous_record_id = $current_record_id;"\
-      "    $current_record_id = next($array_ids);"\
-      "  }"\
-      "  $new_file = "\
-      "  {"\
-      "    file_id: $previous_record_id + 1,"\
-      "    title: $title,"\
-      "    traditional_path: $traditional_path,"\
-      "    tags: $tags "\
-      "  }; "\
-      "  $store_result = db_store('files', $new_file); "\
-      "  if (!$store_result) "\
-      "  {"\
-      "    $error = db_errlog(); "\
-      "  } "\
-      "  else "\
-      "  {"\
-      "    $result = $new_file; "\
-      "  }"\
-      "} ";
+
+      /* make sure all ids are sorted */
+      "sort($array_ids);"\
+      "$current_record_id = current($array_ids);"\
+      "$previous_record_id = 0;"\
+      "while($current_record_id - $previous_record_id == 1)"\
+      "{"\
+      "  $previous_record_id = $current_record_id;"\
+      "  $current_record_id = next($array_ids);"\
+      "}"\
+      "$new_file = "\
+      "{"\
+      "  file_id: $previous_record_id + 1,"\
+      "  title: $title,"\
+      "  traditional_path: $traditional_path,"\
+      "  tags: $tags "\
+      "}; "\
+      "$store_result = db_store('files', $new_file); "\
+      "if (!$store_result) "\
+      "{"\
+      "  $error = db_errlog(); "\
+      "} "\
+      "else "\
+      "{"\
+      "  $result = $new_file; "\
+      "}";
 
   const std::string REMOVE_FILES_SCRIPT = \
       "$founded_files = {};"\

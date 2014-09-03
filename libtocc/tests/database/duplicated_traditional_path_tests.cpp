@@ -59,5 +59,5 @@ TEST_CASE("database: duplicated traditional path tests")
   // Should throw exception
   REQUIRE_THROWS_AS(
           db.create_file("Title 6", "/old/path/test_file"),
-          libtocc::DatabaseScriptExecutionError);
+          libtocc::DatabaseScriptLogicalError);
 }
