@@ -37,6 +37,7 @@ libtocc/src/libtocc.pc
 libtocc/src/libtool
 libtocc/src/ltmain.sh
 libtocc/src/missing
+libtocc/src/compile
 libtocc/tests/.deps/
 libtocc/tests/Makefile.in
 libtocc/tests/aclocal.m4
@@ -48,6 +49,7 @@ libtocc/tests/depcomp
 libtocc/tests/install-sh
 libtocc/tests/missing
 libtocc/tests/libtocctests
+libtocc/tests/compile
 cli/src/Makefile.in
 cli/src/aclocal.m4
 cli/src/autom4te.cache/
@@ -55,4 +57,16 @@ cli/src/configure
 cli/src/depcomp
 cli/src/install-sh
 cli/src/missing
-
+cli/src/compile
+toccfs/src/.deps/
+toccfs/src/Makefile
+toccfs/src/Makefile.in
+toccfs/src/aclocal.m4
+toccfs/src/autom4te.cache/
+toccfs/src/config.log
+toccfs/src/config.status
+toccfs/src/configure
+toccfs/src/depcomp
+toccfs/src/install-sh
+toccfs/src/missing
+toccfs/src/compile

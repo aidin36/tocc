@@ -23,7 +23,7 @@
 #include "libtocc/database/scripts.h"
 #include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
-
+#include "libtocc/utilities/file_info_converter.h"
 
 extern "C"
 {
@@ -866,7 +866,7 @@ namespace libtocc
     {
       converted_ids.push_back(from_base23(*iterator));
     }
-
+ 
     // Registering variables in VM
     std::string variable_file_ids("file_ids");
     std::string variable_tags_to_assign("tags_to_assign");
@@ -878,7 +878,25 @@ namespace libtocc
     execute_vm(vm);
   }
 
-  void Database::unassign_tag(std::string file_id, std::string tag)
+  void Database::unassign_tags(const std::string& file_id, const std::vector<std::string>& tags)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(file_id);
+
+    unassign_tags(file_ids, tags);
+  }
+
+  void Database::unassign_tag(const std::string& file_id, const std::string& tag)
+  {
+    std::vector<std::string> file_ids;
+    std::vector<std::string> file_tags;
+
+    file_ids.push_back(file_id);
+    file_tags.push_back(tag);
+    unassign_tags(file_ids, file_tags);
+  }
+
+  void Database::unassign_tags(const std::vector<std::string>& file_ids, const std::vector<std::string>& tags)
   {
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -887,15 +905,18 @@ namespace libtocc
     // Compiling the script (Which fills VM)
     compile_jx9(this->db_pointer, UNASSIGN_TAGS_SCRIPT, &vm);
 
+    std::vector<unsigned long> converted_ids = string_vector_to_ulong_vector(file_ids);
+
     // Registering variables in VM
-    std::string variable_file_id("file_id");
-    std::string variable_tag_to_unassign("tag_to_unassign");
-    register_variable_in_vm(vm, variable_file_id, file_id);
-    register_variable_in_vm(vm, variable_tag_to_unassign, tag);
+    std::string variable_file_id("file_ids");
+    std::string variable_tag_to_unassign("tags_to_unassign");
+    register_variable_in_vm(vm, variable_file_id, converted_ids);
+    register_variable_in_vm(vm, variable_tag_to_unassign, tags);
 
     // Executing VM
     execute_vm(vm);
   }
+
 
   std::vector<IntFileInfo> Database::search_files(Query& query)
   {

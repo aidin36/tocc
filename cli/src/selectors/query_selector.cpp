@@ -375,7 +375,6 @@ namespace tocccli
       // Auto release this pointer.
       expr_pointer_holder.add(operand);
 
-      index++;
       if (index >= arguments.size())
       {
         // End of the string. Adding the operand to the previous operator.
@@ -403,6 +402,7 @@ namespace tocccli
         {
           last_operator.second->add((libtocc::FieldExpr&)*operand);
         }
+        index++;
       }
       else
       {
@@ -448,6 +448,11 @@ namespace tocccli
 
   std::vector<libtocc::FileInfo> QuerySelector::execute(std::vector<std::string> cmd_arguments)
   {
+    if (cmd_arguments.size() == 0)
+    {
+      throw InvalidParametersError("--query must have at least one argument.");
+    }
+
     int index = 0;
 
     libtocc::ConnectiveExpr* main_expr = extract_next_term(cmd_arguments, index);

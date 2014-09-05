@@ -16,38 +16,42 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Defines main function, which starts all tests.
- */
+#include "utils/string_utils.h"
 
-// The following define causes the Catch to generate a main fucntion here.
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include <sstream>
 
-#include <iostream>
 
-/*
-** Initialisation of Library
-*/
-class TestInitialiser
+namespace toccfs
 {
-  public:
-    TestInitialiser()
-    {
-      // clean previous test files
-      if (int status = system("rm -rf /tmp/tocctests"))
-      {
-        std::cout << "Test initialisation failed -\
-          Unable to delete files" << std::endl;
-        exit(status);
-      }
-      else if (int status = system("mkdir /tmp/tocctests"))
-      {
-        std::cout << "Test initialisation failed -\
-          Unable to create base directory" << std::endl;
-        exit(status);
-      }
-    };
-};
 
-TestInitialiser now;
+  std::vector<std::string> split_string(const std::string& string_to_split,
+                                        char delimiter)
+  {
+    std::vector<std::string> result;
+
+    std::stringstream stream(string_to_split);
+    std::string item;
+    while (std::getline(stream, item, delimiter))
+    {
+      if (!item.empty())
+      {
+        result.push_back(item);
+      }
+    }
+
+    return result;
+  }
+
+  bool string_ends_with(const std::string& str,
+                          const std::string& str_to_check)
+  {
+    if (str.size() >= str_to_check.size())
+    {
+      return false;
+    }
+
+    return str.compare(str.size() - str_to_check.size(),
+                       str_to_check.size(), str_to_check) == 0;
+  }
+
+}

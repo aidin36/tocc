@@ -29,7 +29,7 @@
 
 TEST_CASE("query_files_tests: simple tag search")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   SECTION("Assign and search 'test_tag_0xUi7'")
   {
@@ -91,16 +91,16 @@ TEST_CASE("query_files_tests: simple tag search")
 
 TEST_CASE("query_files_tests: simple title search")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   SECTION("Import and query `IMG007'")
   {
     std::ofstream file_stream;
-    file_stream.open("/tmp/XlfYru129384PxQ");
+    file_stream.open("/tmp/tocctests/XlfYru129384PxQ");
     file_stream << "Not a real photo!";
     file_stream.close();
 
-    libtocc::FileInfo original_file = manager.import_file("/tmp/XlfYru129384PxQ", "IMG007");
+    libtocc::FileInfo original_file = manager.import_file("/tmp/tocctests/XlfYru129384PxQ", "IMG007");
 
     libtocc::Title title_expr("IMG007");
     libtocc::And main_and(title_expr);
@@ -122,9 +122,9 @@ TEST_CASE("query_files_tests: simple title search")
 
 TEST_CASE("query_files_tests: long query test")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
-  std::string test_file = "/tmp/iU83FpdAdjcAppfkdj";
+  std::string test_file = "/tmp/tocctests/iU83FpdAdjcAppfkdj";
 
   std::ofstream file_stream;
   file_stream.open(test_file.c_str());

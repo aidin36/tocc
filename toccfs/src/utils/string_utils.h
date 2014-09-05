@@ -16,20 +16,28 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef TOCCFS_STRING_UTILS_H_INCLUDED
+#define TOCCFS_STRING_UTILS_H_INCLUDED
 
-#include <catch.hpp>
+#include <string>
+#include <vector>
 
-#include "libtocc/front_end/manager.h"
-#include "libtocc/common/database_exceptions.h"
 
-/*
- * Test cases for scenarios that must throw exception.
- */
-TEST_CASE("front_end: assign tag wrong tests")
+namespace toccfs
 {
-  libtocc::Manager manager("/tmp/tocctests/");
 
-  REQUIRE_THROWS_AS(manager.assign_tags("f89ac3e", "author:Unknown"),
-                    libtocc::DatabaseScriptExecutionError);
+  /*
+   * Splits a string, by the specified delimiter.
+   */
+  std::vector<std::string> split_string(const std::string& string_to_split,
+                                        char delimiter);
 
+  /*
+   * Checks if the specified string is ends with the other one.
+   * (i.e. `str_to_check' is at the end of `str'.
+   */
+  bool string_ends_with(const std::string& str,
+                        const std::string& str_to_check);
 }
+
+#endif /* TOCCFS_STRING_UTILS_H_INCLUDED */

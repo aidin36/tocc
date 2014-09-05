@@ -25,7 +25,7 @@
 
 TEST_CASE("Manager::get tests")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   SECTION("file not found error")
   {

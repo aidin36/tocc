@@ -28,14 +28,14 @@
 
 TEST_CASE("Tag Statistics")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   SECTION("Single File")
   {
     /*
      * Preparing test data.
      */
-    const char* file_path = "/tmp/tocc_statistics_test_file.tmp";
+    const char* file_path = "/tmp/tocctests/tocc_statistics_test_file.tmp";
 
     std::ofstream file_to_import(file_path);
     file_to_import << "some data...";
@@ -75,7 +75,7 @@ TEST_CASE("Tag Statistics")
     /*
      * Creating test file.
      */
-    const char* file_path = "/tmp/tocc_statistics_test_file_ufHf89.tmp";
+    const char* file_path = "/tmp/tocctests/tocc_statistics_test_file_ufHf89.tmp";
     std::ofstream file_to_import(file_path);
     file_to_import << "some data...";
     file_to_import.close();

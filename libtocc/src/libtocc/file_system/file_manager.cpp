@@ -170,6 +170,7 @@ namespace libtocc
     // Note: I know that I'm duplicating the code, but its faster than
     // splitting the path.
     std::string path_to_create(this->base_path);
+
     path_to_create += "/";
     path_to_create += id.substr(0, 1) + "/";
     create_dir(path_to_create);
@@ -199,7 +200,11 @@ namespace libtocc
 
     std::string result(this->base_path);
 
-    result += "/";
+    if (result.at(result.length() - 1) != '/')
+    {
+      result += "/";
+    }
+
     result += id.substr(0, 1);
     result += "/";
     result += id.substr(1, 2);
