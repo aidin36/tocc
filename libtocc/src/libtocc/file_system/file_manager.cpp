@@ -22,6 +22,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cstdio>
+#ifndef HAVE_SENDFILE // check if sendfile is available
+#else
+ #include <sys/sendfile.h>
+#endif
 
 #include "libtocc/common/runtime_exceptions.h"
 #include "libtocc/file_system/file_manager.h"
@@ -106,8 +110,7 @@ namespace libtocc
 
   void FileManager::copy(std::string source_path, std::string file_id)
   {
-    // TODO: On a Linux platform, we should use `sendfile' system call, because
-    //   it's a lot faster.
+
     // TODO: Maybe we should use `st_blksize' of the file attributes instead
     //   of the BUFSIZ. That's the optimal value, but we need to read the
     //   attribute from the file, before starting.
@@ -117,17 +120,26 @@ namespace libtocc
 
     int dest = create(file_id);
     int source = open(source_path.c_str(), O_RDONLY);
+    #ifndef HAVE_SENDFILE
+      // we don't have sendfile, so we'll use read and write
+      while ((size = read(source, buf, BUFSIZ)) > 0)
+      {
+          ssize_t write_result = write(dest, buf, size);
 
-    while ((size = read(source, buf, BUFSIZ)) > 0)
-    {
-        ssize_t write_result = write(dest, buf, size);
-
-        if (write_result < 0)
-        {
-          // An error occurred while writing to file.
-          handle_errno(errno, source_path);
-        }
-    }
+          if (write_result < 0)
+          {
+            // An error occurred while writing to file.
+            handle_errno(errno, source_path);
+          }
+      }
+    #else
+      off_t offset = 0;
+      struct stat stat_buf;
+      // Stat the source file to obtain its size.
+      fstat (source, &stat_buf);
+      // Send the file with sendfile
+      sendfile(dest, source, &offset, stat_buf.st_size);
+    #endif
 
     close(source);
     close(dest);
