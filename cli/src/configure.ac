@@ -21,7 +21,7 @@ AC_CHECK_HEADERS([unistd.h])
 AC_CHECK_HEADER_STDBOOL
 
 # Checks for library functions.
-AC_CHECK_FUNCS([getcwd sendfile])
+AC_CHECK_FUNCS([getcwd])
 
 # Checks for UnQlite
 # Since it's a C header, we need to set lang to C

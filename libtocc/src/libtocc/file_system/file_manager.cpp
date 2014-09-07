@@ -22,8 +22,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cstdio>
-#ifndef HAVE_SENDFILE // check if sendfile is available
-#else
+#ifdef HAVE_SENDFILE // check if sendfile is available
  #include <sys/sendfile.h>
 #endif
 
