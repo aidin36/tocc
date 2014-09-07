@@ -119,6 +119,8 @@ namespace libtocc
 
     int dest = create(file_id);
     int source = open(source_path.c_str(), O_RDONLY);
+
+    // `sendfile' is a lot faster. We use it if available.
     #ifndef HAVE_SENDFILE
       // we don't have sendfile, so we'll use read and write
       while ((size = read(source, buf, BUFSIZ)) > 0)
