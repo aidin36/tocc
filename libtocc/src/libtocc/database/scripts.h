@@ -93,13 +93,11 @@ namespace libtocc
       " if an id is not consecutive with the next then it's an empty id */ "\
       "$array_ids = {};"\
       "$record = db_fetch('files');"\
-      "$duplicated_traditional_path = false; "\
       "while($record != NULL)"\
       "{"\
       "  if ($traditional_path != \"\" && "\
       "    $record.traditional_path == $traditional_path)"\
       "  {"\
-      "    $duplicated_traditional_path = true;"\
       "    $error = \"Error: file with identical traditional path found.\"; "\
       "    exit; "\
       "  }"\
