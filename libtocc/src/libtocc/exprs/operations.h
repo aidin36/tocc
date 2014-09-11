@@ -51,6 +51,15 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     /*
+     * Returns true if it's a negative expression.
+     *
+     * Negative expression means that this expression
+     * have negative effect: e.g. if it's a condition and is correct, the
+     * final result should be false.
+     */
+    virtual bool is_negative_expr();
+
+    /*
      * Compiles the expression into a string.
      */
     virtual const char* compile();
@@ -65,18 +74,32 @@ namespace libtocc
     ProtectedData* protected_data;
   };
 
+  class Equal : public OperationExpr
+  {
+  public:
+    Equal(const char* operand);
 
-  class NotEqual : public OperationExpr
+    Equal(const Equal& source);
+
+    /*
+     * Compiles the expression into a string.
+     */
+    virtual const char* compile();
+
+    /*
+     * Creates a copy of the expression.
+     */
+    virtual Expr* clone();
+  };
+
+  class NotEqual : public Equal
   {
   public:
     NotEqual(const char* operand);
 
     NotEqual(const NotEqual& source);
 
-    /*
-     * Compiles the expression into a string.
-     */
-    virtual const char* compile();
+    virtual bool is_negative_expr();
 
     /*
      * Creates a copy of the expression.

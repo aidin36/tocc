@@ -96,13 +96,17 @@ namespace libtocc
     else if (this->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-                          this->function->compile(get_field_name().c_str()));
+                          this->function->compile(get_field_name().c_str()),
+                          this->function->is_negative_expr());
     }
     else
     {
-      std::string result(get_field_name() + this->operation->compile());
+      std::string compiled_value(get_field_name());
+      std::string compiled_operation(this->operation->compile());
+      compiled_value += compiled_operation;
       return CompiledExpr(get_compiled_expr_type(),
-                          result.c_str());
+                          compiled_value.c_str(),
+                          this->operation->is_negative_expr());
     }
   }
 

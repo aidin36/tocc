@@ -58,6 +58,11 @@ namespace libtocc
     return expr_type::OPERATION;
   }
 
+  bool OperationExpr::is_negative_expr()
+  {
+    return false;
+  }
+
   const char* OperationExpr::compile()
   {
     return "Not Implemented";
@@ -68,20 +73,41 @@ namespace libtocc
     return new OperationExpr(*this);
   }
 
-  NotEqual::NotEqual(const char* operand)
+  Equal::Equal(const char* operand)
     : OperationExpr(operand)
   {
   }
 
-  NotEqual::NotEqual(const NotEqual& source)
+  Equal::Equal(const Equal& source)
     : OperationExpr(source)
   {
   }
 
-  const char* NotEqual::compile()
+  const char* Equal::compile()
   {
-    std::string result(" != \"" + this->protected_data->operand + "\"");
+    std::string result(" == \"" + this->protected_data->operand + "\"");
     return result.c_str();
+  }
+
+  Expr* Equal::clone()
+  {
+    return new Equal(*this);
+  }
+
+
+  NotEqual::NotEqual(const char* operand)
+    : Equal(operand)
+  {
+  }
+
+  NotEqual::NotEqual(const NotEqual& source)
+    : Equal(source)
+  {
+  }
+
+  bool NotEqual::is_negative_expr()
+  {
+    return true;
   }
 
   Expr* NotEqual::clone()

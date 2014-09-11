@@ -90,6 +90,11 @@ namespace tocccli
       libtocc::WildCardExpr wild_card_expr(value.c_str());
       return new libtocc::Tag(wild_card_expr);
     }
+    if (opt == "!=" || opt == "~")
+    {
+      libtocc::NotEqual not_equal_expr(value.c_str());
+      return new libtocc::Tag(not_equal_expr);
+    }
 
     // Nothing matched.
     throw InvalidParametersError("Invalid operator: " + opt);
@@ -110,6 +115,11 @@ namespace tocccli
 
       libtocc::WildCardExpr wild_card_expr(value.c_str());
       return new libtocc::Title(wild_card_expr);
+    }
+    if (opt == "!=" || opt == "~")
+    {
+      libtocc::NotEqual not_equal_expr(value.c_str());
+      return new libtocc::Title(not_equal_expr);
     }
 
     // Nothing matched.

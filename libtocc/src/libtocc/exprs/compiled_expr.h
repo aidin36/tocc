@@ -43,6 +43,19 @@ namespace libtocc
     CompiledExpr(compiled_expr::ExprType type, std::string value);
 
     /*
+     * Construct a compiled expression.
+     *
+     * @param type: type of the expression that is compiled.
+     * @param value: compiled expression.
+     * @param negative_expr: If set to true, it means that this expression
+     *   have negative effect: e.g. if it's a condition and is correct, the
+     *   final result should be false.
+     */
+    CompiledExpr(compiled_expr::ExprType type,
+                 std::string value,
+                 bool negative_expr);
+
+    /*
      * Returns the type of the compiled expression.
      */
     compiled_expr::ExprType get_type();
@@ -52,9 +65,19 @@ namespace libtocc
      */
     std::string get_value();
 
+    /*
+     * Returns true if this is a negative expression.
+     *
+     * Negative expression means that this expression
+     * have negative effect: e.g. if it's a condition and is correct, the
+     * final result should be false.
+     */
+    bool is_negative_expr();
+
   private:
     compiled_expr::ExprType type;
     std::string value;
+    bool negative_expr;
   };
 
 };
