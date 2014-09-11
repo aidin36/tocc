@@ -21,9 +21,17 @@
 namespace libtocc
 {
   CompiledExpr::CompiledExpr(compiled_expr::ExprType type, std::string value)
+    : CompiledExpr(type, value, false)
+  {
+  }
+
+  CompiledExpr::CompiledExpr(compiled_expr::ExprType type,
+                             std::string value,
+                             bool negative_expr)
   {
     this->type = type;
     this->value = value;
+    this->negative_expr = negative_expr;
   }
 
   compiled_expr::ExprType CompiledExpr::get_type()
@@ -34,5 +42,10 @@ namespace libtocc
   std::string CompiledExpr::get_value()
   {
     return this->value;
+  }
+
+  bool CompiledExpr::is_negative_expr()
+  {
+    return this->negative_expr;
   }
 };

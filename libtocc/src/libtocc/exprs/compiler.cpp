@@ -38,6 +38,7 @@ namespace libtocc
   public:
     CompileStateData(CompiledExpr* current_expression,
                      CompiledExpr* next_expression,
+                     std::ostringstream* function_header_stream,
                      std::ostringstream* tags_stream,
                      std::ostringstream* fields_stream,
                      std::ostringstream* result)
@@ -45,6 +46,7 @@ namespace libtocc
       this->current_expr = current_expression;
       this->next_expr = next_expression;
       this->result_counter = 1;
+      this->function_header_stream = function_header_stream;
       this->tags_stream = tags_stream;
       this->fields_stream = fields_stream;
       this->result = result;
@@ -54,6 +56,7 @@ namespace libtocc
     CompiledExpr* next_expr;
     int result_counter;
     std::list<std::string> groups_stack;
+    std::ostringstream* function_header_stream;
     std::ostringstream* tags_stream;
     std::ostringstream* fields_stream;
     std::ostringstream* result;
@@ -71,26 +74,42 @@ namespace libtocc
 
   void append_expression(CompileStateData& data)
   {
+    // Appending initialization of $r variable in header.
+    (*data.function_header_stream) << "$r" << data.result_counter << " = ";
+    if (data.current_expr->is_negative_expr())
+    {
+      (*data.function_header_stream) << "true";
+    }
+    else
+    {
+      (*data.function_header_stream) << "false";
+    }
+    (*data.function_header_stream) << "; ";
+
+    // Start a loop if it wasn't start yet.
     if (data.current_expr->get_type() == compiled_expr::TAG)
     {
-      // Start a loop if it wasn't start yet.
       if (data.tags_stream->tellp() == 0)
       {
         (*data.tags_stream) << " foreach ($record.tags as $tag) {";
       }
-
-      // Making a new if for this tag.
-      (*data.tags_stream) << " if (" << data.current_expr->get_value();
-      (*data.tags_stream) << ") { $r" << data.result_counter;
-      (*data.tags_stream) << " = true; }";
     }
 
-    else if (data.current_expr->get_type() == compiled_expr::FIELD)
+    // Making a new if for this field.
+    (*data.tags_stream) << " if (" << data.current_expr->get_value();
+    (*data.tags_stream) << ") { $r" << data.result_counter;
+    (*data.tags_stream) << " = ";
+
+    if (data.current_expr->is_negative_expr())
     {
-      (*data.fields_stream) << " if (" << data.current_expr->get_value();
-      (*data.fields_stream) << ") { $r" << data.result_counter;
-      (*data.fields_stream) << " = true; }";
+      (*data.tags_stream) << "false";
     }
+    else
+    {
+      (*data.tags_stream) << "true";
+    }
+
+    (*data.tags_stream) << "; }";
   }
 
   compile_states::States group_state_handler(CompileStateData& data)
@@ -303,6 +322,9 @@ namespace libtocc
     // The final script.
     std::string script;
 
+    // Keeps first lines of the function (mainly, result variables initialization).
+    std::ostringstream function_header_stream;
+
     // Keeps condition of tags.
     std::ostringstream tags_stream;
 
@@ -324,6 +346,7 @@ namespace libtocc
     CompiledExpr* second_element = &*iterator;
     // Initializing data.
     CompileStateData data(first_element, second_element,
+                          &function_header_stream,
                           &tags_stream, &fields_stream, &result);
     ++iterator;
 
@@ -343,12 +366,18 @@ namespace libtocc
     data.next_expr = &nope_element;
     current_state = state_table[current_state](data);
 
-    // Finalizing the script.
+    // Creating filter function.
     script += "$filter_func = function($record) { ";
 
+    // Header of the function.
+    if (function_header_stream.tellp() != 0)
+    {
+      script += function_header_stream.str();
+    }
+
+    // Appending tags conditions, if there's any.
     if (tags_stream.tellp() != 0)
     {
-      // If `tags_stream' is not empty.
       script += " " + tags_stream.str() +" }";
     }
 

@@ -16,24 +16,31 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBTOCC_FUNCS_H_INCLUDED
+#define LIBTOCC_FUNCS_H_INCLUDED
 
-#include "libtocc/exprs/operands.h"
+// `unqlite.h' is a C header, thus included inside a "C" scope.
+extern "C"
+{
+#include <unqlite.h>
+}
 
 namespace libtocc
 {
 
-  expr_type::ExprType OperandExpr::get_type()
-  {
-    return expr_type::OPERAND;
-  }
+  /*
+   * Compares pattern and string. Pattern can contain `*' as the wild card
+   * character.
+   * Returns true if two matches, false otherwise.
+   */
+  bool wild_card_compare(const char* pattern, const char* string);
 
-  std::string OperandExpr::compile()
-  {
-    return "Not Implemented";
-  }
+  /*
+   * It's an adapter for calling `wild_card_compare' from Jx9 scripts.
+   */
+  int wild_card_compare_unqlite_func(unqlite_context* context,
+                                     int argc,
+                                     unqlite_value** argv);
+}
 
-  Expr* OperandExpr::clone()
-  {
-    return new OperandExpr(*this);
-  }
-};
+#endif /* LIBTOCC_FUNCS_H_INCLUDED */

@@ -16,32 +16,38 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTOCC_FUNCTION_H_INCLUDED
-#define LIBTOCC_FUNCTION_H_INCLUDED
 
-#include <string>
+#ifndef LIBTOCC_OPERAND_H_INCLUDED
+#define LIBTOCC_OPERAND_H_INCLUDED
+
 #include "libtocc/exprs/expr.h"
+
 
 namespace libtocc
 {
 
   /*
-   * Defines base class of all function expressions.
+   * Base class of all operand expressions.
    */
-  class FunctionExpr : public Expr
+  class OperationExpr : public Expr
   {
   public:
     /*
-     * @param arg: Argument of this function. For example:
-     *   WildCard("*book*")
+     * @param operand: Operand of this operation.
+     *   For example: NotEqual("bad-photo")
      */
-    FunctionExpr(const char* arg);
+    OperationExpr(const char* operand);
 
     /*
-     * Copy Constructor.
+     * Copy constructor.
      */
-    FunctionExpr(FunctionExpr& source);
+    OperationExpr(const OperationExpr& source);
 
+    virtual ~OperationExpr();
+
+    /*
+     * Gets the type of this expression.
+     */
     virtual expr_type::ExprType get_type();
 
     /*
@@ -54,51 +60,52 @@ namespace libtocc
     virtual bool is_negative_expr();
 
     /*
-     * Compiles the function.
-     *
-     * @param base_arg: Second argument of the function.
-     *  For example:
-     *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
+     * Compiles the expression into a string.
      */
-    virtual const char* compile(const char* second_arg);
+    virtual const char* compile();
 
     /*
-     * Clones this instance.
+     * Creates a copy of the expression.
      */
     virtual Expr* clone();
 
   protected:
-    /*
-     * Returns the function name as string.
-     */
-    virtual const char* get_func_name();
-
     class ProtectedData;
     ProtectedData* protected_data;
   };
 
-  class WildCardExpr : public FunctionExpr
+  class Equal : public OperationExpr
   {
   public:
-    /*
-     * @param arg: Argument of this function. For example:
-     *   WildCard("*book*")
-     */
-    WildCardExpr(const char* arg);
+    Equal(const char* operand);
+
+    Equal(const Equal& source);
 
     /*
-     * Copy Constructor.
+     * Compiles the expression into a string.
      */
-    WildCardExpr(WildCardExpr& source);
+    virtual const char* compile();
+
     /*
-     * Clones this instance.
+     * Creates a copy of the expression.
      */
     virtual Expr* clone();
-
-  protected:
-    virtual const char* get_func_name();
   };
 
+  class NotEqual : public Equal
+  {
+  public:
+    NotEqual(const char* operand);
+
+    NotEqual(const NotEqual& source);
+
+    virtual bool is_negative_expr();
+
+    /*
+     * Creates a copy of the expression.
+     */
+    virtual Expr* clone();
+  };
 };
 
-#endif /* LIBTOCC_FUNCTION_H_INCLUDED */
+#endif /* LIBTOCC_OPERAND_H_INCLUDED */

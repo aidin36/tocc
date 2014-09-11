@@ -27,7 +27,7 @@ namespace libtocc
   {
     this->value = value;
     this->internal_type = 0;
-    this->operand = NULL;
+    this->operation = NULL;
     this->function = NULL;
   }
 
@@ -35,12 +35,12 @@ namespace libtocc
   {
     this->function = (FunctionExpr*)expression.clone();
     this->internal_type = 1;
-    this->operand = NULL;
+    this->operation = NULL;
   }
 
-  FieldExpr::FieldExpr(OperandExpr& expression)
+  FieldExpr::FieldExpr(OperationExpr& expression)
   {
-    this->operand = (OperandExpr*)expression.clone();
+    this->operation = (OperationExpr*)expression.clone();
     this->internal_type = 2;
     this->function = NULL;
   }
@@ -49,13 +49,13 @@ namespace libtocc
   {
     this->value = source.value;
     this->internal_type = source.internal_type;
-    if (source.operand != NULL)
+    if (source.operation != NULL)
     {
-      this->operand = (OperandExpr*)source.operand->clone();
+      this->operation = (OperationExpr*)source.operation->clone();
     }
     else
     {
-      this->operand = NULL;
+      this->operation = NULL;
     }
     if (source.function != NULL)
     {
@@ -74,10 +74,10 @@ namespace libtocc
       delete this->function;
       this->function = NULL;
     }
-    else if (this->operand != NULL)
+    else if (this->operation != NULL)
     {
-      delete this->operand;
-      this->operand = NULL;
+      delete this->operation;
+      this->operation = NULL;
     }
   }
 
@@ -96,13 +96,17 @@ namespace libtocc
     else if (this->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-                          this->function->compile(get_field_name()).c_str());
+                          this->function->compile(get_field_name().c_str()),
+                          this->function->is_negative_expr());
     }
     else
     {
-      std::string result(get_field_name() + this->operand->compile());
+      std::string compiled_value(get_field_name());
+      std::string compiled_operation(this->operation->compile());
+      compiled_value += compiled_operation;
       return CompiledExpr(get_compiled_expr_type(),
-                          result.c_str());
+                          compiled_value.c_str(),
+                          this->operation->is_negative_expr());
     }
   }
 
@@ -131,7 +135,7 @@ namespace libtocc
   {
   }
 
-  Tag::Tag(OperandExpr& expression)
+  Tag::Tag(OperationExpr& expression)
     : FieldExpr(expression)
   {
   }
@@ -166,7 +170,7 @@ namespace libtocc
   {
   }
 
-  Title::Title(OperandExpr& expression)
+  Title::Title(OperationExpr& expression)
     : FieldExpr(expression)
   {
   }

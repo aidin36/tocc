@@ -18,21 +18,78 @@
 
 #include "libtocc/exprs/functions.h"
 
+#include <string>
+
+
 namespace libtocc
 {
+  class FunctionExpr::ProtectedData
+  {
+  public:
+    std::string arg;
+  };
+
+  FunctionExpr::FunctionExpr(const char* arg)
+  {
+    this->protected_data = new ProtectedData();
+
+    this->protected_data->arg = arg;
+  }
+
+  FunctionExpr::FunctionExpr(FunctionExpr& source)
+  {
+    this->protected_data = new ProtectedData();
+
+    this->protected_data->arg = source.protected_data->arg;
+  }
 
   expr_type::ExprType FunctionExpr::get_type()
   {
     return expr_type::FUNCTION;
   }
 
-  std::string FunctionExpr::compile(std::string base_arg)
+  bool FunctionExpr::is_negative_expr()
   {
-    return "Not Implemented";
+    return false;
+  }
+
+  const char* FunctionExpr::compile(const char* second_arg)
+  {
+    std::string result(get_func_name());
+    result += "('" + this->protected_data->arg + "', ";
+    result += second_arg;
+    result += ")";
+
+    return result.c_str();
   }
 
   Expr* FunctionExpr::clone()
   {
     return new FunctionExpr(*this);
+  }
+
+  const char* FunctionExpr::get_func_name()
+  {
+    return "NotImplementedFunc";
+  }
+
+  WildCardExpr::WildCardExpr(const char* arg)
+    : FunctionExpr(arg)
+  {
+  }
+
+  WildCardExpr::WildCardExpr(WildCardExpr& source)
+    : FunctionExpr(source)
+  {
+  }
+
+  Expr* WildCardExpr::clone()
+  {
+    return new WildCardExpr(*this);
+  }
+
+  const char* WildCardExpr::get_func_name()
+  {
+    return "wild_card_compare";
   }
 };
