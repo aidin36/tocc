@@ -169,11 +169,11 @@ TEST_CASE("query_files_tests: long query test")
 
 TEST_CASE("query_files_tests: Not Equal tests")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   // Creating two test files.
-  std::string test_file_1 = "/tmp/libtocctests_Unx12Pfiedkc";
-  std::string test_file_2 = "/tmp/libtocctests_fPe98ncloEqs";
+  std::string test_file_1 = "/tmp/tocctests/libtocctests_Unx12Pfiedkc";
+  std::string test_file_2 = "/tmp/tocctests/libtocctests_fPe98ncloEqs";
 
   std::ofstream file_stream;
   file_stream.open(test_file_1.c_str());
