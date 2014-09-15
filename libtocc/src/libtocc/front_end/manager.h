@@ -165,7 +165,7 @@ namespace libtocc
      * @param file_id: the ID of the file to unassign tags from.
      * @param tags: A list of tags to unassign.
      */
-    void unassign_tags(const char* file_id, const TagsCollection* tags); 
+    void unassign_tags(const char* file_id, const TagsCollection* tags);
 
     /*
      * Search files according to the specified query.
@@ -182,6 +182,16 @@ namespace libtocc
      * returns it.
      */
     TagStatisticsCollection get_tags_statistics();
+
+    /*
+     * Collects statistics of a list of files.
+     * It returns list of tags assigned to these files, and how many files
+     * is associated to each tag.
+     *
+     * @param file_ids: Files to get their statistics.
+     * @param file_ids_size: the size of the array of file ids.
+     */
+    TagStatisticsCollection get_tags_statistics(const char* file_ids[], int file_ids_size);
 
     /*
      * Sets a new title to a group of files, all the files will be having the same title

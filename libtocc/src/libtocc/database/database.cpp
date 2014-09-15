@@ -964,12 +964,32 @@ namespace libtocc
 
   TagStatisticsCollection Database::get_tags_statistics()
   {
+    std::vector<std::string> empty_vector;
+    return get_tags_statistics(empty_vector);
+  }
+
+  TagStatisticsCollection Database::get_tags_statistics(const std::vector<std::string>& file_ids)
+  {
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
     // Compiling Jx9
     compile_jx9(this->db_pointer, COLLECT_TAGS_STATISTICS, &vm);
+
+    std::string variable_name("file_ids");
+    if (!file_ids.empty())
+    {
+      // Converting IDs.
+      std::vector<unsigned long> converted_ids;
+      std::vector<std::string>::const_iterator iterator = file_ids.begin();
+      for(; iterator != file_ids.end(); ++iterator)
+      {
+        converted_ids.push_back(from_base23(*iterator));
+      }
+
+      register_variable_in_vm(vm, variable_name, converted_ids);
+    }
 
     // Executing vm.
     execute_vm(vm);

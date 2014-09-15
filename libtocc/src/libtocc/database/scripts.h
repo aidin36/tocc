@@ -89,7 +89,7 @@ namespace libtocc
   // TODO: Find an empty ID instead of max one.
   const std::string CREATE_FILE_SCRIPT = \
       "/* First we gather all files ids in an array"\
-      " then we sort that array, and test if they are consecutive ."\ 
+      " then we sort that array, and test if they are consecutive ."\
       " if an id is not consecutive with the next then it's an empty id */ "\
       "$array_ids = {};"\
       "$record = db_fetch('files');"\
@@ -174,6 +174,14 @@ namespace libtocc
       "$filter_func = function($record) "\
       "{"\
       "  uplink $statistics;"\
+      "  /* If file_ids is set, only filter these files. */"\
+      "  if ($file_ids)"\
+      "  {"\
+      "    if (!in_array($record.file_id, $file_ids))"\
+      "    {"\
+      "      return FALSE;"\
+      "    }"\
+      "  }"\
       "  if (count($record.tags) == 0)"\
       "  {"\
       "    if (!array_key_exists(\"*no tag*\", $statistics))"\

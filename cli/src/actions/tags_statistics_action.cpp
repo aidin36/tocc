@@ -16,7 +16,7 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "actions/all_tags_action.h"
+#include "actions/tags_statistics_action.h"
 
 #include <iostream>
 
@@ -27,43 +27,58 @@
 namespace tocccli
 {
 
-  AllTagsAction::AllTagsAction(libtocc::Manager* manager)
+  TagsStatisticsAction::TagsStatisticsAction(libtocc::Manager* manager)
   {
     this->libtocc_manager = manager;
   }
 
-  AllTagsAction::~AllTagsAction()
+  TagsStatisticsAction::~TagsStatisticsAction()
   {
   }
 
-  std::string AllTagsAction::get_short_form()
+  std::string TagsStatisticsAction::get_short_form()
   {
-    // It don't have any short form.
-    return "";
+    return "-s";
   }
 
-  std::string AllTagsAction::get_long_form()
+  std::string TagsStatisticsAction::get_long_form()
   {
-    return "--all-tags";
+    return "--tags-statistics";
   }
 
-  std::string AllTagsAction::get_help_text()
+  std::string TagsStatisticsAction::get_help_text()
   {
-    return "--all-tags\tPrints all tags, and number of files\n"\
-           "          \teach tag assigned to.";
+    return "-s, --tags-statistics\tPrints all tags, and\n"\
+           "          \tnumber of files each tag assigned to.";
   }
 
-  void AllTagsAction::execute(std::vector<libtocc::FileInfo> files,
-                              std::vector<std::string> cmd_arguments)
+  void TagsStatisticsAction::execute(std::vector<libtocc::FileInfo> files,
+                                     std::vector<std::string> cmd_arguments)
   {
     if (!cmd_arguments.empty())
     {
       throw InvalidParametersError("--all-tags don't accept any arguments.");
     }
 
+    libtocc::TagStatisticsCollection statistics_collection;
+
     // Getting statistics.
-    libtocc::TagStatisticsCollection statistics_collection =
-        this->libtocc_manager->get_tags_statistics();
+    if (files.empty())
+    {
+      statistics_collection = this->libtocc_manager->get_tags_statistics();
+    }
+    else
+    {
+      // Converting files vector to array of IDs.
+      const char* files_array[files.size()];
+      for (int i = 0; i < files.size(); i++)
+      {
+        files_array[i] = files[i].get_id();
+      }
+
+      statistics_collection =
+          this->libtocc_manager->get_tags_statistics(files_array, files.size());
+    }
 
     // Print statistics in a pretty format.
     std::cout << "Assigned Files\tTag" << std::endl;

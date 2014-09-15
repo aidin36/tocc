@@ -29,7 +29,7 @@
 #include "selectors/query_selector.h"
 #include "actions/print_action.h"
 #include "actions/assign_action.h"
-#include "actions/all_tags_action.h"
+#include "actions/tags_statistics_action.h"
 #include "actions/remove_action.h"
 #include "actions/set_title_action.h"
 #include "actions/unassign_action.h"
@@ -61,7 +61,7 @@ namespace tocccli
      */
     this->actions.push_back(new PrintAction(this->libtocc_manager));
     this->actions.push_back(new AssignAction(this->libtocc_manager));
-    this->actions.push_back(new AllTagsAction(this->libtocc_manager));
+    this->actions.push_back(new TagsStatisticsAction(this->libtocc_manager));
     this->actions.push_back(new RemoveAction(this->libtocc_manager));
     this->actions.push_back(new SetTitleAction(this->libtocc_manager));
     this->actions.push_back(new UnassignAction(this->libtocc_manager));
@@ -202,7 +202,7 @@ namespace tocccli
       actions_iterator = actions_to_execute.begin();
     for (; actions_iterator < actions_to_execute.end(); ++actions_iterator)
     {
-      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second); 
+      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second);
     }
   }
 

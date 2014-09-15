@@ -95,6 +95,15 @@ namespace libtocc
      */
     TagStatisticsCollection get_tags_statistics();
 
+    /*
+     * Collects statistics of a list of files.
+     * It returns list of tags assigned to these files, and how many files
+     * is associated to each tag.
+     *
+     * @param file_ids: Files to get their statistics.
+     */
+    TagStatisticsCollection get_tags_statistics(const std::vector<std::string>& file_ids);
+
   private:
     /*
      * Instance of the database to work with.

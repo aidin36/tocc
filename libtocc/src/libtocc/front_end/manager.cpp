@@ -226,6 +226,14 @@ namespace libtocc
     return this->private_data->tags_engine->get_tags_statistics();
   }
 
+  TagStatisticsCollection Manager::get_tags_statistics(const char* file_ids[], int file_ids_size)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> vector_file_ids = const_char_array_to_vector(file_ids, file_ids_size);
+
+    return this->private_data->tags_engine->get_tags_statistics(vector_file_ids);
+  }
+
   void Manager::set_titles(const char* file_ids[], int file_ids_size, const char* new_title)
   {
     //Converting file_ids to vector
@@ -233,7 +241,7 @@ namespace libtocc
 
     this->private_data->files_engine->set_titles(vector_file_ids , new_title);
   }
-  
+
   void Manager::set_title(const char* file_id, const char* new_title)
   {
     std::vector<std::string> file_ids;

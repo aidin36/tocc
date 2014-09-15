@@ -63,4 +63,9 @@ namespace libtocc
     return this->database->get_tags_statistics();
   }
 
+  TagStatisticsCollection TagsEngine::get_tags_statistics(const std::vector<std::string>& file_ids)
+  {
+    return this->database->get_tags_statistics(file_ids);
+  }
+
 }

@@ -30,13 +30,13 @@ namespace tocccli
   /*
    * Query statistics of all tags and prints them.
    */
-  class AllTagsAction : public Action
+  class TagsStatisticsAction : public Action
   {
   public:
 
-    AllTagsAction(libtocc::Manager* manager);
+    TagsStatisticsAction(libtocc::Manager* manager);
 
-    ~AllTagsAction();
+    ~TagsStatisticsAction();
 
     /*
      * Returns short form of the parameter.
