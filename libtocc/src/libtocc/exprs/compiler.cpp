@@ -86,30 +86,34 @@ namespace libtocc
     }
     (*data.function_header_stream) << "; ";
 
-    // Start a loop if it wasn't start yet.
+    // Selecting which stream these codes should be put in.
+    std::ostringstream* current_stream = data.fields_stream;
     if (data.current_expr->get_type() == compiled_expr::TAG)
     {
+      current_stream = data.tags_stream;
+
       if (data.tags_stream->tellp() == 0)
       {
+        // Start a loop if it wasn't start yet.
         (*data.tags_stream) << " foreach ($record.tags as $tag) {";
       }
     }
 
     // Making a new if for this field.
-    (*data.tags_stream) << " if (" << data.current_expr->get_value();
-    (*data.tags_stream) << ") { $r" << data.result_counter;
-    (*data.tags_stream) << " = ";
+    (*current_stream) << " if (" << data.current_expr->get_value();
+    (*current_stream) << ") { $r" << data.result_counter;
+    (*current_stream) << " = ";
 
     if (data.current_expr->is_negative_expr())
     {
-      (*data.tags_stream) << "false";
+      (*current_stream) << "false";
     }
     else
     {
-      (*data.tags_stream) << "true";
+      (*current_stream) << "true";
     }
 
-    (*data.tags_stream) << "; }";
+    (*current_stream) << "; }";
   }
 
   compile_states::States group_state_handler(CompileStateData& data)
