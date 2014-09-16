@@ -26,7 +26,7 @@
 #include "libtocc/front_end/tag_statistics.h"
 
 
-TEST_CASE("Tag Statistics")
+TEST_CASE("Tag Statistics: All Tags")
 {
   libtocc::Manager manager("/tmp/tocctests/");
 
@@ -131,4 +131,110 @@ TEST_CASE("Tag Statistics")
     REQUIRE(tags_1_assigned_files == 3);
     REQUIRE(tags_2_assigned_files == 1);
   }
+}
+
+TEST_CASE("Tag Statistics: Tags of Files")
+{
+  libtocc::Manager manager("/tmp/tocctests/");
+
+  /*
+   * Creating test file.
+   */
+  const char* file_path = "/tmp/tocctests/tocc_statistics_test_file_yu78NBq.tmp";
+  std::ofstream file_to_import(file_path);
+  file_to_import << "some data...";
+  file_to_import.close();
+
+  /*
+   * Tags collections to assign to files.
+   */
+  libtocc::TagsCollection tags_1;
+  tags_1.add_tag("files_tag_statistics_test_01");
+
+  libtocc::TagsCollection tags_2;
+  tags_2.add_tag("files_tag_statistics_test_02");
+
+  /*
+   * Importing and assigning tags.
+   */
+  libtocc::FileInfo test_file_01 =
+      manager.import_file(file_path);
+
+  manager.assign_tags(test_file_01.get_id(), &tags_1);
+
+  libtocc::FileInfo test_file_02 =
+      manager.import_file(file_path);
+
+  manager.assign_tags(test_file_02.get_id(), &tags_1);
+  manager.assign_tags(test_file_02.get_id(), &tags_2);
+
+  /*
+   * Checking statistics.
+   */
+  // Checking both files.
+  const char* both_files[2] = { test_file_01.get_id(), test_file_02.get_id() };
+  libtocc::TagStatisticsCollection statistics = manager.get_tags_statistics(both_files, 2);
+
+  int tags_1_assigned_files = 0;
+  int tags_2_assigned_files = 0;
+  libtocc::TagStatisticsCollection::Iterator iterator_1(&statistics);
+  for (; !iterator_1.is_finished(); iterator_1.next())
+  {
+    if (strcmp(iterator_1.get().get_tag(), "files_tag_statistics_test_01") == 0)
+    {
+      tags_1_assigned_files = iterator_1.get().get_assigned_files();
+    }
+    if (strcmp(iterator_1.get().get_tag(), "files_tag_statistics_test_02") == 0)
+    {
+      tags_2_assigned_files = iterator_1.get().get_assigned_files();
+    }
+  }
+
+  REQUIRE(tags_1_assigned_files == 2);
+  REQUIRE(tags_2_assigned_files == 1);
+
+  // Checking first file.
+  const char* first_file[1] = { test_file_01.get_id() };
+  statistics = manager.get_tags_statistics(first_file, 1);
+
+  tags_1_assigned_files = 0;
+  tags_2_assigned_files = 0;
+  libtocc::TagStatisticsCollection::Iterator iterator_2(&statistics);
+  for (; !iterator_2.is_finished(); iterator_2.next())
+  {
+    if (strcmp(iterator_2.get().get_tag(), "files_tag_statistics_test_01") == 0)
+    {
+      tags_1_assigned_files = iterator_2.get().get_assigned_files();
+    }
+    if (strcmp(iterator_2.get().get_tag(), "files_tag_statistics_test_02") == 0)
+    {
+      tags_2_assigned_files = iterator_2.get().get_assigned_files();
+    }
+  }
+
+  REQUIRE(tags_1_assigned_files == 1);
+  REQUIRE(tags_2_assigned_files == 0);
+
+  // Checking second file.
+  const char* second_file[1] = { test_file_02.get_id() };
+  statistics = manager.get_tags_statistics(second_file, 1);
+
+  tags_1_assigned_files = 0;
+  tags_2_assigned_files = 0;
+  libtocc::TagStatisticsCollection::Iterator iterator_3(&statistics);
+  for (; !iterator_3.is_finished(); iterator_3.next())
+  {
+    if (strcmp(iterator_3.get().get_tag(), "files_tag_statistics_test_01") == 0)
+    {
+      tags_1_assigned_files = iterator_3.get().get_assigned_files();
+    }
+    if (strcmp(iterator_3.get().get_tag(), "files_tag_statistics_test_02") == 0)
+    {
+      tags_2_assigned_files = iterator_3.get().get_assigned_files();
+    }
+  }
+
+  REQUIRE(tags_1_assigned_files == 1);
+  REQUIRE(tags_2_assigned_files == 1);
+
 }
