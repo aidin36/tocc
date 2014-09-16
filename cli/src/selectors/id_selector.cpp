@@ -43,7 +43,7 @@ namespace tocccli
 
   std::string IDSelector::get_help_text()
   {
-    return "-i, --id=ID\tSelects a file by its ID.";
+    return "-d, --id=ID\tSelects a file by its ID.";
   }
 
   std::vector<libtocc::FileInfo> IDSelector::execute(std::vector<std::string> cmd_arguments)
