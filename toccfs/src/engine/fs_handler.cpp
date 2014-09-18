@@ -147,4 +147,27 @@ namespace toccfs
     return result;
   }
 
+  std::vector<std::string> FSHandler::get_related_tags(std::vector<libtocc::FileInfo> files)
+  {
+    // Converting list of FileInfo into list of IDs.
+    const char* file_ids[files.size()];
+    for (int i = 0; i < files.size(); i++)
+    {
+      file_ids[i] = files[i].get_id();
+    }
+
+    libtocc::TagStatisticsCollection statistics =
+        this->libtocc_manager->get_tags_statistics(file_ids, files.size());
+
+    // Converting collection into a vector.
+    std::vector<std::string> result;
+    result.reserve(files.size());
+    libtocc::TagStatisticsCollection::Iterator iterator(&statistics);
+    for (; !iterator.is_finished(); iterator.next())
+    {
+      result.push_back(iterator.get().get_tag());
+    }
+
+    return result;
+  }
 }

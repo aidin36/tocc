@@ -49,6 +49,11 @@ namespace toccfs
      */
     std::vector<libtocc::FileInfo> query_by_path(std::string path);
 
+    /*
+     * Returns tags that are associated with these files.
+     */
+    std::vector<std::string> get_related_tags(std::vector<libtocc::FileInfo> files);
+
   private:
     libtocc::Manager* libtocc_manager;
   };

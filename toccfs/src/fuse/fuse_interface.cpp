@@ -32,6 +32,39 @@
 namespace toccfs
 {
 
+  /*
+   * Fills the specified stat buffer with the information of a read-only
+   * directory.
+   *
+   * @param stbuf: Buffer to fill.
+   * @param files_inside: Number of files inside this directory.
+   */
+  void fill_directory_stat(struct stat* stbuf, int files_inside)
+  {
+    memset(stbuf, 0, sizeof(struct stat));
+    stbuf->st_mode = S_IFDIR | 0444;
+    stbuf->st_nlink = files_inside;
+  }
+
+  /*
+   * Fills the specified stat buffer with the stat of the specified file.
+   * It returns zero on success, and errno on fail.
+   */
+  int fill_file_stat(struct stat* stbuf, const char* physical_path)
+  {
+    // Getting stat of the file, from the OS.
+    int stat_result = lstat(physical_path,
+                            stbuf);
+    if (stat_result < 0)
+    {
+      // Returning happened error.
+      return -errno;
+    }
+
+    // Returning OK.
+    return 0;
+  }
+
   FSHandler* get_fs_handler()
   {
     return (FSHandler*)fuse_get_context()->private_data;
@@ -42,10 +75,8 @@ namespace toccfs
     if (strcmp(path, "/") == 0)
     {
       // Returning a directory with read-only permission.
-      memset(stbuf, 0, sizeof(struct stat));
-      stbuf->st_mode = S_IFDIR | 0444;
       // TODO: Return number of tags plus two.
-      stbuf->st_nlink = 2;
+      fill_directory_stat(stbuf, 2);
       return 0;
     }
 
@@ -55,9 +86,8 @@ namespace toccfs
     libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
     if (strcmp(founded_file.get_id(), "-1") != 0)
     {
-      // Getting stat of the pysical file, from the OS.
-      int stat_result = lstat(founded_file.get_physical_path(),
-                              stbuf);
+      int stat_result = fill_file_stat(stbuf, founded_file.get_physical_path());
+
       if (stat_result < 0)
       {
         // Returning happened error.
@@ -79,12 +109,10 @@ namespace toccfs
       return -ENOENT;
     }
 
-    memset(stbuf, 0, sizeof(struct stat));
     // A directory, with read-only permissions.
-    stbuf->st_mode = S_IFDIR | 0444;
-    // Number of files inside this directory.
-    // Two added because of '.' and '..'.
-    stbuf->st_nlink = 2 + founded_files.size();
+    // Number of files inside this directory is added by two,
+    // because of '.' and '..'.
+    fill_directory_stat(stbuf, founded_files.size() + 2);
 
     return 0;
   }
@@ -110,10 +138,39 @@ namespace toccfs
       return 0;
     }
 
+    // Filling buffer with founded files.
     std::vector<libtocc::FileInfo>::iterator files_iterator = founded_files.begin();
     for (; files_iterator != founded_files.end(); files_iterator++)
     {
-      filler(buffer, files_iterator->get_title(), NULL, 0);
+      // Reading stat of the file.
+      struct stat stbuf;
+      fill_file_stat(&stbuf, files_iterator->get_physical_path());
+      // Add this file to buffer.
+      filler(buffer, files_iterator->get_title(), &stbuf, 0);
+    }
+
+    // Finding tags that are related to these files.
+    // We assume that these are directories inside the current directory.
+    std::vector<std::string> tags = fs_handler->get_related_tags(founded_files);
+
+    struct stat stbuf;
+
+    std::vector<std::string>::iterator tags_iterator = tags.begin();
+    for (; tags_iterator != tags.end(); tags_iterator++)
+    {
+//      if (tags_iterator->empty())
+//      {
+//        continue;
+//      }
+
+      // Finding files that should be inside this directory.
+      std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(path);
+      // Filling stat buffer as a read-only directory.
+      // Two added to number of files, because of `.' and `..'.
+      fill_directory_stat(&stbuf, founded_files.size() + 2);
+
+      // Adding founded tags to buffer.
+      filler(buffer, tags_iterator->c_str(), &stbuf, 0);
     }
 
     // Returning OK.
