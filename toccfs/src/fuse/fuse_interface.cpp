@@ -24,9 +24,9 @@
 #include <vector>
 #include <cstring>
 #include <string>
-
 #include "libtocc/front_end/file_info.h"
 #include "engine/fs_handler.h"
+#include "utils/string_utils.h"
 
 
 namespace toccfs
@@ -155,13 +155,26 @@ namespace toccfs
 
     struct stat stbuf;
 
+    // We ignore those tags that are already in the path.
+    std::vector<std::string> path_elements = split_string(path, '/');
+
     std::vector<std::string>::iterator tags_iterator = tags.begin();
     for (; tags_iterator != tags.end(); tags_iterator++)
     {
-//      if (tags_iterator->empty())
-//      {
-//        continue;
-//      }
+      // Ignoring this tag if it's already appeared in the path.
+      bool ignore_this_tag = false;
+      std::vector<std::string>::iterator path_iterator = path_elements.begin();
+      for (; path_iterator != path_elements.end(); path_iterator++)
+      {
+        if ((*tags_iterator).compare(*path_iterator) == 0)
+        {
+          ignore_this_tag = true;
+        }
+      }
+      if (ignore_this_tag)
+      {
+        continue;
+      }
 
       // Finding files that should be inside this directory.
       std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(path);
