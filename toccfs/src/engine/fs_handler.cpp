@@ -36,11 +36,18 @@ namespace toccfs
   FSHandler::FSHandler(std::string base_path)
   {
     this->libtocc_manager = new libtocc::Manager(base_path.c_str());
+
+    this->base_path = base_path;
   }
 
   FSHandler::~FSHandler()
   {
     delete this->libtocc_manager;
+  }
+
+  std::string FSHandler::get_base_path()
+  {
+    return this->base_path;
   }
 
   libtocc::FileInfo FSHandler::get_by_path(std::string path)

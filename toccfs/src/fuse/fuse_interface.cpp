@@ -235,8 +235,10 @@ namespace toccfs
 
   int toccfs_fuse_statfs(const char* path, struct statvfs* stbuf)
   {
-    // Getting true stats of file system.
-    int result = statvfs(path, stbuf);
+    // Asking OS the stats of the base path.
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    int result = statvfs(fs_handler->get_base_path().c_str(), stbuf);
 
     if (result < 0)
     {

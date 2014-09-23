@@ -36,6 +36,11 @@ namespace toccfs
     ~FSHandler();
 
     /*
+     * Returns the base path.
+     */
+    std::string get_base_path();
+
+    /*
      * Gets a file by a path.
      * It assume the last element in the path is the file title, and
      * other elements are tags.
@@ -56,6 +61,8 @@ namespace toccfs
 
   private:
     libtocc::Manager* libtocc_manager;
+
+    std::string base_path;
   };
 }
 
