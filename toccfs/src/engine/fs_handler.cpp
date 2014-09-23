@@ -168,7 +168,24 @@ namespace toccfs
 
     // Converting collection into a vector.
     std::vector<std::string> result;
-    result.reserve(files.size());
+    result.reserve(statistics.size());
+    libtocc::TagStatisticsCollection::Iterator iterator(&statistics);
+    for (; !iterator.is_finished(); iterator.next())
+    {
+      result.push_back(iterator.get().get_tag());
+    }
+
+    return result;
+  }
+
+  std::vector<std::string> FSHandler::get_all_tags()
+  {
+    libtocc::TagStatisticsCollection statistics =
+        this->libtocc_manager->get_tags_statistics();
+
+    // Converting collection into a vector.
+    std::vector<std::string> result;
+    result.reserve(statistics.size());
     libtocc::TagStatisticsCollection::Iterator iterator(&statistics);
     for (; !iterator.is_finished(); iterator.next())
     {

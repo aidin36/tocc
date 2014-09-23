@@ -59,6 +59,11 @@ namespace toccfs
      */
     std::vector<std::string> get_related_tags(std::vector<libtocc::FileInfo> files);
 
+    /*
+     * Returns all of the tags.
+     */
+    std::vector<std::string> get_all_tags();
+
   private:
     libtocc::Manager* libtocc_manager;
 

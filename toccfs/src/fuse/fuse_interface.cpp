@@ -72,15 +72,17 @@ namespace toccfs
 
   int toccfs_fuse_getattr(const char* path, struct stat* stbuf)
   {
+    struct FSHandler* fs_handler = get_fs_handler();
+
     if (strcmp(path, "/") == 0)
     {
       // Returning a directory with read-only permission.
-      // TODO: Return number of tags plus two.
-      fill_directory_stat(stbuf, 2);
+      // The directory contains all the tags defined.
+      std::vector<std::string> all_tags = fs_handler->get_all_tags();
+      // Plus two added because of `.' and `..'.
+      fill_directory_stat(stbuf, all_tags.size() + 2);
       return 0;
     }
-
-    struct FSHandler* fs_handler = get_fs_handler();
 
     // Checking if the path matches a single file.
     libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
@@ -120,15 +122,31 @@ namespace toccfs
   int toccfs_fuse_readdir(const char* path, void* buffer, fuse_fill_dir_t filler,
                           off_t offset, struct fuse_file_info* fileinfo)
   {
+    struct FSHandler* fs_handler = get_fs_handler();
 
     if (strcmp(path, "/") == 0)
     {
-      // Pretending there's no file.
-      // TODO: Return all tags.
+      // Returning all the tags defined in the system.
+      std::vector<std::string> all_tags = fs_handler->get_all_tags();
+
+      struct stat stbuf;
+
+      std::vector<std::string>::iterator tags_iterator = all_tags.begin();
+      for (; tags_iterator != all_tags.end(); tags_iterator++)
+      {
+        // Finding files that should be inside this directory.
+        std::string dir_path = "/" + *tags_iterator;
+        std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(dir_path.c_str());
+        // Filling stat buffer as a read-only directory.
+        // Two added to number of files, because of `.' and `..'.
+        fill_directory_stat(&stbuf, founded_files.size() + 2);
+
+        // Adding founded tags to buffer.
+        filler(buffer, tags_iterator->c_str(), &stbuf, 0);
+      }
+
       return 0;
     }
-
-    struct FSHandler* fs_handler = get_fs_handler();
 
     std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(path);
 
@@ -177,7 +195,10 @@ namespace toccfs
       }
 
       // Finding files that should be inside this directory.
-      std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(path);
+      std::string dir_path = path;
+      dir_path += "/";
+      dir_path += *tags_iterator;
+      std::vector<libtocc::FileInfo> founded_files = fs_handler->query_by_path(dir_path.c_str());
       // Filling stat buffer as a read-only directory.
       // Two added to number of files, because of `.' and `..'.
       fill_directory_stat(&stbuf, founded_files.size() + 2);
