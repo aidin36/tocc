@@ -41,13 +41,24 @@ namespace libtocc
     ~Manager();
 
     /*
+     * Initializes the specified base path.
+     * This method should be called once in a new base path. Or else, you
+     * can't work with that path.
+     * Note that this method should be called once for every path.
+     *
+     * @throw DatabaseInitializationError: If path was already initialized,
+     *   or there was something wrong with the path.
+     */
+    void initialize();
+
+    /*
      * Gets information of a file.
      *
      * @param file_id: ID of the file to get.
      *
      * @return: Infomration of the file.
      *
-     * @throw: DatabaseScriptLogicalError if file not found.
+     * @throw DatabaseScriptLogicalError: if file not found.
      */
     FileInfo get_file_info(const char* file_id);
 

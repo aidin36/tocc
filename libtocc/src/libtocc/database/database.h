@@ -52,6 +52,13 @@ namespace libtocc
     ~Database();
 
     /*
+     * Initializes the database file.
+     * It should be called once for every new database file.
+     * It throws exception if the database file is already initialized.
+     */
+    void initialize();
+
+    /*
      * Creates a new file in database.
      *
      * @param title: title of the file.
@@ -156,9 +163,16 @@ namespace libtocc
   private:
     /*
      * Database handler.
+     * Note: Don't use this directly. Instead, use `get_db_pointer' method.
      */
     unqlite* db_pointer;
 
+    std::string database_file;
+
+    /*
+     * Returns handler of opened UnQlite DB.
+     */
+    unqlite* get_db_pointer();
   };
 
 };

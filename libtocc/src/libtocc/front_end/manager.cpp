@@ -93,6 +93,11 @@ namespace libtocc
     this->private_data = NULL;
   }
 
+  void Manager::initialize()
+  {
+    this->private_data->database->initialize();
+  }
+
   FileInfo Manager::get_file_info(const char* file_id)
   {
     IntFileInfo info = this->private_data->database->get(file_id);
