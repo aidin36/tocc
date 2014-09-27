@@ -860,7 +860,6 @@ namespace libtocc
     register_variable_in_vm(vm, variable_traditional_path, traditional_path);
 
     execute_vm(vm);
-
     return extract_file_from_vm(vm, "result");
   }
 

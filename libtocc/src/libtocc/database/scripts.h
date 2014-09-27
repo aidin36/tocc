@@ -89,16 +89,23 @@ namespace libtocc
   // TODO: Find an empty ID instead of max one.
   const std::string CREATE_FILE_SCRIPT = \
       "/* First we gather all files ids in an array"\
-      " then we sort that array, and test if they are consecutive ."\
+      " then we sort that array, and test if they are consecutive."\
       " if an id is not consecutive with the next then it's an empty id */ "\
       "$array_ids = {};"\
       "$record = db_fetch('files');"\
       "while($record != NULL)"\
       "{"\
+      "  if ($traditional_path != \"\" && "\
+      "    $record.traditional_path == $traditional_path)"\
+      "  {"\
+      "    $error = \"Error: file with identical traditional path found.\"; "\
+      "    exit; "\
+      "  }"\
       "  array_push($array_ids, $record.file_id);"\
       "  $record = db_fetch('files');"\
       "}"\
-      "/* make sure all ids are sorted */"\
+
+      /* make sure all ids are sorted */
       "sort($array_ids);"\
       "$current_record_id = current($array_ids);"\
       "$previous_record_id = 0;"\
