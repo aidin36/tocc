@@ -45,15 +45,6 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     /*
-     * Returns true if it's a negative expression.
-     *
-     * Negative expression means that this expression
-     * have negative effect: e.g. if it's a condition and is correct, the
-     * final result should be false.
-     */
-    virtual bool is_negative_expr();
-
-    /*
      * Compiles the function.
      *
      * @param base_arg: Second argument of the function.

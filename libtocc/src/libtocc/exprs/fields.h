@@ -22,7 +22,6 @@
 #include <string>
 
 #include "libtocc/exprs/expr.h"
-#include "libtocc/exprs/operations.h"
 #include "libtocc/exprs/functions.h"
 #include "libtocc/exprs/compiled_expr_types.h"
 
@@ -50,12 +49,6 @@ namespace libtocc
      * expression.
      */
     FieldExpr(FunctionExpr& expression);
-
-    /*
-     * Represents a field that matches with the specified
-     * expression.
-     */
-    FieldExpr(OperationExpr& expression);
 
     /*
      * Copy constructor.
@@ -86,7 +79,6 @@ namespace libtocc
      * filled:
      *   0: value is filled.
      *   1: function is filled.
-     *   2: operation is filled.
      * This is here, because I can't know if function or operation
      * is filled.
      */
@@ -94,7 +86,6 @@ namespace libtocc
 
     std::string value;
     FunctionExpr* function;
-    OperationExpr* operation;
 
     /*
      * (Should be override by the subclass.)
@@ -127,12 +118,6 @@ namespace libtocc
      * expression.
      */
     Tag(FunctionExpr& expression);
-
-    /*
-     * Represents a Tag that matches with the specified
-     * expression.
-     */
-    Tag(OperationExpr& expression);
 
     /*
      * Copy constructor.
@@ -176,12 +161,6 @@ namespace libtocc
      * expression.
      */
     Title(FunctionExpr& expression);
-
-    /*
-     * Represents a Title that matches with the specified
-     * expression.
-     */
-    Title(OperationExpr& expression);
 
     /*
      * Copy constructor.

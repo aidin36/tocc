@@ -194,13 +194,13 @@ TEST_CASE("query_files_tests: Not Equal tests")
   manager.assign_tags(original_file_2.get_id(), "random aw3r445");
   manager.assign_tags(original_file_2.get_id(), "random cfE394a");
 
-  // Query files. First, checking NotEqual on a Title.
+  // Query files. First, checking Not on a Title.
   libtocc::Tag tag_expr("random aw3r445");
-  libtocc::NotEqual not_equal_expr("Random Title fPe98ncloEqs");
-  libtocc::Title title_expr(not_equal_expr);
+  libtocc::Title title_expr("Random Title fPe98ncloEqs");
+  libtocc::Not not_equal_expr(title_expr);
 
   libtocc::And main_and(tag_expr);
-  main_and.add(title_expr);
+  main_and.add(not_equal_expr);
 
   libtocc::Query query(main_and);
 
@@ -213,12 +213,12 @@ TEST_CASE("query_files_tests: Not Equal tests")
   const libtocc::FileInfo* founded_file = iterator.get();
   REQUIRE(strcmp(founded_file->get_id(), original_file_1.get_id()) == 0);
 
-  // Query files. Second, using NotEqual on a Tag.
-  libtocc::NotEqual not_equal_tag_expr("random cfE394a");
-  libtocc::Tag second_tag_expr(not_equal_tag_expr);
+  // Query files. Second, using Not on a Tag.
+  libtocc::Tag second_tag_expr("random cfE394a");
+  libtocc::Not not_equal_tag_expr(second_tag_expr);
 
   libtocc::And second_and(tag_expr);
-  second_and.add(second_tag_expr);
+  second_and.add(not_equal_tag_expr);
 
   libtocc::Query second_query(main_and);
 

@@ -23,6 +23,8 @@
 
 #include "libtocc/exprs/expr.h"
 #include "libtocc/exprs/fields.h"
+#include "libtocc/exprs/operations.h"
+
 
 namespace libtocc
 {
@@ -56,6 +58,14 @@ namespace libtocc
     ConnectiveExpr(FieldExpr& expression);
 
     /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: First internal element of this
+     *   connective expression.
+     */
+    ConnectiveExpr(OperationExpr& expression);
+
+    /*
      * Copy constructor.
      */
     ConnectiveExpr(const ConnectiveExpr& source);
@@ -76,6 +86,11 @@ namespace libtocc
      * Adds the specified expression.
      */
     void add(FieldExpr& expression);
+
+    /*
+     * Adds the specified expression.
+     */
+    void add(OperationExpr& expression);
 
     /*
      * Compiled the expression and the ones inside it.
@@ -127,6 +142,14 @@ namespace libtocc
     And(FieldExpr& expression);
 
     /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: First internal element of this
+     *   connective expression.
+     */
+    And(OperationExpr& expression);
+
+    /*
      * Copy constructor.
      */
     And(const And& source);
@@ -168,6 +191,14 @@ namespace libtocc
      *   connective expression.
      */
     Or(FieldExpr& expression);
+
+    /*
+     * Creates new instance of the expr.
+     *
+     * @param expression: First internal element of this
+     *   connective expression.
+     */
+    Or(OperationExpr& expression);
 
     /*
      * Copy constructor.

@@ -21,33 +21,38 @@
 
 #include <string>
 
+#include "libtocc/exprs/compiled_expr.h"
+
 
 namespace libtocc
 {
   class OperationExpr::ProtectedData
   {
   public:
-    std::string operand;
+    FieldExpr* operand;
   };
 
-  OperationExpr::OperationExpr(const char* operand)
+  OperationExpr::OperationExpr(FieldExpr& operand)
   {
     this->protected_data = new ProtectedData();
 
-    this->protected_data->operand = operand;
+    this->protected_data->operand = (FieldExpr*)operand.clone();
   }
 
   OperationExpr::OperationExpr(const OperationExpr& source)
   {
     this->protected_data = new ProtectedData();
 
-    this->protected_data->operand = source.protected_data->operand;
+    this->protected_data->operand =
+        (FieldExpr*)source.protected_data->operand->clone();
   }
 
   OperationExpr::~OperationExpr()
   {
     if (this->protected_data != NULL)
     {
+      delete this->protected_data->operand;
+
       delete this->protected_data;
       this->protected_data = NULL;
     }
@@ -58,14 +63,9 @@ namespace libtocc
     return expr_type::OPERATION;
   }
 
-  bool OperationExpr::is_negative_expr()
+  CompiledExpr OperationExpr::compile()
   {
-    return false;
-  }
-
-  const char* OperationExpr::compile()
-  {
-    return "Not Implemented";
+    return this->protected_data->operand->compile();
   }
 
   Expr* OperationExpr::clone()
@@ -73,45 +73,25 @@ namespace libtocc
     return new OperationExpr(*this);
   }
 
-  Equal::Equal(const char* operand)
+  Not::Not(FieldExpr& operand)
     : OperationExpr(operand)
   {
   }
 
-  Equal::Equal(const Equal& source)
+  Not::Not(const Not& source)
     : OperationExpr(source)
   {
   }
 
-  const char* Equal::compile()
+  CompiledExpr Not::compile()
   {
-    std::string result(" == \"" + this->protected_data->operand + "\"");
-    return result.c_str();
+    CompiledExpr result = this->protected_data->operand->compile();
+    result.set_is_negative_expr(true);
+    return result;
   }
 
-  Expr* Equal::clone()
+  Expr* Not::clone()
   {
-    return new Equal(*this);
-  }
-
-
-  NotEqual::NotEqual(const char* operand)
-    : Equal(operand)
-  {
-  }
-
-  NotEqual::NotEqual(const NotEqual& source)
-    : Equal(source)
-  {
-  }
-
-  bool NotEqual::is_negative_expr()
-  {
-    return true;
-  }
-
-  Expr* NotEqual::clone()
-  {
-    return new NotEqual(*this);
+    return new Not(*this);
   }
 };

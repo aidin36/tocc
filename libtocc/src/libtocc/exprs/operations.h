@@ -21,10 +21,15 @@
 #define LIBTOCC_OPERAND_H_INCLUDED
 
 #include "libtocc/exprs/expr.h"
+#include "libtocc/exprs/fields.h"
 
 
 namespace libtocc
 {
+
+  // Forward declaration: This shouldn't be exposed in the public headers.
+  class CompiledExpr;
+
 
   /*
    * Base class of all operand expressions.
@@ -34,9 +39,9 @@ namespace libtocc
   public:
     /*
      * @param operand: Operand of this operation.
-     *   For example: NotEqual("bad-photo")
+     *   For example: Not(Tag("bad-photo"))
      */
-    OperationExpr(const char* operand);
+    OperationExpr(FieldExpr& operand);
 
     /*
      * Copy constructor.
@@ -51,18 +56,9 @@ namespace libtocc
     virtual expr_type::ExprType get_type();
 
     /*
-     * Returns true if it's a negative expression.
-     *
-     * Negative expression means that this expression
-     * have negative effect: e.g. if it's a condition and is correct, the
-     * final result should be false.
+     * Compiles the expression.
      */
-    virtual bool is_negative_expr();
-
-    /*
-     * Compiles the expression into a string.
-     */
-    virtual const char* compile();
+    virtual CompiledExpr compile();
 
     /*
      * Creates a copy of the expression.
@@ -74,32 +70,18 @@ namespace libtocc
     ProtectedData* protected_data;
   };
 
-  class Equal : public OperationExpr
+  class Not : public OperationExpr
   {
   public:
-    Equal(const char* operand);
 
-    Equal(const Equal& source);
+    Not(FieldExpr& operand);
 
-    /*
-     * Compiles the expression into a string.
-     */
-    virtual const char* compile();
+    Not(const Not& source);
 
     /*
-     * Creates a copy of the expression.
+     * Compiles the expression.
      */
-    virtual Expr* clone();
-  };
-
-  class NotEqual : public Equal
-  {
-  public:
-    NotEqual(const char* operand);
-
-    NotEqual(const NotEqual& source);
-
-    virtual bool is_negative_expr();
+    virtual CompiledExpr compile();
 
     /*
      * Creates a copy of the expression.

@@ -74,6 +74,11 @@ namespace libtocc
      */
     bool is_negative_expr();
 
+    /*
+     * Sets the `is_negative_expr' flag for this expression.
+     */
+    void set_is_negative_expr(bool value);
+
   private:
     compiled_expr::ExprType type;
     std::string value;

@@ -48,11 +48,6 @@ namespace libtocc
     return expr_type::FUNCTION;
   }
 
-  bool FunctionExpr::is_negative_expr()
-  {
-    return false;
-  }
-
   const char* FunctionExpr::compile(const char* second_arg)
   {
     std::string result(get_func_name());

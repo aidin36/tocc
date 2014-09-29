@@ -48,4 +48,9 @@ namespace libtocc
   {
     return this->negative_expr;
   }
+
+  void CompiledExpr::set_is_negative_expr(bool value)
+  {
+    this->negative_expr = value;
+  }
 };

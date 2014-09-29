@@ -32,6 +32,11 @@ namespace libtocc
     this->expressions.push_back(expression.clone());
   }
 
+  ConnectiveExpr::ConnectiveExpr(OperationExpr& expression)
+  {
+    this->expressions.push_back(expression.clone());
+  }
+
   ConnectiveExpr::ConnectiveExpr(const ConnectiveExpr& source)
   {
     // Looping through the source's expression, and copying each element
@@ -68,6 +73,11 @@ namespace libtocc
     this->expressions.push_back(expression.clone());
   }
 
+  void ConnectiveExpr::add(OperationExpr& expression)
+  {
+    this->expressions.push_back(expression.clone());
+  }
+
   std::list<CompiledExpr> ConnectiveExpr::compile()
   {
     std::list<CompiledExpr> result;
@@ -83,6 +93,11 @@ namespace libtocc
       {
 	// Simply, compile and append to result.
 	result.push_back(((FieldExpr*)*iterator)->compile());
+      }
+      if ((*iterator)->get_type() == expr_type::OPERATION)
+      {
+        // Simply, compile and append to result.
+        result.push_back(((OperationExpr*)*iterator)->compile());
       }
       else if ((*iterator)->get_type() == expr_type::CONNECTIVE)
       {
@@ -116,6 +131,11 @@ namespace libtocc
   {
   }
 
+  And::And(OperationExpr& expression)
+    : ConnectiveExpr(expression)
+  {
+  }
+
   And::And(const And& source)
     : ConnectiveExpr(source)
   {
@@ -137,6 +157,11 @@ namespace libtocc
   }
 
   Or::Or(FieldExpr& expression)
+    : ConnectiveExpr(expression)
+  {
+  }
+
+  Or::Or(OperationExpr& expression)
     : ConnectiveExpr(expression)
   {
   }

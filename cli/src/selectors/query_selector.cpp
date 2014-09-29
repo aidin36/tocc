@@ -92,8 +92,9 @@ namespace tocccli
     }
     if (opt == "!=" || opt == "~")
     {
-      libtocc::NotEqual not_equal_expr(value.c_str());
-      return new libtocc::Tag(not_equal_expr);
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      libtocc::Tag tag_expr(wild_card_expr);
+      return new libtocc::Not(tag_expr);
     }
 
     // Nothing matched.
@@ -118,8 +119,9 @@ namespace tocccli
     }
     if (opt == "!=" || opt == "~")
     {
-      libtocc::NotEqual not_equal_expr(value.c_str());
-      return new libtocc::Title(not_equal_expr);
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      libtocc::Title title_expr(wild_card_expr);
+      return new libtocc::Not(title_expr);
     }
 
     // Nothing matched.
