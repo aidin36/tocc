@@ -17,44 +17,73 @@
  */
 
 #include "libtocc/exprs/connectives.h"
+
+#include <list>
+
 #include "libtocc/exprs/compiled_expr.h"
+
 
 namespace libtocc
 {
 
+  class ConnectiveExpr::ProtectedData
+  {
+  public:
+    /*
+     * Keeps list of expressions inside this connective expression.
+     */
+    std::list<Expr*> expressions;
+
+  };
+
   ConnectiveExpr::ConnectiveExpr(ConnectiveExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data = new ProtectedData();
+
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
   ConnectiveExpr::ConnectiveExpr(FieldExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data = new ProtectedData();
+
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
   ConnectiveExpr::ConnectiveExpr(OperationExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data = new ProtectedData();
+
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
   ConnectiveExpr::ConnectiveExpr(const ConnectiveExpr& source)
   {
+    this->protected_data = new ProtectedData();
+
     // Looping through the source's expression, and copying each element
     // to our private list.
-    std::list<Expr*>::const_iterator iterator = source.expressions.begin();
-    for (; iterator != source.expressions.end(); iterator++)
+    std::list<Expr*>::const_iterator iterator =
+        source.protected_data->expressions.begin();
+    for (; iterator != source.protected_data->expressions.end(); iterator++)
     {
-      this->expressions.push_back((*iterator)->clone());
+      this->protected_data->expressions.push_back((*iterator)->clone());
     }
   }
 
   ConnectiveExpr::~ConnectiveExpr()
   {
-    // Iterating over internal expressions, deleting each one.
-    while (!this->expressions.empty())
+    if (this->protected_data != NULL)
     {
-      delete this->expressions.back();
-      this->expressions.pop_back();
+      // Iterating over internal expressions, deleting each one.
+      while (!this->protected_data->expressions.empty())
+      {
+        delete this->protected_data->expressions.back();
+        this->protected_data->expressions.pop_back();
+      }
+
+      delete this->protected_data;
+      this->protected_data = NULL;
     }
   }
 
@@ -65,20 +94,20 @@ namespace libtocc
 
   void ConnectiveExpr::add(ConnectiveExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
   void ConnectiveExpr::add(FieldExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
   void ConnectiveExpr::add(OperationExpr& expression)
   {
-    this->expressions.push_back(expression.clone());
+    this->protected_data->expressions.push_back(expression.clone());
   }
 
-  std::list<CompiledExpr> ConnectiveExpr::compile()
+  CompiledExprList ConnectiveExpr::compile()
   {
     std::list<CompiledExpr> result;
 
@@ -86,8 +115,8 @@ namespace libtocc
     result.push_back(CompiledExpr(compiled_expr::CONNECTIVE, get_connective_string()));
 
     // Iterating over internal expressions, compiling and adding them to the result.
-    std::list<Expr*>::iterator iterator = this->expressions.begin();
-    for(; iterator != this->expressions.end(); iterator++)
+    std::list<Expr*>::iterator iterator = this->protected_data->expressions.begin();
+    for(; iterator != this->protected_data->expressions.end(); iterator++)
     {
       if ((*iterator)->get_type() == expr_type::FIELD)
       {
@@ -102,7 +131,8 @@ namespace libtocc
       else if ((*iterator)->get_type() == expr_type::CONNECTIVE)
       {
 	// Compiling the internal expr.
-	std::list<CompiledExpr> compile_result = ((ConnectiveExpr*)*iterator)->compile();
+	std::list<CompiledExpr> compile_result =
+	    ((ConnectiveExpr*)*iterator)->compile().list;
 
 	// Appending two lists together.
 	// `splice' moved elements of `compile_result' to `result'. It's O(1).
@@ -113,10 +143,13 @@ namespace libtocc
     // Marking the end of the `and' group.
     result.push_back(CompiledExpr(compiled_expr::END_CONNECTIVE_GROUP, ""));
 
-    return result;
+    // Wrapping the result.
+    CompiledExprList expr_list;
+    expr_list.list = result;
+    return expr_list;
   }
 
-  std::string And::get_connective_string()
+  const char* And::get_connective_string()
   {
     return "&&";
   }
@@ -146,7 +179,7 @@ namespace libtocc
     return new And(*this);
   }
 
-  std::string Or::get_connective_string()
+  const char* Or::get_connective_string()
   {
     return "||";
   }

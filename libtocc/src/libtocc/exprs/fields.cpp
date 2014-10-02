@@ -23,39 +23,69 @@
 namespace libtocc
 {
 
+  class FieldExpr::ProtectedData
+  {
+  public:
+    /*
+     * this field determines which of the private fields are
+     * filled:
+     *   0: value is filled.
+     *   1: function is filled.
+     * This is here, because I can't know if function or operation
+     * is filled.
+     */
+    int internal_type;
+
+    std::string value;
+    FunctionExpr* function;
+  };
+
   FieldExpr::FieldExpr(const char* value)
   {
-    this->value = value;
-    this->internal_type = 0;
-    this->function = NULL;
+    this->protected_data = new ProtectedData;
+
+    this->protected_data->value = value;
+    this->protected_data->internal_type = 0;
+    this->protected_data->function = NULL;
   }
 
   FieldExpr::FieldExpr(FunctionExpr& expression)
   {
-    this->function = (FunctionExpr*)expression.clone();
-    this->internal_type = 1;
+    this->protected_data = new ProtectedData;
+
+    this->protected_data->function = (FunctionExpr*)expression.clone();
+    this->protected_data->internal_type = 1;
   }
 
   FieldExpr::FieldExpr(const FieldExpr& source)
   {
-    this->value = source.value;
-    this->internal_type = source.internal_type;
-    if (source.function != NULL)
+    this->protected_data = new ProtectedData;
+
+    this->protected_data->value = source.protected_data->value;
+    this->protected_data->internal_type = source.protected_data->internal_type;
+    if (source.protected_data->function != NULL)
     {
-      this->function = (FunctionExpr*)source.function->clone();
+      this->protected_data->function =
+          (FunctionExpr*)source.protected_data->function->clone();
     }
     else
     {
-      this->function = NULL;
+      this->protected_data->function = NULL;
     }
   }
 
   FieldExpr::~FieldExpr()
   {
-    if (this->function != NULL)
+    if (this->protected_data != NULL)
     {
-      delete this->function;
-      this->function = NULL;
+      if (this->protected_data->function != NULL)
+      {
+        delete this->protected_data->function;
+        this->protected_data->function = NULL;
+      }
+
+      delete this->protected_data;
+      this->protected_data = NULL;
     }
   }
 
@@ -66,15 +96,16 @@ namespace libtocc
 
   CompiledExpr FieldExpr::compile()
   {
-    if (this->internal_type == 0)
+    if (this->protected_data->internal_type == 0)
     {
-      std::string compiled_value(get_field_name() + " == '" + this->value + "'");
+      std::string compiled_value(
+          get_field_name() + " == '" + this->protected_data->value + "'");
       return CompiledExpr(get_compiled_expr_type(), compiled_value.c_str());
     }
-    else if (this->internal_type == 1)
+    else if (this->protected_data->internal_type == 1)
     {
       return CompiledExpr(get_compiled_expr_type(),
-                          this->function->compile(get_field_name().c_str()));
+                          this->protected_data->function->compile(get_field_name().c_str()));
     }
   }
 

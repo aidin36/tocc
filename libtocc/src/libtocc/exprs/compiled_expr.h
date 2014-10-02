@@ -20,6 +20,7 @@
 #define LIBTOCC_COMPILED_EXPR_INCLUDED
 
 #include <string>
+#include <list>
 
 #include "libtocc/exprs/compiled_expr_types.h"
 
@@ -83,6 +84,16 @@ namespace libtocc
     compiled_expr::ExprType type;
     std::string value;
     bool negative_expr;
+  };
+
+  /*
+   * Defines a list of compiled exprs.
+   * It's simply a wrapper over `std::list', in order to hide it from API.
+   */
+  class CompiledExprList
+  {
+  public:
+    std::list<CompiledExpr> list;
   };
 
 };

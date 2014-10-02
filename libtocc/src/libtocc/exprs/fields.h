@@ -74,18 +74,8 @@ namespace libtocc
     virtual Expr* clone();
 
   protected:
-    /*
-     * this field determines which of the private fields are
-     * filled:
-     *   0: value is filled.
-     *   1: function is filled.
-     * This is here, because I can't know if function or operation
-     * is filled.
-     */
-    int internal_type;
-
-    std::string value;
-    FunctionExpr* function;
+    class ProtectedData;
+    ProtectedData* protected_data;
 
     /*
      * (Should be override by the subclass.)

@@ -19,8 +19,6 @@
 #ifndef LIBTOCC_CONNECTIVE_H_INCLUDED
 #define LIBTOCC_CONNECTIVE_H_INCLUDED
 
-#include <list>
-
 #include "libtocc/exprs/expr.h"
 #include "libtocc/exprs/fields.h"
 #include "libtocc/exprs/operations.h"
@@ -30,16 +28,13 @@ namespace libtocc
 {
 
   // Forward declaration: This shouldn't be exposed in the public headers.
-  class CompiledExpr;
+  class CompiledExprList;
 
   /*
    * Base class of all connective expressions.
    */
   class ConnectiveExpr : public Expr
   {
-    // To allow this class to delete a pointer to ConnectiveExpr.
-    friend class Query;
-
   public:
     /*
      * Creates new instance of the expr.
@@ -93,10 +88,10 @@ namespace libtocc
     void add(OperationExpr& expression);
 
     /*
-     * Compiled the expression and the ones inside it.
+     * Compiles the expression and the ones inside it.
      * And returns list of compiled expressions.
      */
-    virtual std::list<CompiledExpr> compile();
+    virtual CompiledExprList compile();
 
     /*
      * Clones this instance.
@@ -104,16 +99,13 @@ namespace libtocc
     virtual Expr* clone() = 0;
 
   protected:
+    class ProtectedData;
+    ProtectedData* protected_data;
 
     /*
      * Returns the equivalent string of this connective expression.
      */
-    virtual std::string get_connective_string() = 0;
-
-    /*
-     * Keeps list of expressions inside this connective expression.
-     */
-    std::list<Expr*> expressions;
+    virtual const char* get_connective_string() = 0;
   };
 
   /*
@@ -163,7 +155,7 @@ namespace libtocc
     /*
      * Returns the equivalent string of this connective expression.
      */
-    virtual std::string get_connective_string();
+    virtual const char* get_connective_string();
   };
 
 
@@ -214,7 +206,7 @@ namespace libtocc
     /*
      * Returns the equivalent string of this connective expression.
      */
-    virtual std::string get_connective_string();
+    virtual const char* get_connective_string();
 
   };
 

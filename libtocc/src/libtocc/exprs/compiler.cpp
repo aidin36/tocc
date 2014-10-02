@@ -341,7 +341,8 @@ namespace libtocc
     compile_states::States current_state = compile_states::GROUP_AFTER_GROUP;
 
     // Compiling expressions to CompiledExprs.
-    std::list<CompiledExpr> compiled_list = expression_to_compile->compile();
+    std::list<CompiledExpr> compiled_list =
+        expression_to_compile->compile().list;
 
     // Iterating over CompiledExprs to create a Jx9 script.
     std::list<CompiledExpr>::iterator iterator = compiled_list.begin();
