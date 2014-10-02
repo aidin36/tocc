@@ -16,11 +16,13 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/utilities/file_info_converter.h"
+
 #include <string>
 #include <vector>
 
-#include "libtocc/utilities/file_info_converter.h"
 #include "libtocc/database/base23.h"
+
 
 namespace libtocc
 {

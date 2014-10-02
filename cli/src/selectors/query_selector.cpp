@@ -16,6 +16,8 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "selectors/query_selector.h"
+
 #include <utility> // std::pair
 #include <sstream>
 #include <vector>
@@ -25,7 +27,6 @@
 #include "libtocc/front_end/file_info.h"
 
 #include "common/exceptions/cmd_usage_exceptions.h"
-#include "selectors/query_selector.h"
 
 
 namespace tocccli

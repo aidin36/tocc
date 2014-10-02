@@ -16,12 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/front_end/file_info.h"
+
 #include <string>
 #include <cstring>
 #include <iostream> // for std::endl
 #include <vector>
-
-#include "libtocc/front_end/file_info.h"
 
 
 namespace libtocc

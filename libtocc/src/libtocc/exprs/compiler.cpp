@@ -16,12 +16,14 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/exprs/compiler.h"
+
 #include <list>
 #include <sstream>
 
 #include "libtocc/common/expr_exceptions.h"
-#include "libtocc/exprs/compiler.h"
 #include "libtocc/exprs/compiled_expr.h"
+
 
 namespace libtocc
 {

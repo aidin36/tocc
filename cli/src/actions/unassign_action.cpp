@@ -16,8 +16,8 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "common/exceptions/cmd_usage_exceptions.h"
 #include "actions/unassign_action.h"
+#include "common/exceptions/cmd_usage_exceptions.h"
 
 
 namespace tocccli

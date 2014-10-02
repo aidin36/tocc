@@ -16,10 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/engine/files_engine.h"
+
 #include <string>
 
-#include "libtocc/engine/files_engine.h"
 #include"libtocc/utilities/file_utils.h"
+
 
 namespace libtocc
 {

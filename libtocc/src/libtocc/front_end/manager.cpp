@@ -16,6 +16,8 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/front_end/manager.h"
+
 #include <string>
 
 #include "libtocc/database/database.h"
@@ -23,7 +25,6 @@
 #include "libtocc/engine/tags_engine.h"
 #include "libtocc/engine/files_engine.h"
 #include "libtocc/utilities/file_info_converter.h"
-#include "libtocc/front_end/manager.h"
 
 
 namespace libtocc

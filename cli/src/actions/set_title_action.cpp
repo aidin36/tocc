@@ -16,11 +16,13 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "actions/set_title_action.h"
+
 #include <iostream>
 
-#include "actions/set_title_action.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include <libtocc/front_end/manager.h>
+
 
 namespace tocccli
 {
@@ -63,7 +65,7 @@ namespace tocccli
     {
       file_ids[i] = files[i].get_id();
     }
-  
+
     this->libtocc_manager->set_titles(file_ids, files.size(), cmd_arguments.front().c_str());
   }
 }

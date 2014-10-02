@@ -16,6 +16,8 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/file_system/file_manager.h"
+
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -27,8 +29,8 @@
 #endif
 
 #include "libtocc/common/runtime_exceptions.h"
-#include "libtocc/file_system/file_manager.h"
 #include "libtocc/file_system/helpers.cpp"
+
 
 namespace libtocc
 {

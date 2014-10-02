@@ -16,10 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "actions/print_action.h"
+
 #include <iostream>
 
-#include "actions/print_action.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
+
 
 namespace tocccli
 {

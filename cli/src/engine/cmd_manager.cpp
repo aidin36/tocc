@@ -16,13 +16,14 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "engine/cmd_manager.h"
+
 #include <sstream>
 #include <iostream>
 
 #include <libtocc/front_end/file_info.h>
 #include <libtocc/front_end/manager.h>
 
-#include "engine/cmd_manager.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
 #include "selectors/import_file_selector.h"
