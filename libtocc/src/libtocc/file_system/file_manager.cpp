@@ -121,6 +121,10 @@ namespace libtocc
 
     int dest = create(file_id);
     int source = open(source_path.c_str(), O_RDONLY);
+    if(source == -1)
+    {
+      handle_errno(errno, source_path);
+    }
 
     // `sendfile' is a lot faster. We use it if available.
     #ifndef HAVE_SENDFILE
@@ -135,7 +139,7 @@ namespace libtocc
             handle_errno(errno, source_path);
           }
       }
-    #else
+    #else      
       off_t offset = 0;
       struct stat stat_buf;
       // Stat the source file to obtain its size.

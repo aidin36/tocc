@@ -25,6 +25,7 @@
 #include "libtocc/common/file_system_exceptions.h"
 
 
+
 TEST_CASE("front_end: file import")
 {
   // Creating a file to import.
@@ -122,5 +123,5 @@ TEST_CASE("Importing a not-existed file")
 
   REQUIRE_THROWS_AS(
       manager.import_file("/path/to/a/not/existed/file/fly364bouqc"),
-      libtocc::BadAddressError);
+      libtocc::BadPathError);
 }
