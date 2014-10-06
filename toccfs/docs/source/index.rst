@@ -1,3 +1,10 @@
+
+.. toctree::
+  :hidden:
+
+  compile
+
+
 Tocc File System (toccfs)
 -----------------------------------------
 
@@ -9,6 +16,9 @@ To solve this, to let other applications use files stored with Tocc, there's a s
 
 I this way, any other applications that can only understand traditional way of storing files, can use Tocc without any change. You can browse your files using *Nautilus*, even you can acess them on network using *Samba*, and like that.
 
+Installation
+------------
+If you download a binary package of *toccfs*, installing that would be enough. If you have the source code package, see :doc:`compile`.
 
 How to Use
 -------------------
