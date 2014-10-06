@@ -20,7 +20,7 @@ Bootstrapping
 First step is to create a ``configure`` script. If you downloaded a released
 source package, this step already done. You can skip it.
 
-You need *Gnu Auto Tools*, e.g. *Libtocc*, *Autoconf* and *Automake* installed.
+You need *Gnu Auto Tools*, e.g. *Libtool*, *Autoconf* and *Automake* installed.
 Then, simply invoke ``bootstrap`` script::
 
   ./bootstrap
@@ -55,6 +55,8 @@ Installing
 If previous step goes without any error, simply invoke::
 
   make install
+
+(Usually, you need super user access to invoke this command.)
 
 This will install ``tocc`` binary in the directory you specified using
 ``--prefix`` (or the default directory).
