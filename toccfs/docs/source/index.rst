@@ -6,7 +6,7 @@
 
 
 Tocc File System (toccfs)
------------------------------------------
+=========================
 
 Tocc stores all the files in a special structure, and let other applications query and use the files using its API. It means, if any application wants to use files stored using Tocc, it should know how to talk with Tocc. It's not possible in all cases. (At least, not untill Tocc become famous enough that everyone supports it ;-) )
 
@@ -21,7 +21,7 @@ Installation
 If you download a binary package of *toccfs*, installing that would be enough. If you have the source code package, see :doc:`compile`.
 
 How to Use
--------------------
+----------
 
 First, mount your *Tocc Managed File System* somewhere::
 

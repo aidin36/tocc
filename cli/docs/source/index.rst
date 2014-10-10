@@ -7,10 +7,10 @@
 
 
 Tocc's CLI Users Manual
------------------------
+=======================
 
 Introduction
-============
+------------
 
 Tocc have different UIs. The official UI that comes with it by default, is a CLI (Command Line Interface). Its binary calls *tocc*, which you can inboke as follows::
 
@@ -19,11 +19,11 @@ Tocc have different UIs. The official UI that comes with it by default, is a CLI
 The above command will print out the help of the CLI.
 
 Installation
-============
+------------
 If you download a binary package, simply install that. If you have source package,  instructions about how to compile and install CLI is available in :doc:`compile`.
 
 Quick Start
-===========
+-----------
 
 *The path that goes through the rules is long and hard, the path that goes through the examples is short and easy.*
 
@@ -88,7 +88,7 @@ Now, what if we want to edit a file?::
 
 
 How Tocc Works?
----------------------------
+---------------
 
 Tocc keeps two kind of data: Your actual files, and their metadata (mainly, tags that are assigned to them).
 
@@ -100,7 +100,7 @@ Note that you can have more than one *Tocc Managed File System*. Each of them ha
 
 
 Where to go from here
-=====================
+---------------------
 
 * :doc:`compile`
 * :doc:`reference`

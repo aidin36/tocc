@@ -6,8 +6,8 @@
   :hidden:
 
 
-Coding Style Guid
-=================
+Coding Style Guide
+==================
 
 There are some rules that must be followed by developers of Tocc, in order to
 keep a cleaner and more maintainable code.
