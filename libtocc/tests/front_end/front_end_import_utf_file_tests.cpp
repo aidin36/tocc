@@ -122,5 +122,5 @@ TEST_CASE("Importing a not-existed UTF file")
 
   REQUIRE_THROWS_AS(
       manager.import_file("/مجلد/από/ոչ/存在的/फ़ाइल/fうんこ"),
-      libtocc::BadAddressError);
+      libtocc::BaseException);
 }
