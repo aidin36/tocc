@@ -25,6 +25,7 @@
 #include <libtocc/exprs/query.h>
 #include <libtocc/exprs/expr.h>
 #include "libtocc/front_end/file_info.h"
+#include <utilities/string_utils.h>
 
 #include "common/exceptions/cmd_usage_exceptions.h"
 
@@ -71,81 +72,9 @@ namespace tocccli
   };
 
   /*
-   * Pointer to functions that creates a field.
+   * Pointer to function that creates a field.
    */
-  typedef libtocc::Expr* (*FieldCreatorFunction)(std::string opt, std::string value);
-
-  /*
-   * Creates a tag expression.
-   *
-   * @param opt: Operator to use.
-   * @param value: Value to compare tag to.
-   */
-  libtocc::Expr* create_tag(std::string opt, std::string value)
-  {
-    if (opt == "=")
-    {
-      // By default, "=" operation will compile to WildCardExpr. So, user
-      // can simply invoke a query like "tag = 2014*"
-
-      libtocc::WildCardExpr wild_card_expr(value.c_str());
-      return new libtocc::Tag(wild_card_expr);
-    }
-    if (opt == "!=" || opt == "~")
-    {
-      libtocc::WildCardExpr wild_card_expr(value.c_str());
-      libtocc::Tag tag_expr(wild_card_expr);
-      return new libtocc::Not(tag_expr);
-    }
-
-    // Nothing matched.
-    throw InvalidParametersError("Invalid operator: " + opt);
-  }
-
-  /*
-   * Creates a title expression.
-   *
-   * @param opt: Operation to use.
-   * @param value: Value to compare title to.
-   */
-  libtocc::Expr* create_title(std::string opt, std::string value)
-  {
-    if (opt == "=")
-    {
-      // By default, "=" operation will compile to WildCardExpr. So, user
-      // can simply invoke a query like "tag = 2014*"
-
-      libtocc::WildCardExpr wild_card_expr(value.c_str());
-      return new libtocc::Title(wild_card_expr);
-    }
-    if (opt == "!=" || opt == "~")
-    {
-      libtocc::WildCardExpr wild_card_expr(value.c_str());
-      libtocc::Title title_expr(wild_card_expr);
-      return new libtocc::Not(title_expr);
-    }
-
-    // Nothing matched.
-    throw InvalidParametersError("Invalid operator: " + opt);
-  }
-
-  /*
-   * Returns the creator function of the specified field name.
-   * It will return NULL if no function found.
-   */
-  FieldCreatorFunction get_field_creator(std::string name)
-  {
-    if (name == "tag")
-    {
-      return create_tag;
-    }
-    if (name == "title")
-    {
-      return create_title;
-    }
-
-    return NULL;
-  }
+  typedef libtocc::Expr* (*FieldCreatorFunction)(std::vector<std::string>& arguments, int& index);
 
   /*
    * Throws a parsing exception, and formats its message in a pretty form.
@@ -177,6 +106,157 @@ namespace tocccli
     error_marker_stream << "^";
 
     throw InvalidParametersError(message + "\n" + args_stream.str() + "\n" + error_marker_stream.str());
+  }
+
+  /*
+   * Split argument at `index', from `pos' position. Then, keep the first
+   * part in `index', and insert the second part in the `arguments' as the
+   * element after that.
+   */
+  void move_arguments_forward(std::vector<std::string>& arguments, int& index,
+                              int pos)
+  {
+    std::string& arg = arguments[index];
+    arguments.insert(arguments.begin() + index, arg.substr(0, pos));
+
+    std::string& next_arg = arguments[index + 1];
+    next_arg.erase(0, pos);
+  }
+
+  /*
+   * Checks if `opt' matches the argument at `index'. If it match, it
+   * put value related to `opt' (its operand) into `extracted_value'.
+   * Returns true if `opt' matches, false otherwise.
+   */
+  bool try_extract_opt(std::vector<std::string>& arguments, int& index,
+                       std::string opt, std::string* extracted_value)
+  {
+    std::string& arg = arguments[index];
+
+    if (!string_starts_with(arg, opt))
+    {
+      return false;
+    }
+
+    if (arg.compare(opt) != 0)
+    {
+      // arg contains opt and its value.
+      move_arguments_forward(arguments, index, opt.size());
+    }
+
+    index++;
+
+    if (index >= arguments.size())
+    {
+      throw_parsing_exception(arguments, index,
+          "Expected an operand after operator, but reached end of string.");
+    }
+
+    *extracted_value = arguments[index];
+
+    index++;
+
+    return true;
+  }
+
+  /*
+   * Creates a tag expression.
+   *
+   * @param opt: Operator to use.
+   * @param value: Value to compare tag to.
+   */
+  libtocc::Expr* create_tag(std::vector<std::string>& arguments, int& index)
+  {
+    std::string value;
+
+    if (try_extract_opt(arguments, index, "=", &value))
+    {
+      // By default, "=" operation will compile to WildCardExpr. So, user
+      // can simply invoke a query like "tag = 2014*"
+
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      return new libtocc::Tag(wild_card_expr);
+    }
+    if (try_extract_opt(arguments, index, "!=", &value) ||
+        try_extract_opt(arguments, index, "~", &value))
+    {
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      libtocc::Tag tag_expr(wild_card_expr);
+      return new libtocc::Not(tag_expr);
+    }
+
+    // Nothing matched.
+    throw_parsing_exception(arguments, index,
+                            "Invalid operator: " + arguments[index]);
+  }
+
+  /*
+   * Creates a title expression.
+   */
+  libtocc::Expr* create_title(std::vector<std::string>& arguments, int& index)
+  {
+    std::string value;
+
+    if (try_extract_opt(arguments, index, "=", &value))
+    {
+      // By default, "=" operation will compile to WildCardExpr. So, user
+      // can simply invoke a query like "tag = 2014*"
+
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      return new libtocc::Title(wild_card_expr);
+    }
+
+    if (try_extract_opt(arguments, index, "!=", &value) ||
+        try_extract_opt(arguments, index, "~", &value))
+    {
+      libtocc::WildCardExpr wild_card_expr(value.c_str());
+      libtocc::Title title_expr(wild_card_expr);
+      return new libtocc::Not(title_expr);
+    }
+
+    // Nothing matched.
+    throw_parsing_exception(arguments, index,
+                            "Invalid operator: " + arguments[index]);
+  }
+
+  /*
+   * Returns the creator function of the specified field name.
+   * It will return NULL if no function found.
+   */
+  FieldCreatorFunction get_field_creator(std::vector<std::string>& arguments,
+                                         int& index)
+  {
+    std::string& arg = arguments[index];
+
+    std::string field_str = "tag";
+    if (string_starts_with(arg, field_str))
+    {
+      if (arg.compare(field_str) != 0)
+      {
+        // If "tag" is only part of the argument (e.g. "tag=..."),
+        // we parse `arg', remove "tag" from its start, and keep the rest.
+        move_arguments_forward(arguments, index, 3);
+      }
+
+      index++;
+      return create_tag;
+    }
+
+    field_str = "title";
+    if (string_starts_with(arg, field_str))
+    {
+      if (arg.compare(field_str) != 0)
+      {
+        move_arguments_forward(arguments, index, 5);
+      }
+
+      index++;
+
+      return create_title;
+    }
+
+    // If none of the above matches.
+    return NULL;
   }
 
   /*
@@ -278,50 +358,36 @@ namespace tocccli
      */
 
     // First, the field.
-    std::string field = arguments[index];
-    index++;
-
     // Getting the field creator function.
-    FieldCreatorFunction field_creator_function = get_field_creator(field);
+    FieldCreatorFunction field_creator_function =
+        get_field_creator(arguments, index);
     if (field_creator_function == NULL)
     {
       throw_parsing_exception(arguments, index,
-          "Unknown field: Expected one of 'tag', 'title', etc, found: " + field);
+          "Unknown field: Expected one of 'tag', 'title', etc, found: " + arguments[index]);
     }
 
-    // Next, the operator.
-    if (index >= arguments.size())
-    {
-      throw_parsing_exception(arguments, index - 1,
-          "Expected an operator, but reached end of string.");
-    }
-    std::string opt = arguments[index];
-    index++;
-
-    // Last one is the value.
     if (index >= arguments.size())
     {
       throw_parsing_exception(arguments, index,
-          "Expected an operand after operator, but reached end of string.");
+                              "Reached end of string while looking for an operator.");
     }
 
-    std::string value = arguments[index];
-    index++;
-
-    // Calling the creator function.
-    return field_creator_function(opt, value);
+    // Next, the operator and its operand.
+    // Field creator function will extract these two itself.
+    return field_creator_function(arguments, index);
   }
 
   /*
-   * Makes an operator form the specified string.
+   * Makes a connector form the specified string.
    *
-   * @param operator_string: Operator in the string form.
-   * @param operand: Operand to add into the operator.
+   * @param connector_string: Connector in the string form.
+   * @param operand: Operand to add into the connector.
    */
-  libtocc::ConnectiveExpr* make_operator(std::string operator_string,
-                                         libtocc::Expr* operand)
+  libtocc::ConnectiveExpr* make_connector(std::string connector_string,
+                                          libtocc::Expr* operand)
   {
-    if (operator_string == "and")
+    if (connector_string == "and")
     {
       if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
       {
@@ -333,7 +399,7 @@ namespace tocccli
       }
     }
 
-    if (operator_string == "or")
+    if (connector_string == "or")
     {
       if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
       {
@@ -346,7 +412,7 @@ namespace tocccli
     }
 
     // None of the above.
-    throw InvalidParametersError("Unknown operator: Expected one of 'and', 'or', etc, found: " + operator_string);
+    throw InvalidParametersError("Unknown connector: Expected one of 'and', 'or', etc, found: " + connector_string);
   }
 
   /*
@@ -360,7 +426,7 @@ namespace tocccli
    */
   libtocc::ConnectiveExpr* extract_next_term(std::vector<std::string>& arguments, int& index)
   {
-    std::pair<std::string, libtocc::ConnectiveExpr*> last_operator;
+    std::pair<std::string, libtocc::ConnectiveExpr*> last_connector;
     libtocc::ConnectiveExpr* result;
 
     // The first argument must be an operand.
@@ -370,15 +436,15 @@ namespace tocccli
 
     if (index >= arguments.size())
     {
-      // This term only had one operand. We add it to the default operator.
-      return make_operator("and", first_operand);
+      // This term only had one operand. We add it to the default connector.
+      return make_connector("and", first_operand);
     }
 
-    // Next one should be an operator.
-    // Everything comes next will be added to this operator. So this is the
-    // result (root operator) of this method.
-    result = make_operator(arguments[index], first_operand);
-    last_operator =
+    // Next one should be a connector.
+    // Everything comes next will be added to this connector. So this is the
+    // result (root connector) of this method.
+    result = make_connector(arguments[index], first_operand);
+    last_connector =
         std::make_pair(arguments[index],
                        result);
     index++;
@@ -400,41 +466,41 @@ namespace tocccli
         // End of the string. Adding the operand to the previous operator.
         if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
         {
-          last_operator.second->add((libtocc::ConnectiveExpr&)*operand);
+          last_connector.second->add((libtocc::ConnectiveExpr&)*operand);
         }
         else
         {
-          last_operator.second->add((libtocc::FieldExpr&)*operand);
+          last_connector.second->add((libtocc::FieldExpr&)*operand);
         }
 
         // Ending the loop.
         break;
       }
 
-      if (arguments[index] == last_operator.first)
+      if (arguments[index] == last_connector.first)
       {
         // It's same as the previous operator. No need to create a new one.
         if (operand->get_type() == libtocc::expr_type::CONNECTIVE)
         {
-          last_operator.second->add((libtocc::ConnectiveExpr&)*operand);
+          last_connector.second->add((libtocc::ConnectiveExpr&)*operand);
         }
         else
         {
-          last_operator.second->add((libtocc::FieldExpr&)*operand);
+          last_connector.second->add((libtocc::FieldExpr&)*operand);
         }
         index++;
       }
       else
       {
-        // Making a new operator and add it to the previous one.
-        libtocc::ConnectiveExpr* new_operator = make_operator(arguments[index], operand);
+        // Making a new connector and add it to the previous one.
+        libtocc::ConnectiveExpr* new_connector = make_connector(arguments[index], operand);
         // Auto release pointer.
-        expr_pointer_holder.add(new_operator);
+        expr_pointer_holder.add(new_connector);
 
-        last_operator.second->add((libtocc::ConnectiveExpr&)*new_operator);
-        last_operator =
+        last_connector.second->add((libtocc::ConnectiveExpr&)*new_connector);
+        last_connector =
             std::make_pair(arguments[index],
-                           new_operator);
+                           new_connector);
       }
     }
 
