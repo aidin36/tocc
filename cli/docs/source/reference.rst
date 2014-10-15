@@ -36,17 +36,23 @@ Query files. The syntax of query is as follows::
 
   field operator operand
 
+*field* can be ``tag`` or ``title``. *operator* is ``=`` or ``!=``.
+
 Some examples::
 
   # Finds all files that have `book' tag.
   tag = book
 
-  # Finds all files that have both `book' and `programming' tags.
-  tag = book and tag = programming
+  # Finds all files that have `book' tag but not `programming' tags.
+  tag = book and tag != programming
 
   # Finds files that have `book' tag, and either have a `programming'
   # tag or their titles are equal to "Awesome Book".
   tag = book and (tag = programming or title = "Awesome Book")
+
+  # Finds files that have a tag starts with good
+  tag = good*
+
 
 .. option:: -p, --print
 
