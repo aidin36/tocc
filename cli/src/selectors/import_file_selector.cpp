@@ -18,7 +18,9 @@
 
 #include "selectors/import_file_selector.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
-
+#include "engine/wild_card_manager.h"
+#include <cassert>
+#include <cstdio>
 
 namespace tocccli
 {
@@ -55,10 +57,17 @@ namespace tocccli
       throw InvalidParametersError("-i and --import must have an argument.");
     }
 
-    libtocc::FileInfo new_file = this->libtocc_manager->import_file(cmd_arguments.front().c_str());
+    assert(WILDCARD_MANAGER != 0);
 
     std::vector<libtocc::FileInfo> result;
-    result.push_back(new_file);
+    std::vector<std::string> files = WILDCARD_MANAGER->detect_wild_cards(cmd_arguments.front());
+    for(int i = 0; i < files.size(); i++)
+    {      
+      libtocc::FileInfo new_file = this->libtocc_manager->import_file(files[i].c_str());   
+      printf("%s \n", files[i].c_str());
+      result.push_back(new_file);
+    }
+    
     return result;
   }
 
