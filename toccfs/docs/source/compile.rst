@@ -1,22 +1,23 @@
 
-
 .. toctree::
   :hidden:
 
 
-How to Compile Tocc's Official CLI
-==================================
+Compiling Toccfs from Source
+============================
 
-In order to compile CLI, you need first have ``libtocc`` compiled and
-installed. Follow the instructions in
-`How to Compile And Use libtocc </libtocc/compile.html>`_ page.
+Requirements
+------------
+*toccfs* wrote using FUSE (File System in User Environment) library. So, you
+need to have FUSE installed on your system. Usually, you can find a package
+like *libfuse-dev* among your distro's packages. If not, try get it from its
+web site: `fuse.sourceforge.net <http://fuse.sourceforge.net>`_.
 
-Source of the CLI is available in ``cli/src/`` directory. Change your
-current directory to it, and follow the instructions.
+You also need *libtocc* compiled and installed on you system. If you didn't
+do this already, see `How to Compile And Use libtocc </libtocc/compile.html>`_.
 
-Bootstrapping
--------------
-
+Bootstraping
+------------
 First step is to create a ``configure`` script. If you downloaded a released
 source package, this step already done. You can skip it.
 
@@ -27,13 +28,12 @@ Then, simply invoke ``bootstrap`` script::
 
 Configuring
 -----------
-
 Previous step created a ``configure`` script. Normally, you don't need to pass
 any options::
 
   ./configure
 
-By default, CLI binary (``tocc``) will be installed in the default ``bin``
+By default, *toccfs* binary (``toccfs``) will be installed in the default ``bin``
 directory. Usually ``/usr/local/bin/``. If you want to install it into another
 directory, you can pass ``--prefix`` option to ``configure`` script::
 
@@ -58,7 +58,7 @@ If previous step goes without any error, simply invoke::
 
 (Usually, you need super user access to invoke this command.)
 
-This will install ``tocc`` binary in the directory you specified using
+This will install ``toccfs`` binary in the directory you specified using
 ``--prefix`` (or the default directory).
 
 

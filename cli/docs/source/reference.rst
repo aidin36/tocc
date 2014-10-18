@@ -36,17 +36,23 @@ Query files. The syntax of query is as follows::
 
   field operator operand
 
+*field* can be ``tag`` or ``title``. *operator* is ``=`` or ``!=``.
+
 Some examples::
 
   # Finds all files that have `book' tag.
   tag = book
 
-  # Finds all files that have both `book' and `programming' tags.
-  tag = book and tag = programming
+  # Finds all files that have `book' tag but not `programming' tags.
+  tag = book and tag != programming
 
   # Finds files that have `book' tag, and either have a `programming'
   # tag or their titles are equal to "Awesome Book".
   tag = book and (tag = programming or title = "Awesome Book")
+
+  # Finds files that have a tag starts with good
+  tag = good*
+
 
 .. option:: -p, --print
 
@@ -89,6 +95,15 @@ some examples::
 
   tocc --query title = "The Art of Unix Programming" --assign "unix philosophy"
 
+
+.. option:: -u, --unassign=TAGS
+
+Unassign a tag from files. TAGS is a list of space-separated strings.
+examples::
+
+  # Removing "favorite song" tag from first track.
+  tocc --query tag = music and title = track01 --unassign "favorite song"
+
 .. option:: -r, --remove
 
 Removes files.
@@ -108,5 +123,18 @@ Sets title of files. For example::
 
   # Setting title of all files tagged photo and 2014-03-07, to "A Jungle Trip".
   tocc --query tag = photo and tag = 2014-03-07 --set-title "A Jungle Trip"
+
+.. option:: -s, --tags-statistics
+
+Prints out statistics of tags. It prints out list of tags, and how many files
+each tag assigned to.
+
+If you just pass this option (no option other than ``-s`` passed to CLI), it
+will print out all the tags of all files. If you query some files, and then
+pass ``-s``, it will print tags assigned to those files.
+
+For example, if you want to see tag statistics of you photos::
+
+  tocc --query tag = photo --tags-statistics
 
 

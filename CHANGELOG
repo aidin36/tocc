@@ -1,4 +1,17 @@
 
+v1.0.0
+  * API of libtocc's expressions cleaned up.
+  * Not and WildCard added to expressions.
+  * CLI uses wild card in its queries.
+  * Now user must initialize a directory before use it as
+    Tocc Managed File System.
+  * --all-tags renamed to --tags-statistics, and its behaviour
+    improved.
+  * tests of libtocc improved.
+  * Toccfs is implemented.
+  * Preventing duplicated traditional paths.
+  * Bug fix.
+
 v0.3.0:
   * --set-title added to CLI.
   * --remove added to CLI.

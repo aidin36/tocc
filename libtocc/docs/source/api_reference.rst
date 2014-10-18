@@ -11,8 +11,8 @@ Header files of *libtocc* are in ``libtocc`` directory, which itself structured
 into the following directories.
 
 * **front_end**: This directory defines the the interface of *libtocc*.
-:cpp:class:`libtocc::Manager` in ``manager.h`` defines the main
-functionalities.
+  :cpp:class:`libtocc::Manager` in ``manager.h`` defines the main
+  functionalities.
 
 * **exprs**: Expresions for quering files.
 

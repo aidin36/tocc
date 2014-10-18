@@ -1,4 +1,10 @@
 
+.. toctree::
+  :hidden:
+
+  coding_style
+
+
 Developers Documentation
 ========================
 
