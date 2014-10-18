@@ -30,7 +30,8 @@ namespace tocccli
   {
     friend Singletons;
     public:      
-      std::vector<std::string> detect_wild_cards(std::string expression);
+      std::vector<std::string> process_wild_cards(std::string expression);
+      bool detect_wild_cards(std::string expression);
 
     private:
       std::vector<WildCard*> wild_cards;

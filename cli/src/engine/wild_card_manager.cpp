@@ -28,7 +28,7 @@ namespace tocccli
      wild_cards.push_back(new AsteriskWildCard());
    }
 
-   std::vector<std::string> WildCardManager::detect_wild_cards(std::string expression)
+   std::vector<std::string> WildCardManager::process_wild_cards(std::string expression)
    {
       std::vector<std::string> files;
       std::string dir = get_dir(expression);
@@ -43,5 +43,21 @@ namespace tocccli
       }
      
       return files;
+   }
+ 
+   bool WildCardManager::detect_wild_cards(std::string expression)
+   {
+     std::vector<std::string> files;
+     std::string dir = get_dir(expression);
+     std::string file_expression = get_file(expression);
+     for(int i = 0; i < wild_cards.size(); i++)
+      {
+        if(file_expression.find(wild_cards[i]->get_expr()) != std::string::npos)
+        {
+          return true;
+        }
+      }
+
+      return false;
    }
 }

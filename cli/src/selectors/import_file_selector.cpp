@@ -60,11 +60,21 @@ namespace tocccli
     assert(WILDCARD_MANAGER != 0);
 
     std::vector<libtocc::FileInfo> result;
-    std::vector<std::string> files = WILDCARD_MANAGER->detect_wild_cards(cmd_arguments.front());
-    for(int i = 0; i < files.size(); i++)
-    {      
-      libtocc::FileInfo new_file = this->libtocc_manager->import_file(files[i].c_str());   
-      printf("%s \n", files[i].c_str());
+
+    if(WILDCARD_MANAGER->detect_wild_cards(cmd_arguments.front()))
+    {
+      std::vector<std::string> files = WILDCARD_MANAGER->process_wild_cards(cmd_arguments.front());
+      printf("here\n");
+      for(int i = 0; i < files.size(); i++)
+      {      	
+        libtocc::FileInfo new_file = this->libtocc_manager->import_file(files[i].c_str());   
+        printf("%s \n", files[i].c_str());
+        result.push_back(new_file);
+      }
+    }
+    else
+    {
+      libtocc::FileInfo new_file = this->libtocc_manager->import_file(cmd_arguments.front().c_str());
       result.push_back(new_file);
     }
     
