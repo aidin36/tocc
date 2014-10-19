@@ -20,6 +20,7 @@
 #define TOCCCLI_STRING_UTILS_H_INCLUDED
 
 #include <string>
+#include <vector>
 
 
 namespace tocccli
@@ -31,6 +32,17 @@ namespace tocccli
    */
   bool string_starts_with(std::string& str, std::string& str_to_check);
 
+  /*
+   * Splits the specified string from the specified delimiter.
+   *
+   * @param string_to_split: String to split.
+   * @param delimiter: Char to split the string from.
+   * @param count: Stop if these many splits took place.
+   *   (Zero means no limit).
+   */
+  std::vector<std::string> split_string(const std::string& string_to_split,
+                                        char delimiter,
+                                        int count=0);
 }
 
 #endif /* TOCCCLI_STRING_UTILS_H_INCLUDED */
