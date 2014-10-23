@@ -8,6 +8,8 @@ libtocc_la_LDFLAGS = -version-info 0:0:0
 libtocc_la_SOURCES = libtocc/check_exists.cpp libtocc/common/database_exceptions.cpp libtocc/common/expr_exceptions.cpp libtocc/common/file_system_exceptions.cpp libtocc/common/int_file_info.cpp libtocc/utilities/file_info_converter.cpp libtocc/utilities/file_utils.cpp libtocc/database/base23.cpp libtocc/database/funcs.cpp libtocc/database/database.cpp libtocc/exprs/compiled_expr.cpp libtocc/exprs/compiler.cpp libtocc/exprs/connectives.cpp libtocc/exprs/fields.cpp libtocc/exprs/functions.cpp libtocc/exprs/operations.cpp libtocc/exprs/query.cpp libtocc/file_system/file_manager.cpp libtocc/engine/files_engine.cpp libtocc/engine/tags_engine.cpp libtocc/front_end/file_info.cpp libtocc/front_end/tag_statistics.cpp libtocc/front_end/manager.cpp
 
 # Installing headers
+libtocc_includedir = $(includedir)
+libtocc_include_HEADERS = libtocc.h
 front_end_includedir = $(includedir)/libtocc/front_end
 front_end_include_HEADERS = libtocc/front_end/file_info.h libtocc/front_end/manager.h libtocc/front_end/tag_statistics.h
 common_includedir = $(includedir)/libtocc/common/
