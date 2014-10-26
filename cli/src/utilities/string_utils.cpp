@@ -17,7 +17,7 @@
  */
 
 #include "utilities/string_utils.h"
-
+#include <sstream>
 
 namespace tocccli
 {
@@ -30,6 +30,40 @@ namespace tocccli
     }
 
     return str.compare(0, str_to_check.size(), str_to_check) == 0;
+  }
+
+  std::vector<std::string> split_string(const std::string& string_to_split,
+                                        char delimiter,
+                                        int count)
+  {
+    std::vector<std::string> result;
+
+    std::stringstream stream(string_to_split);
+    std::string item;
+
+    while (std::getline(stream, item, delimiter))
+    {
+      if (!item.empty())
+      {
+        result.push_back(item);
+      }
+
+      if (count > 0 && result.size() == count)
+      {
+        // Getting the rest of stream without splitting.
+        // (If anything remained.)
+        if (std::getline(stream, item))
+        {
+          if (!item.empty())
+          {
+            result.push_back(item);
+          }
+        }
+        break;
+      }
+    }
+
+    return result;
   }
 
 }
