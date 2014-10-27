@@ -195,24 +195,6 @@ namespace libtocc
     this->private_data->tags_engine->assign_tags(file_id, tag);
   }
 
-  void Manager::unassign_tag(const char* file_id, const char* tag)
-  {
-    this->private_data->tags_engine->unassign_tag(std::string(file_id), std::string(tag));
-  }
-
-  void Manager::unassign_tags(const char* file_id, const TagsCollection* tags)
-  {
-    std::vector<std::string> tags_vector = tags_to_vector(tags);
-    this->private_data->tags_engine->unassign_tags(std::string(file_id), tags_vector);
-  }
-
-  void Manager::unassign_tags(const char* file_ids[], int file_ids_size, const TagsCollection* tags)
-  {
-    std::vector<std::string> tags_vector = tags_to_vector(tags);
-    std::vector<std::string> file_ids_vector = const_char_array_to_vector(file_ids, file_ids_size);
-    this->private_data->tags_engine->unassign_tags(file_ids_vector, tags_vector);
-  }
-
   FileInfoCollection Manager::search_files(Query& query)
   {
     std::vector<IntFileInfo> founded_files =

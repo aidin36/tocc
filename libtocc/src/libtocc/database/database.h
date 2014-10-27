@@ -111,20 +111,10 @@ namespace libtocc
      */
     void assign_tag(std::string file_id, std::string tag);
 
-   /*
-    * Unassigns the specified tags from a file
-    */
-   void unassign_tags(const std::string& file_id, const std::vector<std::string>& tags);
-
-    /*
-     * Unassigns the specified tags from each file
-     */
-    void unassign_tags(const std::vector<std::string>& files_ids, const std::vector<std::string>& tags);
-
     /*
      * Unassign a tag from a file.
      */
-    void unassign_tag(const std::string& file_id, const std::string& tag);
+    void unassign_tag(std::string file_id, std::string tag);
 
     /*
      * Searching the files by executing the specified query.

@@ -58,7 +58,7 @@ namespace tocccli
   {
     if (!cmd_arguments.empty())
     {
-      throw InvalidParametersError("--all-tags don't accept any arguments.");
+      throw new InvalidParametersError("--all-tags don't accept any arguments.");
     }
 
     // Getting statistics.
