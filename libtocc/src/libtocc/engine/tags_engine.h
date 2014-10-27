@@ -65,30 +65,6 @@ namespace libtocc
      */
     void assign_tags(std::string file_id, std::string tag);
 
-
-    /*
-     * Unassigns a tag from a file
-     *
-     * @param file_id: File to unassign tag from.
-     * @param tag: Tag to unassign from file.
-     */
-    void unassign_tag(const std::string& file_id, const std::string& tag);
-
-    /*
-     * Unassign the list of tags from all the specified files in the list
-     *
-     * @param file_ids: a list of the ids of the files to unassign tags from
-     * @param tags: a list of tags to unassign from the files.
-     */
-    void unassign_tags(const std::vector<std::string>& file_ids, const std::vector<std::string>& tags);
-
-    /* Unassign the list of tags from the specified file
-     *
-     * @param file_id: ID of the file to unassign tag from.
-     * @param tags : a list of tags to unassign from the file.
-     */
-    void unassign_tags(const std::string& file_id, const std::vector<std::string>& tags);
-
     /*
      * Collects statistics (how many files assigned to each tag) and
      * returns it.

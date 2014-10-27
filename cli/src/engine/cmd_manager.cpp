@@ -32,7 +32,6 @@
 #include "actions/all_tags_action.h"
 #include "actions/remove_action.h"
 #include "actions/set_title_action.h"
-#include "actions/unassign_action.h"
 
 
 // PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
@@ -64,7 +63,6 @@ namespace tocccli
     this->actions.push_back(new AllTagsAction(this->libtocc_manager));
     this->actions.push_back(new RemoveAction(this->libtocc_manager));
     this->actions.push_back(new SetTitleAction(this->libtocc_manager));
-    this->actions.push_back(new UnassignAction(this->libtocc_manager));
   }
 
   CmdManager::~CmdManager()
@@ -190,9 +188,9 @@ namespace tocccli
       if (!option_handler_found)
       {
         // It means that this parameter didn't match any of the known ones.
-      	std::string error_message("Unknown option: ");
-      	error_message += (*params_iterator).option;
-      	throw InvalidParametersError(error_message.c_str());
+	std::string error_message("Unknown option: ");
+	error_message += (*params_iterator).option;
+	throw InvalidParametersError(error_message.c_str());
       }
     }
 
@@ -202,7 +200,7 @@ namespace tocccli
       actions_iterator = actions_to_execute.begin();
     for (; actions_iterator < actions_to_execute.end(); ++actions_iterator)
     {
-      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second); 
+      (*actions_iterator).first->execute(selected_files, (*actions_iterator).second);
     }
   }
 
