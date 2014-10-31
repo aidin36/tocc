@@ -25,7 +25,7 @@
 
 
 #include "libtocc/common/base_exception.h"
-
+#include <string>
 namespace libtocc
 {
   /*
@@ -41,7 +41,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    const char* message;
+    std::string message;
   };
 
   /*

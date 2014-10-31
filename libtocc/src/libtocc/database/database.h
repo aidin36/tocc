@@ -25,6 +25,7 @@
 #include "libtocc/exprs/query.h"
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/front_end/tag_statistics.h"
+#include "libtocc/common/runtime_exceptions.h"
 
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others

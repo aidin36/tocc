@@ -52,37 +52,7 @@ namespace tocccli
     {
       throw InvalidParametersError("-d or --id takes exactly one argument.");
     }
-
-    /* id must be 7 characters long and all 0-9 or A-M (base-23 digit) */
-  
-    std::string id = cmd_arguments[0];
-    bool valid_id = true;
-    if (id.size() == 7)
-    {
-      for (int i = 0; i < 7; i++)
-      {
-        if ((id[i] >= '0' && id[i] <= '9')
-         || (id[i] >= 'a' && id[i] <= 'm')
-         || (id[i] >= 'A' && id[i] <= 'M'))
-        {
-        }
-        else
-        {
-          valid_id = false;
-          break;
-        }
-      }
-    }
-    else
-    {
-      valid_id = false;
-    }
-    if (! valid_id)
-    {
-      throw InvalidParametersError("Id must be seven characters, each 0-9 or A-M or a-m.");
-    }
-  
-    libtocc::FileInfo selected_file =
+   libtocc::FileInfo selected_file =
         this->libtocc_manager->get_file_info(cmd_arguments.front().c_str());
 
     std::vector<libtocc::FileInfo> result;

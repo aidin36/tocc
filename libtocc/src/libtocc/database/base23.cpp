@@ -18,9 +18,14 @@
 
 #include "libtocc/database/base23.h"
 
+#include "libtocc/common/runtime_exceptions.h"
+#include "libtocc/database/database.h"
+#include "libtocc/common/file_system_exceptions.h"
+
+
 #include <cmath>
 #include <cassert>
-
+#include <stdexcept>
 
 const std::string DIGITS = "0123456789abcdefghijklmn";
 
@@ -43,7 +48,28 @@ std::string to_base23(unsigned long num)
 
 unsigned long from_base23(std::string num)
 {
-  assert(num.length() == 7);
+  bool valid_id = true;
+  if (num.length() != 7)
+  {
+    valid_id = false;
+  }
+  else 
+  {
+    for (int i = 0; i < 7; i++)
+    {
+      if (!((num[i] >= '0' && num[i] <= '9')
+         || (num[i] >= 'a' && num[i] <= 'm')
+         || (num[i] >= 'A' && num[i] <= 'M')))
+      {
+        valid_id = false;
+        break;
+      }
+    }
+  }
+  if (! valid_id)
+  {
+    throw libtocc::InvalidArgumentError(libtocc::invalid_id_msg.c_str());
+  }
 
   unsigned long result = 0;
   for (short index = 6; index >= 0; index--)
