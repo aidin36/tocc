@@ -24,12 +24,9 @@
  */
 
 #include "libtocc/common/base_exception.h"
-#include <string>
 
 namespace libtocc
 {
-
-  const std::string invalid_id_msg = "ID must be seven characters, and only contain 0-9 and a-m.";
 
   /*
    * Base class for all exceptions related to File System layer.

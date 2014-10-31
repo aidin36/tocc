@@ -20,7 +20,6 @@
 
 #include <sstream>
 #include <fstream>
-#include <iostream>
 
 #include "libtocc/database/base23.h"
 #include "libtocc/database/scripts.h"
@@ -141,6 +140,7 @@ namespace libtocc
 
     // Checking if any error occurred inside the script.
     unqlite_value* execution_error = unqlite_vm_extract_variable(vm, "error");
+
     if (execution_error != NULL)
     {
       // Auto release value.
@@ -148,9 +148,7 @@ namespace libtocc
 
       // Second variable is a pointer to int, which returns the length of the
       // string. Since we don't need it, we passed null.
-	  
-	   const char* em = unqlite_value_to_string(execution_error, NULL);
-      const std::string error_message = em;
+      std::string error_message(unqlite_value_to_string(execution_error, NULL));
       throw DatabaseScriptLogicalError(error_message.c_str());
     }
   }
@@ -906,8 +904,7 @@ namespace libtocc
 
     std::string variable_file_id("file_id");
     register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
-    std::string base23_file_id("base23_file_id");
-	 register_variable_in_vm(vm, base23_file_id, file_id);
+
     execute_vm(vm);
 
     return extract_file_from_vm(vm, "result");

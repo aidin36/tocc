@@ -17,7 +17,7 @@
  */
 
 #include "libtocc/common/database_exceptions.h"
-#include <iostream>
+
 namespace libtocc
 {
 
@@ -32,7 +32,7 @@ namespace libtocc
 
   const char* BaseDatabaseException::what() const throw()
   {
-    return this->message.c_str();
+    return this->message;
   }
 
   DatabaseInitializationError::DatabaseInitializationError(const char* message) throw()

@@ -169,7 +169,7 @@ namespace libtocc
       "/* If $result does not set, it means file not found. */ "\
       "if ($result == NULL) "\
       "{"\
-      "   $error = 'File '..$base23_file_id..' does not exist.'; "\
+      "   $error = 'file '..$file_id..' does not exists.'; "\
       "}";
 
   /*
