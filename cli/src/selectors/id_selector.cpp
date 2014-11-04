@@ -61,12 +61,9 @@ namespace tocccli
     {
       for (int i = 0; i < 7; i++)
       {
-        if ((id[i] >= '0' && id[i] <= '9')
-         || (id[i] >= 'a' && id[i] <= 'm')
-         || (id[i] >= 'A' && id[i] <= 'M'))
-        {
-        }
-        else
+        if (!((id[i] >= '0' && id[i] <= '9')
+          || (id[i] >= 'a' && id[i] <= 'm')
+          || (id[i] >= 'A' && id[i] <= 'M')))
         {
           valid_id = false;
           break;
@@ -79,7 +76,7 @@ namespace tocccli
     }
     if (! valid_id)
     {
-      throw InvalidParametersError("Id must be seven characters, each 0-9 or A-M or a-m.");
+      throw InvalidParametersError("ID must be seven characters, and only contain 0-9 and a-m");
     }
   
     libtocc::FileInfo selected_file =
