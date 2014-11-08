@@ -172,6 +172,26 @@ namespace libtocc
       "   $error = 'file '..$file_id..' does not exists.'; "\
       "}";
 
+const std::string GET_FILE_BY_TRADITIONAL_PATH_SCRIPT = \
+      "/* Manually looping over records, so we can break the loop"\
+      " When the file is found. */ "\
+      "$result = NULL; "\
+      "$record = db_fetch('files'); "\
+      "while($record != NULL) "\
+      "{"\
+      "  if ($record.traditional_path == $traditional_path)"\
+      "  {"\
+      "    $result = $record;"\
+      "    break;"\
+      "  }"\
+      "  $record = db_fetch('files'); "\
+      "} "\
+      "/* If $result does not set, it means file not found. */ "\
+      "if ($result == NULL) "\
+      "{"\
+      "   $error = 'file '..$traditional_path..' does not exist.'; "\
+      "}";
+
   /*
    * Loops through all the records, and calculates statistics of each tag.
    */
