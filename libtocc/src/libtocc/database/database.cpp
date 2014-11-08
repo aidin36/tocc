@@ -910,7 +910,7 @@ namespace libtocc
     return extract_file_from_vm(vm, "result");
   }
   
-    IntFileInfo Database::get(std::string traditional_path)
+    IntFileInfo Database::get_by_traditional_path(std::string traditional_path)
   {
     unqlite* db_pointer = get_db_pointer();
 
