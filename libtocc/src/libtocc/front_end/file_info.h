@@ -47,6 +47,11 @@ namespace libtocc
      */
     TagsCollection(int size);
 
+    /*
+     * Copy Constructor.
+     */
+    TagsCollection(const TagsCollection& source);
+
     ~TagsCollection();
 
     /*
@@ -73,6 +78,8 @@ namespace libtocc
      * Returns true if the collection is empty.
      */
     bool is_empty() const;
+
+    TagsCollection& operator=(const TagsCollection& source);
 
   private:
     class PrivateData;

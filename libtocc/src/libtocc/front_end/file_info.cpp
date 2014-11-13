@@ -83,6 +83,12 @@ namespace libtocc
     this->private_data = new PrivateData(size);
   }
 
+  TagsCollection::TagsCollection(const TagsCollection& source)
+  {
+    this->private_data = new PrivateData(source.private_data->tags.size());
+    this->private_data->tags = source.private_data->tags;
+  }
+
   TagsCollection::~TagsCollection()
   {
     delete this->private_data;
@@ -140,6 +146,18 @@ namespace libtocc
   public:
     std::vector<std::string>::iterator collection_iterator;
   };
+
+  TagsCollection& TagsCollection::operator=(const TagsCollection& source)
+  {
+    if (this == &source)
+    {
+      return *this;
+    }
+
+    this->private_data->tags = source.private_data->tags;
+
+    return *this;
+  }
 
   TagsCollection::Iterator::Iterator(const TagsCollection* collection)
   {
