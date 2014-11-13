@@ -19,6 +19,7 @@
 #include "libtocc/front_end/manager.h"
 
 #include <string>
+#include <cassert>
 
 #include "libtocc/database/database.h"
 #include "libtocc/file_system/file_manager.h"
@@ -110,6 +111,12 @@ namespace libtocc
                                 const char* title,
                                 const char* traditional_path)
   {
+    assert(source_path != NULL);
+    assert(title != NULL &&
+           "If you don't want to set `title', pass empty string.");
+    assert(traditional_path != NULL &&
+           "If you don't want to set `traditional_path', pass empty string.");
+
     IntFileInfo new_file_info =
         this->private_data->files_engine->import_file(source_path,
                                                       title, traditional_path);
@@ -122,6 +129,12 @@ namespace libtocc
                                 const char* traditional_path,
                                 const TagsCollection* tags)
   {
+    assert(source_path != NULL);
+    assert(title != NULL &&
+           "If you don't want to set `title', pass empty string.");
+    assert(traditional_path != NULL &&
+           "If you don't want to set `traditional_path', pass empty string.");
+
     std::vector<std::string> tags_vector = tags_to_vector(tags);
 
     IntFileInfo new_file_info =

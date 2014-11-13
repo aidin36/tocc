@@ -69,6 +69,9 @@ namespace libtocc
      * @param title: (optional) title of the file.
      * @param traditional_path: (optional) traditional path of the file.
      *
+     * @note: If you don't want to set title or traditional path,
+     *   pass empty string ("").
+     *
      * @return: Information of the newly created file.
      */
     FileInfo import_file(const char* source_path,
@@ -83,6 +86,9 @@ namespace libtocc
      * @param traditional_path: traditional path of the file.
      *   (Can be empty string.)
      * @param tags: Tags to assign to the file.
+     *
+     * @note: If you don't want to set title or traditional path,
+     *   pass empty string ("").
      *
      * @return: Information of the newly created file.
      */
