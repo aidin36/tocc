@@ -903,7 +903,9 @@ namespace libtocc
     compile_jx9(db_pointer, GET_FILE_SCRIPT, &vm);
 
     std::string variable_file_id("file_id");
+    std::string variable_orig_file_id("orig_file_id");
     register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
+    register_variable_in_vm(vm, variable_orig_file_id, file_id);
 
     execute_vm(vm);
 
