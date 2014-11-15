@@ -49,7 +49,7 @@ namespace libtocc
      * @throw DatabaseInitializationError: If path was already initialized,
      *   or there was something wrong with the path.
      */
-    void initialize();
+    void initialize(const char *path);
 
     /*
      * Gets information of a file.
@@ -224,6 +224,12 @@ namespace libtocc
      * @param new_title: the new file's title
      */
     void set_title(const char* file_id, const char* new_title);
+
+    /*
+     * Checks the existence of directory
+     * @param path: Path of the directory to be checked.
+     */
+	bool is_directory(const char *path);
 
   private:
     /*

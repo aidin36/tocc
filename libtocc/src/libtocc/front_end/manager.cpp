@@ -20,13 +20,14 @@
 
 #include <string>
 #include <cassert>
+#include <dirent.h>
 
+#include "libtocc/common/database_exceptions.h"
 #include "libtocc/database/database.h"
 #include "libtocc/file_system/file_manager.h"
 #include "libtocc/engine/tags_engine.h"
 #include "libtocc/engine/files_engine.h"
 #include "libtocc/utilities/file_info_converter.h"
-
 
 namespace libtocc
 {
@@ -95,9 +96,21 @@ namespace libtocc
     this->private_data = NULL;
   }
 
-  void Manager::initialize()
+  void Manager::initialize(const char* base_path)
   {
-    this->private_data->database->initialize();
+	if(is_directory(base_path))
+	    this->private_data->database->initialize();
+  }
+	
+  bool Manager::is_directory(const char *base_path)
+  {
+	DIR *dptr = NULL;
+	std::string msg("Invalid path detected, please specify a valid path");
+	dptr = opendir(base_path);
+	if(dptr == NULL){
+		throw DatabaseInitializationError(msg.c_str());
+	}
+	return true;
   }
 
   FileInfo Manager::get_file_info(const char* file_id)
