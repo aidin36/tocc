@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
+ * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,24 @@ namespace libtocc
     ~Manager();
 
     /*
+     * Initializes the specified base path.
+     * This method should be called once in a new base path. Or else, you
+     * can't work with that path.
+     * Note that this method should be called once for every path.
+     *
+     * @throw DatabaseInitializationError: If path was already initialized,
+     *   or there was something wrong with the path.
+     */
+    void initialize();
+
+    /*
      * Gets information of a file.
      *
      * @param file_id: ID of the file to get.
      *
      * @return: Infomration of the file.
      *
-     * @throw: DatabaseScriptLogicalError if file not found.
+     * @throw DatabaseScriptLogicalError: if file not found.
      */
     FileInfo get_file_info(const char* file_id);
 
@@ -57,6 +68,9 @@ namespace libtocc
      * @param source_path: Path to the source file.
      * @param title: (optional) title of the file.
      * @param traditional_path: (optional) traditional path of the file.
+     *
+     * @note: If you don't want to set title or traditional path,
+     *   pass empty string ("").
      *
      * @return: Information of the newly created file.
      */
@@ -73,12 +87,44 @@ namespace libtocc
      *   (Can be empty string.)
      * @param tags: Tags to assign to the file.
      *
+     * @note: If you don't want to set title or traditional path,
+     *   pass empty string ("").
+     *
      * @return: Information of the newly created file.
      */
     FileInfo import_file(const char* source_path,
                          const char* title,
                          const char* traditional_path,
                          const TagsCollection* tags);
+
+    /*
+     * Deletes a file from the database and Tocc managed file system.
+     *
+     * @param file_id: the id of the file to delete.
+     */
+    void remove_file(const char* file_id);
+
+     /*
+     * Deletes an array of file ids from the database and Tocc managed file system.
+     *
+     * @param file_ids: an array of the ids of the files to delete.
+     * @param file_ids_size : the size of the array of the file ids
+     */
+    void remove_files(const char* file_ids[], int file_ids_size);
+
+     /*
+     * Deletes a file from the database and Tocc managed file system.
+     *
+     * @param file_to_remove: the informations related to the file to delete.
+     */
+    void remove_file(FileInfo& file_to_remove);
+
+     /*
+     * Deletes a collection of FileInfos from the database and Tocc managed file system.
+     *
+     * @param files_to_remove: collection of the files to remove.
+     */
+    void remove_files(FileInfoCollection& files_to_remove);
 
     /*
      * Assigns specified tags to all files in the specified list of files.
@@ -115,6 +161,30 @@ namespace libtocc
     void assign_tags(const char* file_id, const char* tag);
 
     /*
+     * Unassign tag from a file
+     *
+     * @param file_id: the id of the file to unassign tag from
+     * @param tag: tag to unassign
+     */
+    void unassign_tag(const char* file_id, const char* tag);
+
+    /*
+     * Unassign a collection of tags from the specified files
+     *
+     * @param file_ids: An array of ids of the files to unassign tags from.
+     * @param tags: A list of tags to unassign
+     */
+    void unassign_tags(const char* file_ids[], int file_ids_size, const TagsCollection* tags);
+
+    /*
+     * Unassign a collection of tags from the specified file
+     *
+     * @param file_id: the ID of the file to unassign tags from.
+     * @param tags: A list of tags to unassign.
+     */
+    void unassign_tags(const char* file_id, const TagsCollection* tags);
+
+    /*
      * Search files according to the specified query.
      *
      * @param query: Query to execute.
@@ -129,6 +199,31 @@ namespace libtocc
      * returns it.
      */
     TagStatisticsCollection get_tags_statistics();
+
+    /*
+     * Collects statistics of a list of files.
+     * It returns list of tags assigned to these files, and how many files
+     * is associated to each tag.
+     *
+     * @param file_ids: Files to get their statistics.
+     * @param file_ids_size: the size of the array of file ids.
+     */
+    TagStatisticsCollection get_tags_statistics(const char* file_ids[], int file_ids_size);
+
+    /*
+     * Sets a new title to a group of files, all the files will be having the same title
+     * @param file_ids: An array of ids of the files to set a title to.
+     * @param file_ids_size: the size of the array of file ids.
+     * @param new_title : the new files title
+     */
+    void set_titles(const char* file_ids[], int file_ids_size, const char* new_title);
+
+    /*
+     * Sets a new title to a file
+     * @param file_id: the id of the file we want to set a title to
+     * @param new_title: the new file's title
+     */
+    void set_title(const char* file_id, const char* new_title);
 
   private:
     /*

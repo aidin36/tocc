@@ -16,20 +16,24 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "engine/cmd_manager.h"
+
 #include <sstream>
 #include <iostream>
 
 #include <libtocc/front_end/file_info.h>
 #include <libtocc/front_end/manager.h>
 
-#include "engine/cmd_manager.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 #include "selectors/id_selector.h"
 #include "selectors/import_file_selector.h"
 #include "selectors/query_selector.h"
 #include "actions/print_action.h"
 #include "actions/assign_action.h"
-#include "actions/all_tags_action.h"
+#include "actions/tags_statistics_action.h"
+#include "actions/remove_action.h"
+#include "actions/set_title_action.h"
+#include "actions/unassign_action.h"
 
 
 // PACKAGE_VERSION macro defines by Autoconf. But in case someone don't use
@@ -58,7 +62,10 @@ namespace tocccli
      */
     this->actions.push_back(new PrintAction(this->libtocc_manager));
     this->actions.push_back(new AssignAction(this->libtocc_manager));
-    this->actions.push_back(new AllTagsAction(this->libtocc_manager));
+    this->actions.push_back(new TagsStatisticsAction(this->libtocc_manager));
+    this->actions.push_back(new RemoveAction(this->libtocc_manager));
+    this->actions.push_back(new SetTitleAction(this->libtocc_manager));
+    this->actions.push_back(new UnassignAction(this->libtocc_manager));
   }
 
   CmdManager::~CmdManager()
@@ -184,9 +191,9 @@ namespace tocccli
       if (!option_handler_found)
       {
         // It means that this parameter didn't match any of the known ones.
-	std::string error_message("Unknown option: ");
-	error_message += (*params_iterator).option;
-	throw InvalidParametersError(error_message.c_str());
+      	std::string error_message("Unknown option: ");
+      	error_message += (*params_iterator).option;
+      	throw InvalidParametersError(error_message.c_str());
       }
     }
 

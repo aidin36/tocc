@@ -24,19 +24,26 @@
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/front_end/file_info.h"
+#include "libtocc/file_system/file_manager.h"
+
 
 namespace libtocc
 {
-  FileInfo to_external_file_info(const IntFileInfo* internal_file_info);
+  FileInfo to_external_file_info(const IntFileInfo* internal_file_info, FileManager* file_manager);
 
   IntFileInfo to_internal_file_info(const FileInfo* external_file_info);
 
-  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos);
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos, FileManager* file_manager);
 
   std::vector<std::string> tags_to_vector(const TagsCollection* collection);
 
   TagsCollection vector_to_tags(const std::vector<std::string>* vector);
 
+  std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection);
+ 
+  std::vector<std::string> const_char_array_to_vector(const char* char_array[], int char_array_size);
+
+  std::vector<unsigned long> string_vector_to_ulong_vector(const std::vector<std::string> vect_of_strings);
 }
 
 #endif /* LIBTOCC_FILE_INFO_CONVERTER_H_INCLUDED */

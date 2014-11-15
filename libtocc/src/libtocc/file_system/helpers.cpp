@@ -23,6 +23,7 @@
 #include <errno.h>
 
 #include "libtocc/common/file_system_exceptions.h"
+#include <string>
 
 namespace libtocc
 {

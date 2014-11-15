@@ -18,6 +18,7 @@
 
 #include"libtocc/utilities/file_utils.h"
 
+
 namespace libtocc
 {
   std::string get_filename_from_path(std::string path)
@@ -29,14 +30,18 @@ namespace libtocc
     {
       filename = path.substr(last_slash_index + 1, path.length());
     }
-
-    //remove the file extension
+    else
+    {
+      if(path.length()!=0)
+      {
+          filename=path;
+      }
+    }
     int last_point_index = filename.rfind(".");
     if(last_point_index != std::string::npos && last_point_index != 0)
     {
       filename = filename.substr(0, last_point_index);
     }
-
     return filename;
   }
 }

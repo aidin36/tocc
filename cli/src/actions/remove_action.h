@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
+ * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,27 +16,28 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOCCCLI_ALL_TAGS_ACTION_H_INCLUDED
-#define TOCCCLI_ALL_TAGS_ACTION_H_INCLUDED
-
-#include "libtocc/front_end/manager.h"
+#ifndef TOCCCLI_REMOVE_ACTION_HANDLER_H_INCLUDED
+#define TOCCCLI_REMOVE_ACTION_HANDLER_H_INCLUDED
 
 #include "actions/action.h"
 
+namespace libtocc
+{
+  class Manager;
+}
 
 namespace tocccli
 {
-
   /*
-   * Query statistics of all tags and prints them.
+   * This action removes files when executed
    */
-  class AllTagsAction : public Action
+  class RemoveAction : public Action
   {
   public:
 
-    AllTagsAction(libtocc::Manager* manager);
+    RemoveAction(libtocc::Manager* manager);
 
-    ~AllTagsAction();
+    virtual ~RemoveAction();
 
     /*
      * Returns short form of the parameter.
@@ -63,9 +64,9 @@ namespace tocccli
      */
     virtual void execute(std::vector<libtocc::FileInfo> files, std::vector<std::string> cmd_arguments);
 
-  private:
+   private:
     libtocc::Manager* libtocc_manager;
   };
 }
 
-#endif /* TOCCCLI_ALL_TAGS_ACTION_H_INCLUDED */
+#endif /* TOCCCLI_REMOVE_ACTION_HANDLER_H_INCLUDED */

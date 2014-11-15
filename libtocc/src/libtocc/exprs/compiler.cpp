@@ -16,12 +16,14 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/exprs/compiler.h"
+
 #include <list>
 #include <sstream>
 
 #include "libtocc/common/expr_exceptions.h"
-#include "libtocc/exprs/compiler.h"
 #include "libtocc/exprs/compiled_expr.h"
+
 
 namespace libtocc
 {
@@ -38,6 +40,7 @@ namespace libtocc
   public:
     CompileStateData(CompiledExpr* current_expression,
                      CompiledExpr* next_expression,
+                     std::ostringstream* function_header_stream,
                      std::ostringstream* tags_stream,
                      std::ostringstream* fields_stream,
                      std::ostringstream* result)
@@ -45,6 +48,7 @@ namespace libtocc
       this->current_expr = current_expression;
       this->next_expr = next_expression;
       this->result_counter = 1;
+      this->function_header_stream = function_header_stream;
       this->tags_stream = tags_stream;
       this->fields_stream = fields_stream;
       this->result = result;
@@ -54,6 +58,7 @@ namespace libtocc
     CompiledExpr* next_expr;
     int result_counter;
     std::list<std::string> groups_stack;
+    std::ostringstream* function_header_stream;
     std::ostringstream* tags_stream;
     std::ostringstream* fields_stream;
     std::ostringstream* result;
@@ -71,26 +76,46 @@ namespace libtocc
 
   void append_expression(CompileStateData& data)
   {
+    // Appending initialization of $r variable in header.
+    (*data.function_header_stream) << "$r" << data.result_counter << " = ";
+    if (data.current_expr->is_negative_expr())
+    {
+      (*data.function_header_stream) << "true";
+    }
+    else
+    {
+      (*data.function_header_stream) << "false";
+    }
+    (*data.function_header_stream) << "; ";
+
+    // Selecting which stream these codes should be put in.
+    std::ostringstream* current_stream = data.fields_stream;
     if (data.current_expr->get_type() == compiled_expr::TAG)
     {
-      // Start a loop if it wasn't start yet.
+      current_stream = data.tags_stream;
+
       if (data.tags_stream->tellp() == 0)
       {
+        // Start a loop if it wasn't start yet.
         (*data.tags_stream) << " foreach ($record.tags as $tag) {";
       }
-
-      // Making a new if for this tag.
-      (*data.tags_stream) << " if (" << data.current_expr->get_value();
-      (*data.tags_stream) << ") { $r" << data.result_counter;
-      (*data.tags_stream) << " = true; }";
     }
 
-    else if (data.current_expr->get_type() == compiled_expr::FIELD)
+    // Making a new if for this field.
+    (*current_stream) << " if (" << data.current_expr->get_value();
+    (*current_stream) << ") { $r" << data.result_counter;
+    (*current_stream) << " = ";
+
+    if (data.current_expr->is_negative_expr())
     {
-      (*data.fields_stream) << " if (" << data.current_expr->get_value();
-      (*data.fields_stream) << ") { $r" << data.result_counter;
-      (*data.fields_stream) << " = true; }";
+      (*current_stream) << "false";
     }
+    else
+    {
+      (*current_stream) << "true";
+    }
+
+    (*current_stream) << "; }";
   }
 
   compile_states::States group_state_handler(CompileStateData& data)
@@ -303,6 +328,9 @@ namespace libtocc
     // The final script.
     std::string script;
 
+    // Keeps first lines of the function (mainly, result variables initialization).
+    std::ostringstream function_header_stream;
+
     // Keeps condition of tags.
     std::ostringstream tags_stream;
 
@@ -315,7 +343,8 @@ namespace libtocc
     compile_states::States current_state = compile_states::GROUP_AFTER_GROUP;
 
     // Compiling expressions to CompiledExprs.
-    std::list<CompiledExpr> compiled_list = expression_to_compile->compile();
+    std::list<CompiledExpr> compiled_list =
+        expression_to_compile->compile().list;
 
     // Iterating over CompiledExprs to create a Jx9 script.
     std::list<CompiledExpr>::iterator iterator = compiled_list.begin();
@@ -324,6 +353,7 @@ namespace libtocc
     CompiledExpr* second_element = &*iterator;
     // Initializing data.
     CompileStateData data(first_element, second_element,
+                          &function_header_stream,
                           &tags_stream, &fields_stream, &result);
     ++iterator;
 
@@ -343,12 +373,18 @@ namespace libtocc
     data.next_expr = &nope_element;
     current_state = state_table[current_state](data);
 
-    // Finalizing the script.
+    // Creating filter function.
     script += "$filter_func = function($record) { ";
 
+    // Header of the function.
+    if (function_header_stream.tellp() != 0)
+    {
+      script += function_header_stream.str();
+    }
+
+    // Appending tags conditions, if there's any.
     if (tags_stream.tellp() != 0)
     {
-      // If `tags_stream' is not empty.
       script += " " + tags_stream.str() +" }";
     }
 

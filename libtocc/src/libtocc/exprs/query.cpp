@@ -21,9 +21,9 @@
 namespace libtocc
 {
 
-  Query::Query(ConnectiveExpr* expression)
+  Query::Query(ConnectiveExpr& expression)
   {
-    this->expr = expression;
+    this->expr = (ConnectiveExpr*)expression.clone();
   }
 
   Query::~Query()

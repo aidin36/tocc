@@ -1,4 +1,29 @@
 
+v1.0.0
+  * API of libtocc's expressions cleaned up.
+  * Not and WildCard added to expressions.
+  * CLI uses wild card in its queries.
+  * Better argument parsing in CLI (user don't have to hit space
+    before and after operations in query, and she can user equal
+    sign in command line arguments.)
+  * Now user must initialize a directory before use it as
+    Tocc Managed File System.
+  * --all-tags renamed to --tags-statistics, and its behaviour
+    improved.
+  * tests of libtocc improved.
+  * Toccfs is implemented.
+  * Preventing duplicated traditional paths.
+  * When importing a file, auto-title contains file's extension too.
+  * Bug fix.
+
+v0.3.0:
+  * --set-title added to CLI.
+  * --remove added to CLI.
+  * --print now accepts formatting.
+  * --all-tags added to CLI.
+  * `physical_path' property added to FileInfo class.
+  * Better memory management in Query and Expr classes.
+
 v0.2.0:
   * A memory leak in libtocc fixed.
   * --assign added to CLI.
@@ -6,5 +31,5 @@ v0.2.0:
   * Better build scripts.
   * Minor bug fixes.
 
--- Aidin Gharibnavaz <aidin@t-o-c-c.com> Sat, 31 May 2015 06:44:32 +0430
+-- Aidin Gharibnavaz <aidin@t-o-c-c.com> Sat, 5 Nov 2014 06:44:32 +0430
 

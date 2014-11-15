@@ -20,23 +20,74 @@
 #ifndef LIBTOCC_OPERAND_H_INCLUDED
 #define LIBTOCC_OPERAND_H_INCLUDED
 
-#include <string>
 #include "libtocc/exprs/expr.h"
+#include "libtocc/exprs/fields.h"
+
 
 namespace libtocc
 {
 
+  // Forward declaration: This shouldn't be exposed in the public headers.
+  class CompiledExpr;
+
+
   /*
    * Base class of all operand expressions.
    */
-  class OperandExpr : public Expr
+  class OperationExpr : public Expr
   {
   public:
+    /*
+     * @param operand: Operand of this operation.
+     *   For example: Not(Tag("bad-photo"))
+     */
+    OperationExpr(FieldExpr& operand);
+
+    /*
+     * Copy constructor.
+     */
+    OperationExpr(const OperationExpr& source);
+
+    virtual ~OperationExpr();
+
+    /*
+     * Gets the type of this expression.
+     */
     virtual expr_type::ExprType get_type();
 
-    virtual std::string compile();
+    /*
+     * Compiles the expression.
+     */
+    virtual CompiledExpr compile();
+
+    /*
+     * Creates a copy of the expression.
+     */
+    virtual Expr* clone();
+
+  protected:
+    class ProtectedData;
+    ProtectedData* protected_data;
   };
 
+  class Not : public OperationExpr
+  {
+  public:
+
+    Not(FieldExpr& operand);
+
+    Not(const Not& source);
+
+    /*
+     * Compiles the expression.
+     */
+    virtual CompiledExpr compile();
+
+    /*
+     * Creates a copy of the expression.
+     */
+    virtual Expr* clone();
+  };
 };
 
 #endif /* LIBTOCC_OPERAND_H_INCLUDED */

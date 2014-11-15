@@ -14,6 +14,7 @@
 
   manual/index
   contribution
+  developers/index
 
 
 Tocc is a tag-based file management system. It also includes a tag-based file
@@ -23,6 +24,7 @@ tree of files and directories.
 
 .. image:: _static/gplv3.png
   :alt: Gnu General Public License, version 3
+
 Tocc is free software. It publishes under the terms of Gnu General Public
 License version 3.
 
@@ -62,6 +64,19 @@ with.
 
 Features
 ========
+
+These are the main features of Tocc.
+
+ * It can manage any kind of file. It don't limited to specific type of file.
+ * It stores files and their related database in a regular directory, so you
+   can store them everywhere, from you local file system, to a network storage
+   or back them up in a DVD.
+ * It have a File System interface, that let's any application use Tocc without
+   any changes. In other words, other applications don't have to support Tocc
+   specially. It's compatible with everyone, out of the box.
+ * There can be different UIs that work with Tocc: Command line interface,
+   plugin for different launcher or different file browsers, etc.
+
 
 Download
 ========

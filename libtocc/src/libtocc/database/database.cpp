@@ -16,14 +16,17 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
-
 #include "libtocc/database/database.h"
+
+#include <sstream>
+#include <fstream>
+
 #include "libtocc/database/base23.h"
 #include "libtocc/database/scripts.h"
+#include "libtocc/database/funcs.h"
 #include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
-
+#include "libtocc/utilities/file_info_converter.h"
 
 extern "C"
 {
@@ -200,6 +203,31 @@ namespace libtocc
     UnqliteValueHolder holder(value, vm);
 
     return unqlite_value_to_int64(value);
+  }
+
+  /*
+   * Extracts a boolean from the specified VM.
+   *
+   * @param vm: pointer to VM.
+   * @param variable_name: Name of the variable to extract.
+   *
+   * @return: Extracted variable. It will return false
+   *   if variable does not exists.
+   */
+  bool extract_boolean_from_vm(unqlite_vm* vm, std::string variable_name)
+  {
+    unqlite_value* value = unqlite_vm_extract_variable(vm,
+                                                       variable_name.c_str());
+
+    if (value == NULL)
+    {
+      return false;
+    }
+
+    // Auto release value.
+    UnqliteValueHolder holder(value, vm);
+
+    return unqlite_value_to_bool(value);
   }
 
   /*
@@ -698,19 +726,97 @@ namespace libtocc
     }
   }
 
+  /*
+   * Registers available functions in Unqlite Virtual Machine.
+   */
+  void register_funcs_in_vm(unqlite_vm* vm)
+  {
+    int result = unqlite_create_function(vm,
+                                         "wild_card_compare",
+                                         wild_card_compare_unqlite_func,
+                                         NULL);
+    if (result != 0)
+    {
+      std::stringstream error_message;
+      error_message << "Could not register `wild_card_compare' function.";
+      error_message << " Error number: ";
+      error_message << result;
+      throw DatabaseScriptCompilationError(error_message.str().c_str());
+    }
+  }
+
   Database::Database(std::string database_file)
   {
-    int result;
+    this->database_file = database_file;
+    this->db_pointer = NULL;
+  }
 
+  Database::~Database()
+  {
+    // Closing the database file.
+    if (this->db_pointer != NULL)
+    {
+      unqlite_close(this->db_pointer);
+    }
+  }
+
+  unqlite* Database::get_db_pointer()
+  {
+    // Checking if we were initialized the DB pointer before.
+    if (this->db_pointer == NULL)
+    {
+      // Checking if the database file exists.
+      std::ifstream db_file_stream(this->database_file.c_str());
+      if (!db_file_stream.good())
+      {
+        std::string message("No database found in the base path specified.");
+        message += " Make sure the path is correct, and it's initialized.";
+        throw DatabaseInitializationError(message.c_str());
+      }
+      db_file_stream.close();
+
+      // Opening the database.
+      int result;
+      result = unqlite_open(&this->db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
+
+      if (result != UNQLITE_OK)
+      {
+        std::stringstream message_stream;
+        message_stream << "Error opening database file: [";
+        message_stream << this->database_file;
+        message_stream << "] Error code: ";
+        message_stream << result;
+        throw DatabaseInitializationError(message_stream.str().c_str());
+      }
+    }
+
+    return this->db_pointer;
+  }
+
+  void Database::initialize()
+  {
+    // Checking if the database file already exists.
+    std::ifstream db_file_stream(this->database_file.c_str());
+    if (db_file_stream)
+    {
+      db_file_stream.close();
+
+      std::string message("Specified path is already initialized.");
+      message += " Initialize should only run once in every path.";
+      throw DatabaseInitializationError(message.c_str());
+    }
     // Opening the database.
-    result = unqlite_open(&this->db_pointer, database_file.c_str(), UNQLITE_OPEN_CREATE);
+    int result;
+    result = unqlite_open(&this->db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
 
     if (result != UNQLITE_OK)
     {
-      std::string message = "Error opening database file: [";
-      message += database_file;
-      message += "]";
-      throw DatabaseInitializationError(message.c_str());
+      std::stringstream message_stream;
+      message_stream << "Error opening database file: [";
+      message_stream << this->database_file;
+      message_stream << "] Error code: ";
+      message_stream << result;
+      throw DatabaseInitializationError(message_stream.str().c_str());
     }
 
     // Ensuring that collection is available, by executing a Jx9 script.
@@ -721,12 +827,6 @@ namespace libtocc
     // Compiling and executing the Jx9 script.
     compile_jx9(this->db_pointer, COLLECTION_CREATION_SCRIPT, &vm);
     execute_vm(vm);
-  }
-
-  Database::~Database()
-  {
-    // Closing the database file.
-    unqlite_close(this->db_pointer);
   }
 
   IntFileInfo Database::create_file(std::string title,
@@ -743,12 +843,14 @@ namespace libtocc
                                     std::string title,
                                     std::string traditional_path)
   {
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
-    //VMPointerHolder holder(&vm);
+    VMPointerHolder holder(&vm);
 
     // Compiling the script (Which fills VM)
-    compile_jx9(this->db_pointer, CREATE_FILE_SCRIPT, &vm);
+    compile_jx9(db_pointer, CREATE_FILE_SCRIPT, &vm);
 
     std::string variable_tags("tags");
     std::string variable_title("title");
@@ -758,21 +860,52 @@ namespace libtocc
     register_variable_in_vm(vm, variable_traditional_path, traditional_path);
 
     execute_vm(vm);
-
     return extract_file_from_vm(vm, "result");
+  }
+
+  void Database::remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files)
+  {
+    unqlite* db_pointer = get_db_pointer();
+
+    unqlite_vm* vm;
+    VMPointerHolder vm_holder(&vm);
+
+    //Executing script
+    compile_jx9(db_pointer, REMOVE_FILES_SCRIPT, &vm);
+
+    //Convert string ids to base23
+    std::vector<unsigned long> converted_ids;
+    std::vector<std::string>::const_iterator iterator = file_ids.begin();
+    for(; iterator != file_ids.end(); ++iterator)
+    {
+      converted_ids.push_back(from_base23(*iterator));
+    }
+
+    //Register the converted_ids in VM
+    std::string variable_file_ids("file_ids");
+    register_variable_in_vm(vm, variable_file_ids, converted_ids);
+
+    execute_vm(vm);
+
+    std::string founded_files_variable("founded_files");
+    founded_files = extract_files_list_from_vm(vm, founded_files_variable);
   }
 
   IntFileInfo Database::get(std::string file_id)
   {
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
-    // Executing script.
-    compile_jx9(this->db_pointer, GET_FILE_SCRIPT, &vm);
+    // Compiling the script.
+    compile_jx9(db_pointer, GET_FILE_SCRIPT, &vm);
 
     std::string variable_file_id("file_id");
+    std::string variable_orig_file_id("orig_file_id");
     register_variable_in_vm(vm, variable_file_id, from_base23(file_id));
+    register_variable_in_vm(vm, variable_orig_file_id, file_id);
 
     execute_vm(vm);
 
@@ -801,12 +934,14 @@ namespace libtocc
   void Database::assign_tag(std::vector<std::string> file_ids,
                             std::vector<std::string> tags)
   {
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
     // Compiling the script (Which fills VM)
-    compile_jx9(this->db_pointer, ASSIGN_TAGS_SCRIPT, &vm);
+    compile_jx9(db_pointer, ASSIGN_TAGS_SCRIPT, &vm);
 
     // Converting IDs.
     std::vector<unsigned long> converted_ids;
@@ -827,24 +962,47 @@ namespace libtocc
     execute_vm(vm);
   }
 
-  void Database::unassign_tag(std::string file_id, std::string tag)
+  void Database::unassign_tags(const std::string& file_id, const std::vector<std::string>& tags)
   {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(file_id);
+
+    unassign_tags(file_ids, tags);
+  }
+
+  void Database::unassign_tag(const std::string& file_id, const std::string& tag)
+  {
+    std::vector<std::string> file_ids;
+    std::vector<std::string> file_tags;
+
+    file_ids.push_back(file_id);
+    file_tags.push_back(tag);
+    unassign_tags(file_ids, file_tags);
+  }
+
+  void Database::unassign_tags(const std::vector<std::string>& file_ids, const std::vector<std::string>& tags)
+  {
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
     // Compiling the script (Which fills VM)
-    compile_jx9(this->db_pointer, UNASSIGN_TAGS_SCRIPT, &vm);
+    compile_jx9(db_pointer, UNASSIGN_TAGS_SCRIPT, &vm);
+
+    std::vector<unsigned long> converted_ids = string_vector_to_ulong_vector(file_ids);
 
     // Registering variables in VM
-    std::string variable_file_id("file_id");
-    std::string variable_tag_to_unassign("tag_to_unassign");
-    register_variable_in_vm(vm, variable_file_id, file_id);
-    register_variable_in_vm(vm, variable_tag_to_unassign, tag);
+    std::string variable_file_id("file_ids");
+    std::string variable_tag_to_unassign("tags_to_unassign");
+    register_variable_in_vm(vm, variable_file_id, converted_ids);
+    register_variable_in_vm(vm, variable_tag_to_unassign, tags);
 
     // Executing VM
     execute_vm(vm);
   }
+
 
   std::vector<IntFileInfo> Database::search_files(Query& query)
   {
@@ -854,12 +1012,17 @@ namespace libtocc
     QueryCompiler compiler;
     std::string jx9_script = compiler.compile(query, result_variable_name);
 
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
     // Compiling Jx9
-    compile_jx9(this->db_pointer, jx9_script, &vm);
+    compile_jx9(db_pointer, jx9_script, &vm);
+
+    // Registers external functions.
+    register_funcs_in_vm(vm);
 
     // Executing vm.
     execute_vm(vm);
@@ -869,12 +1032,34 @@ namespace libtocc
 
   TagStatisticsCollection Database::get_tags_statistics()
   {
+    std::vector<std::string> empty_vector;
+    return get_tags_statistics(empty_vector);
+  }
+
+  TagStatisticsCollection Database::get_tags_statistics(const std::vector<std::string>& file_ids)
+  {
+    unqlite* db_pointer = get_db_pointer();
+
     unqlite_vm* vm;
     // Auto release the pointer.
     VMPointerHolder holder(&vm);
 
     // Compiling Jx9
-    compile_jx9(this->db_pointer, COLLECT_TAGS_STATISTICS, &vm);
+    compile_jx9(db_pointer, COLLECT_TAGS_STATISTICS, &vm);
+
+    std::string variable_name("file_ids");
+    if (!file_ids.empty())
+    {
+      // Converting IDs.
+      std::vector<unsigned long> converted_ids;
+      std::vector<std::string>::const_iterator iterator = file_ids.begin();
+      for(; iterator != file_ids.end(); ++iterator)
+      {
+        converted_ids.push_back(from_base23(*iterator));
+      }
+
+      register_variable_in_vm(vm, variable_name, converted_ids);
+    }
 
     // Executing vm.
     execute_vm(vm);
@@ -882,4 +1067,31 @@ namespace libtocc
     return extract_tag_statistics_from_vm(vm, "statistics");
   }
 
+  void Database::set_titles(const std::vector<std::string>& file_ids, const std::string& new_title)
+  {
+    unqlite* db_pointer = get_db_pointer();
+
+    unqlite_vm* vm;
+    VMPointerHolder vm_holder(&vm);
+
+    //Executing set_title script
+    compile_jx9(db_pointer, SET_TITLE_SCRIPT, &vm);
+
+    // Converting IDs.
+    std::vector<unsigned long> converted_ids;
+    std::vector<std::string>::const_iterator iterator = file_ids.begin();
+    for(; iterator != file_ids.end(); ++iterator)
+    {
+      converted_ids.push_back(from_base23(*iterator));
+    }
+
+   //Register the variables in VM
+   std::string variable_file_id("file_ids");
+   std::string variable_new_title("new_title");
+   register_variable_in_vm(vm, variable_file_id, converted_ids);
+   register_variable_in_vm(vm, variable_new_title, new_title);
+
+   //Execute script
+   execute_vm(vm);
+  }
 }

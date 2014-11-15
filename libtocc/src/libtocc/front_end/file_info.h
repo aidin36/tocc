@@ -1,6 +1,6 @@
 /*
- * This file is part of Tocc. (see <http://www.github.com/aidin36/tocc>)
- * Copyright (C) 2013, 2014, Aidin Gharibnavaz <tocc@aidinhut.com>
+ * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,11 @@ namespace libtocc
      */
     TagsCollection(int size);
 
+    /*
+     * Copy Constructor.
+     */
+    TagsCollection(const TagsCollection& source);
+
     ~TagsCollection();
 
     /*
@@ -73,6 +78,8 @@ namespace libtocc
      * Returns true if the collection is empty.
      */
     bool is_empty() const;
+
+    TagsCollection& operator=(const TagsCollection& source);
 
   private:
     class PrivateData;
@@ -164,16 +171,19 @@ namespace libtocc
 
     FileInfo(const char* file_id,
              const char* title,
-             const char* traditional_path);
+             const char* traditional_path,
+             const char* physical_path);
 
     FileInfo(const char* file_id,
              const char* title,
              const char* traditional_path,
+             const char* physical_path,
              const char* tags[]);
 
     FileInfo(const char* file_id,
              const char* title,
              const char* traditional_path,
+             const char* physical_path,
              const TagsCollection* tags);
 
     /*
@@ -202,6 +212,11 @@ namespace libtocc
      * Gets traditional path of the file.
      */
     const char* get_traditional_path() const;
+
+    /*
+     * Gets path of the file on the Tocc Managed file system.
+     */
+    const char* get_physical_path() const;
 
     /*
      * Overrided operator for std::ostream.

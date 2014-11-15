@@ -69,31 +69,54 @@ namespace libtocc
       "}";
 
   /*
-   * Removes a tag from the list of tags of a file.
+   * Removes a tag or a list of tags from a list of files.
    */
-  // TODO: Implement this. Right now Unqlite doesn't supports removing an
-  //       element from an array. Wait until then, or find a workaround.
   const std::string UNASSIGN_TAGS_SCRIPT =  \
-      "";
+      "$filter_func = function($record) "\
+      "{"\
+      "  return in_array($record.file_id, $file_ids);"\
+      "};"\
+      "/* Finding records that should  be updated */"\
+      "$records_to_update = db_fetch_all('files', $filter_func); "\
+      "foreach ($records_to_update as $record) "\
+      "{"\
+      "  $record.tags = array_diff($record.tags, $tags_to_unassign);"\
+      "  /* Updating the record (removing and adding it again). */"\
+      "  db_drop_record('files', $record.__id);"\
+      "  db_store('files', $record);"\
+      "}";
 
   // TODO: Find an empty ID instead of max one.
   const std::string CREATE_FILE_SCRIPT = \
-      "/* First we find the maximum file ID, then adds a file with an ID"\
-      " after that. */ "\
-      "$max_id = 0; "\
-      "$filter_func = function($record) "\
+      "/* First we gather all files ids in an array"\
+      " then we sort that array, and test if they are consecutive."\
+      " if an id is not consecutive with the next then it's an empty id */ "\
+      "$array_ids = {};"\
+      "$record = db_fetch('files');"\
+      "while($record != NULL)"\
       "{"\
-      "  uplink $max_id;"\
-      "  if ($record.file_id > $max_id)"\
+      "  if ($traditional_path != \"\" && "\
+      "    $record.traditional_path == $traditional_path)"\
       "  {"\
-      "    $max_id = $record.file_id;"\
+      "    $error = \"Error: file with identical traditional path found.\"; "\
+      "    exit; "\
       "  }"\
-      "  return false; "\
-      "};"\
-      "db_fetch_all('files', $filter_func); "\
+      "  array_push($array_ids, $record.file_id);"\
+      "  $record = db_fetch('files');"\
+      "}"\
+
+      /* make sure all ids are sorted */
+      "sort($array_ids);"\
+      "$current_record_id = current($array_ids);"\
+      "$previous_record_id = 0;"\
+      "while($current_record_id - $previous_record_id == 1)"\
+      "{"\
+      "  $previous_record_id = $current_record_id;"\
+      "  $current_record_id = next($array_ids);"\
+      "}"\
       "$new_file = "\
       "{"\
-      "  file_id: $max_id + 1,"\
+      "  file_id: $previous_record_id + 1,"\
       "  title: $title,"\
       "  traditional_path: $traditional_path,"\
       "  tags: $tags "\
@@ -107,6 +130,27 @@ namespace libtocc
       "{"\
       "  $result = $new_file; "\
       "}";
+
+  const std::string REMOVE_FILES_SCRIPT = \
+      "$founded_files = {};"\
+      "$found_something =false;"\
+      "while(($record = db_fetch('files')) != NULL)"\
+      "{"\
+      "  if(in_array($record.file_id, $file_ids))"\
+      "  {"\
+      "    if(!$found_something)"\
+      "    {"\
+      "      $found_something = true;"\
+      "    }"\
+      "    array_push($founded_files, $record);"\
+      "    db_drop_record('files', $record.__id);"\
+      "  }"\
+      "}"\
+      "if(!$found_something)"\
+      "{"\
+      "  $error = 'file(s) doesn t(don t) exist';"\
+      "}";
+
 
   const std::string GET_FILE_SCRIPT = \
       "/* Manually looping over records, so we can break the loop"\
@@ -125,7 +169,7 @@ namespace libtocc
       "/* If $result does not set, it means file not found. */ "\
       "if ($result == NULL) "\
       "{"\
-      "   $error = 'file '..$file_id..' does not exists.'; "\
+      "   $error = 'file '..$orig_file_id..' does not exist.'; "\
       "}";
 
   /*
@@ -137,17 +181,64 @@ namespace libtocc
       "$filter_func = function($record) "\
       "{"\
       "  uplink $statistics;"\
-      "  foreach ($record.tags as $tag)"\
+      "  /* If file_ids is set, only filter these files. */"\
+      "  if ($file_ids)"\
       "  {"\
-      "    if (!array_key_exists($tag, $statistics))"\
+      "    if (!in_array($record.file_id, $file_ids))"\
       "    {"\
-      "      $statistics[$tag] = 0;"\
+      "      return FALSE;"\
       "    }"\
-      "    $statistics[$tag] += 1;"\
+      "  }"\
+      "  if (count($record.tags) == 0)"\
+      "  {"\
+      "    if (!array_key_exists(\"*no tag*\", $statistics))"\
+      "    {"\
+      "      $statistics[\"*no tag*\"] = 0;"\
+      "    }"\
+      "    $statistics[\"*no tag*\"] += 1;"\
+      "  }"\
+      "  else"\
+      "  {"\
+      "    foreach ($record.tags as $tag)"\
+      "    {"\
+      "      if (!array_key_exists($tag, $statistics))"\
+      "      {"\
+      "        $statistics[$tag] = 0;"\
+      "      }"\
+      "      $statistics[$tag] += 1;"\
+      "    }"\
       "  }"\
       "  return FALSE;"\
       "}; "\
       "db_fetch_all('files', $filter_func);";
+
+  /*
+   * Sets a file's title
+   */
+  const std::string SET_TITLE_SCRIPT = \
+      "$found_something = false;"\
+      "while(($record = db_fetch('files')) != NULL)"\
+      "{"\
+      "  if(in_array($record.file_id, $file_ids))"\
+      "  {"\
+      "    if(!$found_something)"\
+      "    {"\
+      "      $found_something = true;"\
+      "    }"\
+      "    /*if the new title isn t the same as the title's file*/"\
+      "    if($record.title != $new_title)"\
+      "    {"\
+      "      $record.title = $new_title;"\
+      "      /*Updating the record*/"\
+      "      db_drop_record('files', $record.__id);"\
+      "      db_store('files', $record);"\
+      "    }"\
+      "  }"\
+      "}"\
+      "if(!$found_something)"\
+      "{"\
+      "  $error = 'Error while trying to set title of file: file ['..$file_id..'] not found.';"\
+      "}";
 }
 
 #endif /* LIBTOCC_SCRIPTS_H_INCLUDED */

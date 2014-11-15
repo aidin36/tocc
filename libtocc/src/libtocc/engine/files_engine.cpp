@@ -16,10 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/engine/files_engine.h"
+
 #include <string>
 
-#include "libtocc/engine/files_engine.h"
 #include"libtocc/utilities/file_utils.h"
+
 
 namespace libtocc
 {
@@ -68,4 +70,22 @@ namespace libtocc
     return new_file;
   }
 
+  void FilesEngine::remove_files(const std::vector<std::string>& files_to_remove)
+  {
+    std::vector<IntFileInfo> founded_files;
+
+    this->database->remove_files(files_to_remove, founded_files);
+
+    //Delete the founded files
+    for(int i = 0; i < founded_files.size(); i++)
+    {
+      const std::string& file_id = std::string(founded_files[i].get_id());
+      this->file_manager->remove(file_id.c_str());
+    }
+  }
+
+  void FilesEngine::set_titles(const std::vector<std::string>& file_ids, const std::string& new_title)
+  {
+    this->database->set_titles(file_ids, new_title);
+  }
 }

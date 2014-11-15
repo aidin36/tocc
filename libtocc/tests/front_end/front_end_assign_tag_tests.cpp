@@ -23,7 +23,7 @@
 
 TEST_CASE("front_end: assign tag")
 {
-  libtocc::Manager manager("/tmp/");
+  libtocc::Manager manager("/tmp/tocctests/");
 
   manager.assign_tags("0000001", "author:Unknown");
 

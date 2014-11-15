@@ -22,9 +22,9 @@
 TEST_CASE("utilities/file_utils: get file name from path")
 {
 	REQUIRE( libtocc::get_filename_from_path("/home") == "home");
-	REQUIRE( libtocc::get_filename_from_path("/home/dummy.ext") == "dummy");
-	REQUIRE( libtocc::get_filename_from_path("/home/dummy.dump.ext") == "dummy.dump");
-	REQUIRE( libtocc::get_filename_from_path("/home.ext") == "home");
-	REQUIRE( libtocc::get_filename_from_path("/home/.act.ext") == ".act");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.ext") == "dummy.ext");
+	REQUIRE( libtocc::get_filename_from_path("/home/dummy.dump.ext") == "dummy.dump.ext");
+	REQUIRE( libtocc::get_filename_from_path("/home.ext") == "home.ext");
+	REQUIRE( libtocc::get_filename_from_path("/home/.act.ext") == ".act.ext");
 	REQUIRE( libtocc::get_filename_from_path("/.home") == ".home");
 }

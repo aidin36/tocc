@@ -43,16 +43,42 @@ namespace tocccli
 
   std::string IDSelector::get_help_text()
   {
-    return "-i, --id=ID\tSelects a file by its ID.";
+    return "-d, --id=ID\tSelects a file by its ID.";
   }
 
   std::vector<libtocc::FileInfo> IDSelector::execute(std::vector<std::string> cmd_arguments)
   {
     if (cmd_arguments.empty() || cmd_arguments.size() != 1)
     {
-      throw InvalidParametersError("-i or --id takes exactly one argument.");
+      throw InvalidParametersError("-d or --id takes exactly one argument.");
     }
 
+    /* id must be 7 characters long and all 0-9 or A-M (base-23 digit) */
+  
+    std::string id = cmd_arguments[0];
+    bool valid_id = true;
+    if (id.size() == 7)
+    {
+      for (int i = 0; i < 7; i++)
+      {
+        if (!((id[i] >= '0' && id[i] <= '9')
+          || (id[i] >= 'a' && id[i] <= 'm')
+          || (id[i] >= 'A' && id[i] <= 'M')))
+        {
+          valid_id = false;
+          break;
+        }
+      }
+    }
+    else
+    {
+      valid_id = false;
+    }
+    if (! valid_id)
+    {
+      throw InvalidParametersError("ID must be seven characters, and only contain 0-9 and a-m");
+    }
+  
     libtocc::FileInfo selected_file =
         this->libtocc_manager->get_file_info(cmd_arguments.front().c_str());
 

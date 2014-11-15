@@ -16,14 +16,16 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/front_end/manager.h"
+
 #include <string>
+#include <cassert>
 
 #include "libtocc/database/database.h"
 #include "libtocc/file_system/file_manager.h"
 #include "libtocc/engine/tags_engine.h"
 #include "libtocc/engine/files_engine.h"
 #include "libtocc/utilities/file_info_converter.h"
-#include "libtocc/front_end/manager.h"
 
 
 namespace libtocc
@@ -93,22 +95,33 @@ namespace libtocc
     this->private_data = NULL;
   }
 
+  void Manager::initialize()
+  {
+    this->private_data->database->initialize();
+  }
+
   FileInfo Manager::get_file_info(const char* file_id)
   {
     IntFileInfo info = this->private_data->database->get(file_id);
 
-    return to_external_file_info(&info);
+    return to_external_file_info(&info, this->private_data->file_manager);
   }
 
   FileInfo Manager::import_file(const char* source_path,
                                 const char* title,
                                 const char* traditional_path)
   {
+    assert(source_path != NULL);
+    assert(title != NULL &&
+           "If you don't want to set `title', pass empty string.");
+    assert(traditional_path != NULL &&
+           "If you don't want to set `traditional_path', pass empty string.");
+
     IntFileInfo new_file_info =
         this->private_data->files_engine->import_file(source_path,
                                                       title, traditional_path);
 
-    return to_external_file_info(&new_file_info);
+    return to_external_file_info(&new_file_info, this->private_data->file_manager);
   }
 
   FileInfo Manager::import_file(const char* source_path,
@@ -116,6 +129,12 @@ namespace libtocc
                                 const char* traditional_path,
                                 const TagsCollection* tags)
   {
+    assert(source_path != NULL);
+    assert(title != NULL &&
+           "If you don't want to set `title', pass empty string.");
+    assert(traditional_path != NULL &&
+           "If you don't want to set `traditional_path', pass empty string.");
+
     std::vector<std::string> tags_vector = tags_to_vector(tags);
 
     IntFileInfo new_file_info =
@@ -124,7 +143,39 @@ namespace libtocc
                                                       traditional_path,
                                                       tags_vector);
 
-    return to_external_file_info(&new_file_info);
+    return to_external_file_info(&new_file_info, this->private_data->file_manager);
+  }
+
+  void Manager::remove_file(const char* file_id)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_id));
+    this->private_data->files_engine->remove_files(file_ids);
+  }
+
+  void Manager::remove_file(FileInfo& file_to_remove)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_to_remove.get_id()));
+    this->private_data->files_engine->remove_files(file_ids);
+  }
+
+  void Manager::remove_files(const char* file_ids[], int file_ids_size)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> file_ids_vector = const_char_array_to_vector(file_ids, file_ids_size);
+
+    //Remove the files
+    this->private_data->files_engine->remove_files(file_ids_vector);
+  }
+
+  void Manager::remove_files(FileInfoCollection& files_to_remove)
+  {
+    //Converting the FileInfoCollection to a vector of file ids
+    std::vector<std::string> file_ids = file_info_collection_to_vector_ids(files_to_remove);
+
+    //Remove the files
+    this->private_data->files_engine->remove_files(file_ids);
   }
 
   void Manager::assign_tags(const char* file_ids[],
@@ -163,12 +214,30 @@ namespace libtocc
     this->private_data->tags_engine->assign_tags(file_id, tag);
   }
 
+  void Manager::unassign_tag(const char* file_id, const char* tag)
+  {
+    this->private_data->tags_engine->unassign_tag(std::string(file_id), std::string(tag));
+  }
+
+  void Manager::unassign_tags(const char* file_id, const TagsCollection* tags)
+  {
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+    this->private_data->tags_engine->unassign_tags(std::string(file_id), tags_vector);
+  }
+
+  void Manager::unassign_tags(const char* file_ids[], int file_ids_size, const TagsCollection* tags)
+  {
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+    std::vector<std::string> file_ids_vector = const_char_array_to_vector(file_ids, file_ids_size);
+    this->private_data->tags_engine->unassign_tags(file_ids_vector, tags_vector);
+  }
+
   FileInfoCollection Manager::search_files(Query& query)
   {
     std::vector<IntFileInfo> founded_files =
         this->private_data->database->search_files(query);
 
-    return to_external_file_infos(founded_files);
+    return to_external_file_infos(founded_files, this->private_data->file_manager);
   }
 
   TagStatisticsCollection Manager::get_tags_statistics()
@@ -176,4 +245,26 @@ namespace libtocc
     return this->private_data->tags_engine->get_tags_statistics();
   }
 
+  TagStatisticsCollection Manager::get_tags_statistics(const char* file_ids[], int file_ids_size)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> vector_file_ids = const_char_array_to_vector(file_ids, file_ids_size);
+
+    return this->private_data->tags_engine->get_tags_statistics(vector_file_ids);
+  }
+
+  void Manager::set_titles(const char* file_ids[], int file_ids_size, const char* new_title)
+  {
+    //Converting file_ids to vector
+    std::vector<std::string> vector_file_ids = const_char_array_to_vector(file_ids, file_ids_size);
+
+    this->private_data->files_engine->set_titles(vector_file_ids , new_title);
+  }
+
+  void Manager::set_title(const char* file_id, const char* new_title)
+  {
+    std::vector<std::string> file_ids;
+    file_ids.push_back(std::string(file_id));
+    this->private_data->files_engine->set_titles(file_ids , new_title);
+  }
 }

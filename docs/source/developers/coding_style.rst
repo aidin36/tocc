@@ -6,8 +6,8 @@
   :hidden:
 
 
-Coding Style Guid
-=================
+Coding Style Guide
+==================
 
 There are some rules that must be followed by developers of Tocc, in order to
 keep a cleaner and more maintainable code.
@@ -69,4 +69,12 @@ Commit Messages
 
 * Include related issue number (if any) in the commit message. In the form
   ``issue #52``.
+
+Headers
+-------
+
+* First header that includes in a ``.cpp`` file, should be its header. For
+  example, in ``expr.cpp``, the first include must be ``expr.h``. Then other
+  headers. It will help us see dependency problems earlier.
+
 

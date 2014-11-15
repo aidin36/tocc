@@ -16,15 +16,19 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/utilities/file_info_converter.h"
+
 #include <string>
 #include <vector>
 
-#include "libtocc/utilities/file_info_converter.h"
+#include "libtocc/database/base23.h"
+
 
 namespace libtocc
 {
 
-  FileInfo to_external_file_info(const IntFileInfo* internal_file_info)
+  FileInfo to_external_file_info(const IntFileInfo* internal_file_info,
+                                 FileManager* file_manager)
   {
     // FileInfo copies each of these parameters. So, we just passed a
     // pointer to the internal variable of each string.
@@ -35,6 +39,7 @@ namespace libtocc
     FileInfo result(internal_file_info->get_id().c_str(),
                     internal_file_info->get_title().c_str(),
                     internal_file_info->get_traditional_path().c_str(),
+                    file_manager->get_physical_path(internal_file_info->get_id()).c_str(),
                     &tags);
     return result;
   }
@@ -52,7 +57,8 @@ namespace libtocc
     return result;
   }
 
-  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos)
+  FileInfoCollection to_external_file_infos(std::vector<IntFileInfo> internal_file_infos,
+                                            FileManager* file_manager)
   {
     if (internal_file_infos.empty())
     {
@@ -66,7 +72,7 @@ namespace libtocc
     std::vector<IntFileInfo>::iterator iterator = internal_file_infos.begin();
     for (; iterator != internal_file_infos.end(); ++iterator)
     {
-      result.add_file_info(to_external_file_info(&*iterator));
+      result.add_file_info(to_external_file_info(&*iterator, file_manager));
     }
 
     return result;
@@ -102,4 +108,42 @@ namespace libtocc
     return TagsCollection(tags, vector->size());
   }
 
+  std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection)
+  {
+    std::vector<std::string> file_ids;
+
+    FileInfoCollection::Iterator file_info_collection_iterator(&file_info_collection);
+    for (; !file_info_collection_iterator.is_finished(); ++file_info_collection_iterator)
+    {
+      if(FileInfo* file_info = const_cast<FileInfo*>(file_info_collection_iterator.get()))
+      {
+        file_ids.push_back(std::string(file_info->get_id()));
+      }
+    }
+    return file_ids;
+  }
+
+  std::vector<std::string> const_char_array_to_vector(const char* char_array[], int char_array_size)
+  {
+    std::vector<std::string> char_array_vector;
+
+    for(int i = 0; i < char_array_size; i++)
+    {
+      char_array_vector.push_back(std::string(char_array[i]));
+    }
+
+    return char_array_vector;
+  }
+
+  std::vector<unsigned long> string_vector_to_ulong_vector(const std::vector<std::string> vect_of_strings)
+  {
+    std::vector<unsigned long> converted_strings;
+    std::vector<std::string>::const_iterator iterator = vect_of_strings.begin();
+    for(; iterator != vect_of_strings.end(); ++iterator)
+    {
+      converted_strings.push_back(from_base23(*iterator));
+    }
+
+    return converted_strings;
+  }
 }

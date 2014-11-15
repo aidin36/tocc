@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libtocc], [0.3.0], [aidin@t-o-c-c.com], [libtocc], [http://t-o-c-c.com])
+AC_INIT([libtocc], [0.4.0], [aidin@t-o-c-c.com], [libtocc], [http://t-o-c-c.com])
 AC_CONFIG_SRCDIR([libtocc/front_end/manager.h])
 #AC_CONFIG_HEADERS([config.h])
 
@@ -27,7 +27,7 @@ AC_TYPE_SIZE_T
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([mkdir pow strerror])
+AC_CHECK_FUNCS([mkdir pow strerror sendfile])
 
 # Checking for UnQlite
 AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to documentation for more info.])])

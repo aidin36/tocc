@@ -24,3 +24,30 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+#include <iostream>
+
+/*
+** Initialisation of Library
+*/
+class TestInitialiser
+{
+  public:
+    TestInitialiser()
+    {
+      // clean previous test files
+      if (int status = system("rm -rf /tmp/tocctests"))
+      {
+        std::cout << "Test initialisation failed -\
+          Unable to delete files" << std::endl;
+        exit(status);
+      }
+      else if (int status = system("mkdir /tmp/tocctests"))
+      {
+        std::cout << "Test initialisation failed -\
+          Unable to create base directory" << std::endl;
+        exit(status);
+      }
+    };
+};
+
+TestInitialiser now;

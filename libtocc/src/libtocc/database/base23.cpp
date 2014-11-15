@@ -16,10 +16,11 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/database/base23.h"
+
 #include <cmath>
 #include <cassert>
 
-#include "libtocc/database/base23.h"
 
 const std::string DIGITS = "0123456789abcdefghijklmn";
 
@@ -49,6 +50,6 @@ unsigned long from_base23(std::string num)
   {
     result += DIGITS.find_first_of(num[index]) * pow(23, 6 - index);
   }
-  
+
   return result;
 }

@@ -16,9 +16,10 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/common/int_file_info.h"
+
 #include <sstream>
 
-#include "libtocc/common/int_file_info.h"
 
 namespace libtocc
 {

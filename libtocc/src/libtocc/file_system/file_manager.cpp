@@ -16,16 +16,21 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/file_system/file_manager.h"
+
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cstdio>
+#ifdef HAVE_SENDFILE // check if sendfile is available
+ #include <sys/sendfile.h>
+#endif
 
 #include "libtocc/common/runtime_exceptions.h"
-#include "libtocc/file_system/file_manager.h"
 #include "libtocc/file_system/helpers.cpp"
+
 
 namespace libtocc
 {
@@ -106,8 +111,7 @@ namespace libtocc
 
   void FileManager::copy(std::string source_path, std::string file_id)
   {
-    // TODO: On a Linux platform, we should use `sendfile' system call, because
-    //   it's a lot faster.
+
     // TODO: Maybe we should use `st_blksize' of the file attributes instead
     //   of the BUFSIZ. That's the optimal value, but we need to read the
     //   attribute from the file, before starting.
@@ -117,20 +121,40 @@ namespace libtocc
 
     int dest = create(file_id);
     int source = open(source_path.c_str(), O_RDONLY);
-
-    while ((size = read(source, buf, BUFSIZ)) > 0)
+    if(source == -1)
     {
-        ssize_t write_result = write(dest, buf, size);
-
-        if (write_result < 0)
-        {
-          // An error occurred while writing to file.
-          handle_errno(errno, source_path);
-        }
+      handle_errno(errno, source_path);
     }
+
+    // `sendfile' is a lot faster. We use it if available.
+    #ifndef HAVE_SENDFILE
+      // we don't have sendfile, so we'll use read and write
+      while ((size = read(source, buf, BUFSIZ)) > 0)
+      {
+          ssize_t write_result = write(dest, buf, size);
+
+          if (write_result < 0)
+          {
+            // An error occurred while writing to file.
+            handle_errno(errno, source_path);
+          }
+      }
+    #else      
+      off_t offset = 0;
+      struct stat stat_buf;
+      // Stat the source file to obtain its size.
+      fstat (source, &stat_buf);
+      // Send the file with sendfile
+      sendfile(dest, source, &offset, stat_buf.st_size);
+    #endif
 
     close(source);
     close(dest);
+  }
+
+  std::string FileManager::get_physical_path(std::string file_id)
+  {
+    return id_to_file_path(file_id);
   }
 
   void FileManager::ensure_path_exists(std::string id)
@@ -165,6 +189,7 @@ namespace libtocc
     // Note: I know that I'm duplicating the code, but its faster than
     // splitting the path.
     std::string path_to_create(this->base_path);
+
     path_to_create += "/";
     path_to_create += id.substr(0, 1) + "/";
     create_dir(path_to_create);
@@ -191,26 +216,30 @@ namespace libtocc
   std::string FileManager::id_to_dir_path(std::string id)
   {
     // TODO: Raise exception if ID is not valid (e.g. its length is incorrect.)
-    
+
     std::string result(this->base_path);
-    
-    result += "/";
+
+    if (result.at(result.length() - 1) != '/')
+    {
+      result += "/";
+    }
+
     result += id.substr(0, 1);
     result += "/";
     result += id.substr(1, 2);
     result += "/";
     result += id.substr(3, 2);
     result += "/";
-    
+
     return result;
   }
-  
+
   std::string FileManager::id_to_file_path(std::string id)
   {
     std::string result(id_to_dir_path(id));
-    
+
     result += id.substr(5, 2);
-    
+
     return result;
   }
 

@@ -80,6 +80,21 @@ namespace libtocc
                             std::string traditional_path,
                             std::vector<std::string> tags);
 
+    /*
+    * Sets a new title to a group of files
+    * @param file_ids : A vector of file ids to set title to
+    * @param new_title : the new files title
+    */
+    void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
+
+    /*
+     * Deletes an array of files from the Tocc managed file system.
+     *
+     * @param files_to_remove: a vector of file ids.
+     *
+     */
+    void remove_files(const std::vector<std::string>& files_to_remove);
+
   private:
     Database* database;
     FileManager* file_manager;

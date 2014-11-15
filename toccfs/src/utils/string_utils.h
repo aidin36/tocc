@@ -16,20 +16,28 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef TOCCFS_STRING_UTILS_H_INCLUDED
+#define TOCCFS_STRING_UTILS_H_INCLUDED
 
-#include "libtocc/exprs/operands.h"
+#include <string>
+#include <vector>
 
-namespace libtocc
+
+namespace toccfs
 {
 
-  expr_type::ExprType OperandExpr::get_type()
-  {
-    return expr_type::OPERAND;
-  }
+  /*
+   * Splits a string, by the specified delimiter.
+   */
+  std::vector<std::string> split_string(const std::string& string_to_split,
+                                        char delimiter);
 
-  std::string OperandExpr::compile()
-  {
-    return "Not Implemented";
-  }
+  /*
+   * Checks if the specified string is ends with the other one.
+   * (i.e. `str_to_check' is at the end of `str'.
+   */
+  bool string_ends_with(const std::string& str,
+                        const std::string& str_to_check);
+}
 
-};
+#endif /* TOCCFS_STRING_UTILS_H_INCLUDED */

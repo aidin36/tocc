@@ -18,6 +18,7 @@
 
 
 #include "utilities/cmd_parser.h"
+#include "utilities/string_utils.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 
 
@@ -35,14 +36,34 @@ namespace tocccli
       {
         // A new option.
         CmdParam new_param;
-        new_param.option = argv[i];
+
+        // Checking if it is in form "--option=value".
+        std::string arg(argv[i]);
+        std::string double_dash("--");
+        if (string_starts_with(arg, double_dash))
+        {
+          std::vector<std::string> arg_parts = split_string(arg, '=', 1);
+          if (arg_parts.size() == 2)
+          {
+            // Yes, it is in the form "--option=value".
+            new_param.option = arg_parts[0];
+            new_param.arguments.push_back(arg_parts[1]);
+          }
+        }
+
+        if (new_param.option.empty())
+        {
+          // Previous check is failed.
+          new_param.option = arg;
+        }
+
         result.push_back(new_param);
       }
       else
       {
         if (result.empty())
         {
-          throw new InvalidParametersError(
+          throw InvalidParametersError(
               "First parameter have to be an option (e.g. starts with a dash)");
         }
 

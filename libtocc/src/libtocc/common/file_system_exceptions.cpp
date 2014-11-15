@@ -16,11 +16,12 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libtocc/common/file_system_exceptions.h"
+
 #include <string>
 #include <string.h> // For `strerror'.
 #include <errno.h>
 
-#include "libtocc/common/file_system_exceptions.h"
 
 namespace libtocc
 {
@@ -107,7 +108,7 @@ namespace libtocc
     result += " [";
     result += this->file_path;
     result += "]";
-    return result.c_str();    
+    return result.c_str();
   }
 
   InfinitLinkLoopError::InfinitLinkLoopError(const char* file_path) throw()
@@ -150,7 +151,7 @@ namespace libtocc
     result += " [";
     result += this->file_path;
     result += "]";
-    return result.c_str();    
+    return result.c_str();
   }
 
   OutOfMemoryError::OutOfMemoryError() throw()

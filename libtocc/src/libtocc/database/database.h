@@ -52,6 +52,13 @@ namespace libtocc
     ~Database();
 
     /*
+     * Initializes the database file.
+     * It should be called once for every new database file.
+     * It throws exception if the database file is already initialized.
+     */
+    void initialize();
+
+    /*
      * Creates a new file in database.
      *
      * @param title: title of the file.
@@ -74,6 +81,15 @@ namespace libtocc
     IntFileInfo create_file(std::vector<std::string> tags,
                             std::string title="",
                             std::string traditional_path="");
+
+    /*
+     * Removes files from database.
+     *
+     * @param file_ids: the ids of the files to remove.
+     * @param OUT: the founded files(among the files passed in file_ids) in the database
+     *
+     */
+    void remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files);
 
     /*
      * Gets a file by its ID.
@@ -102,10 +118,20 @@ namespace libtocc
      */
     void assign_tag(std::string file_id, std::string tag);
 
+   /*
+    * Unassigns the specified tags from a file
+    */
+   void unassign_tags(const std::string& file_id, const std::vector<std::string>& tags);
+
+    /*
+     * Unassigns the specified tags from each file
+     */
+    void unassign_tags(const std::vector<std::string>& files_ids, const std::vector<std::string>& tags);
+
     /*
      * Unassign a tag from a file.
      */
-    void unassign_tag(std::string file_id, std::string tag);
+    void unassign_tag(const std::string& file_id, const std::string& tag);
 
     /*
      * Searching the files by executing the specified query.
@@ -118,12 +144,35 @@ namespace libtocc
      */
     TagStatisticsCollection get_tags_statistics();
 
+    /*
+     * Collects statistics of a list of files.
+     * It returns list of tags assigned to these files, and how many files
+     * is associated to each tag.
+     *
+     * @param file_ids: Files to get their statistics.
+     */
+    TagStatisticsCollection get_tags_statistics(const std::vector<std::string>& file_ids);
+
+    /*
+    * Sets a new title to a group of files
+    * @param file_id : a vector of file ids to set title to
+    * @param new_title : the new file's title
+    */
+    void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
+
   private:
     /*
      * Database handler.
+     * Note: Don't use this directly. Instead, use `get_db_pointer' method.
      */
     unqlite* db_pointer;
 
+    std::string database_file;
+
+    /*
+     * Returns handler of opened UnQlite DB.
+     */
+    unqlite* get_db_pointer();
   };
 
 };
