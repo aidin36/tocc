@@ -189,7 +189,7 @@ const std::string GET_FILE_BY_TRADITIONAL_PATH_SCRIPT = \
       "/* If $result does not set, it means file not found. */ "\
       "if ($result == NULL) "\
       "{"\
-      "   $error = 'file '..$traditional_path..' does not exist.'; "\
+      "   $error = 'No file with traditional_path '..$traditional_path..' found. '; "\
       "}";
 
   /*
