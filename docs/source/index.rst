@@ -15,6 +15,7 @@
   manual/index
   contribution
   developers/index
+  uis
 
 
 Tocc is a tag-based file management system. It also includes a tag-based file
