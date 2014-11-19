@@ -17,17 +17,24 @@
  */
 
 #include "libtocc/common/database_exceptions.h"
+#include <string.h>
 
 namespace libtocc
 {
 
   BaseDatabaseException::BaseDatabaseException(const char* message) throw()
   {
-    this->message = message;
+    /* String copy message to this->message to avoid using
+     * pointer which is invalidated during stack unwind when
+     * the exception is thrown.
+     */
+    this->message = new char[strlen (message) + 1];
+    strcpy (this->message, message);
   }
 
   BaseDatabaseException::~BaseDatabaseException() throw()
   {
+    delete[] this->message;
   }
 
   const char* BaseDatabaseException::what() const throw()
