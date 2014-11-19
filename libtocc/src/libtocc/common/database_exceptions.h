@@ -41,7 +41,7 @@ namespace libtocc
     virtual const char* what() const throw();
 
   private:
-    const char* message;
+    char* message;
   };
 
   /*
