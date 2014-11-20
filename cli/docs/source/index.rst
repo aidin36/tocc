@@ -12,7 +12,7 @@ Tocc's CLI Users Manual
 Introduction
 ------------
 
-Tocc have different UIs. The official UI that comes with it by default, is a CLI (Command Line Interface). Its binary calls *tocc*, which you can inboke as follows::
+Tocc have different UIs. The official UI that comes with it by default, is a CLI (Command Line Interface). Its binary calls *tocc*, which you can invoke as follows::
 
   $ tocc --help
 
@@ -41,7 +41,7 @@ Now let's import some files and assign some tags to them::
 
   $ tocc -b /home/tocc-managed/ -i /media/photography/DSC00001.JPG -a photo good-shot landscape 2014-06-18
 
-What a long command! Let's analyize it step by step.
+What a long command! Let's analyze it step by step.
 
 First option, ``-b`` (or ``--base-path`` if you prefer long but meaningful form), tells Tocc where it should keeps its data. **Tip:** To simplify your commands, you can change directory to ``/home/tocc-managed/``, and you don't have to pass ``-b`` option anymore. CLI will use the current directory as the base path by default.
 
@@ -92,9 +92,9 @@ How Tocc Works?
 
 Tocc keeps two kind of data: Your actual files, and their metadata (mainly, tags that are assigned to them).
 
-Tocc keeps your files in a directory on the file system. We call this direcory *Tocc Managed File System*. Files rename to some meaningless names, kept under meaningless directory structure (meaningless for humans, I mean!). For example, if *Tocc Managed File System* is ``/home/tocc-managed/``, you will some files like ``/opt/tocc-managed/00/00/01/3`` or ``/opt/tocc-managed/00/0c/6a/e``. These are the files that you're imported in Tocc.
+Tocc keeps your files in a directory on the file system. We call this directory *Tocc Managed File System*. Files rename to some meaningless names, kept under meaningless directory structure (meaningless for humans, I mean!). For example, if *Tocc Managed File System* is ``/home/tocc-managed/``, you will some files like ``/opt/tocc-managed/00/00/01/3`` or ``/opt/tocc-managed/00/0c/6a/e``. These are the files that you're imported in Tocc.
 
-In order to search these files, we need the metadata. Tocc creates a database file in the root of *Tocc Managed File System*, and keep metada of files inside it: Title of each file, tags that assigned to it, etc.
+In order to search these files, we need the metadata. Tocc creates a database file in the root of *Tocc Managed File System*, and keep metdata of files inside it: Title of each file, tags that assigned to it, etc.
 
 Note that you can have more than one *Tocc Managed File System*. Each of them have their own database and separate set of files.
 

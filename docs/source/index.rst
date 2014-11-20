@@ -6,8 +6,8 @@
 .. highlight:: cpp
   :linenothreshold: 5
 
-*tocc*, a Tool for Obsessive Compulsive Classifers
-==================================================
+*tocc*, a Tool for Obsessive Compulsive Classifiers
+===================================================
 
 .. toctree::
   :hidden:
@@ -31,7 +31,7 @@ License version 3.
 
 Who Needs Tocc?
 ===============
-Traditional file systems are very limit for classifiying files.
+Traditional file systems are very limit for classifying files.
 All you have is some directories.
 Imagine that you want to store your photos on your hard drive. How you're
 going to categorize them? By the date they taken? Then what if you want to
@@ -44,13 +44,13 @@ books or music?
 
 Tocc is here to help you! Using Tocc, you tag your stored files.
 In the previous example, you can add these tags to a photo: ``2014-01-07``,
-``portrate``, ``maria``. And another one with: ``2014-01-07``, ``landscape``,
+``portraite``, ``maria``. And another one with: ``2014-01-07``, ``landscape``,
 ``abstract``. Then you can simply search your photos with these tags.
 
 In this way, you have a graph of tags and files instead of a tree.
 It's much more flexible.
 
-Tocc is very powerfull in searching files. You can create complex queries like
+Tocc is very powerful in searching files. You can create complex queries like
 ``photo and landscape and (b&w or abstract)``. You can use *wildcard* and
 *Regular Expression* in your queries.
 

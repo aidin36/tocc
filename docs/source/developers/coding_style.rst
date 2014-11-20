@@ -15,8 +15,8 @@ keep a cleaner and more maintainable code.
 And remember: Special cases are not special enough to break the rules.
 
 
-Apperance
----------
+Appearance
+----------
 
 * Indents are two spaces.
 
@@ -51,7 +51,7 @@ Naming
 
 * Name of classes must be in Camel Case. Like ``InvalidArgumentsError``.
 
-* Name of constants must be all in captial letters, and each word separated
+* Name of constants must be all in captal letters, and each word separated
   by underscore. Example: ``MAXIMUM_ALLOWED_TAGS = 100``.
 
 * Everything else (methods, variables, name spaces, file names, etc) must be
