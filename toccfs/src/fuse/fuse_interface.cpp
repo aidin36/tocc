@@ -19,8 +19,9 @@
 #include "fuse/fuse_interface.h"
 
 #include <errno.h>
-#include <unistd.h> // pread, open
-#include <sys/statvfs.h> // statvfs
+#include <unistd.h>
+#include <sys/statvfs.h>
+#include <sys/types.h>
 #include <vector>
 #include <cstring>
 #include <string>
@@ -318,27 +319,106 @@ namespace toccfs
 
   int toccfs_fuse_chmod(const char* path, mode_t mode)
   {
-    // Returning `Read-only File System' error.
-    return -EROFS;
+    int result;
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    // Getting the file that matches this path.
+    libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
+
+    // If no file found, return an error.
+    if (strcmp(founded_file.get_id(), "-1") == 0)
+    {
+      return -ENOENT;
+    }
+
+    result = chmod(founded_file.get_physical_path(), mode);
+    if (result == -1)
+    {
+      return -errno;
+    }
+
+    return 0;
   }
 
   int toccfs_fuse_chown(const char* path, uid_t uid, gid_t gid)
   {
-    // Returning `Read-only File System' error.
-    return -EROFS;
+    int result;
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    // Getting the file that matches this path.
+    libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
+
+    // If no file found, return an error.
+    if (strcmp(founded_file.get_id(), "-1") == 0)
+    {
+      return -ENOENT;
+    }
+
+    result = lchown(founded_file.get_physical_path(), uid, gid);
+    if (result == -1)
+    {
+      return -errno;
+    }
+
+    return 0;
   }
 
   int toccfs_fuse_truncate(const char* path, off_t size)
   {
-    // Returning `Read-only File System' error.
-    return -EROFS;
+    int result;
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    // Getting the file that matches this path.
+    libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
+
+    // If no file found, return an error.
+    if (strcmp(founded_file.get_id(), "-1") == 0)
+    {
+      return -ENOENT;
+    }
+
+    result = truncate(founded_file.get_physical_path(), size);
+    if (result == -1)
+    {
+      return -errno;
+    }
+
+    return 0;
   }
 
   int toccfs_fuse_write(const char* path, const char* buf, size_t size,
                         off_t offset, struct fuse_file_info* fi)
   {
-    // Returning `Read-only File System' error.
-    return -EROFS;
+    int file_descriptor;
+    int result;
+    struct FSHandler* fs_handler = get_fs_handler();
+
+    // Getting the file that matches this path.
+    libtocc::FileInfo founded_file = fs_handler->get_by_path(path);
+
+    // If no file found, return an error.
+    if (strcmp(founded_file.get_id(), "-1") == 0)
+    {
+      return -ENOENT;
+    }
+
+    // Openning physical file for writing.
+    file_descriptor = open(founded_file.get_physical_path(),
+                           O_WRONLY);
+    if (file_descriptor == -1)
+    {
+      return -errno;
+    }
+
+    // Writing buffer to file.
+    result = pwrite(file_descriptor, buf, size, offset);
+    if (result == -1)
+    {
+      return -errno;
+    }
+
+    close(file_descriptor);
+    return result;
   }
 
 }
