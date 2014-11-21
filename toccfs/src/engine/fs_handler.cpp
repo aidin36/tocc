@@ -85,6 +85,11 @@ namespace toccfs
       std::vector<std::string>::iterator path_items_iterator = path_items.begin();
       for (; path_items_iterator != path_items.end(); path_items_iterator++)
       {
+        if (*path_items_iterator == ".." || *path_items_iterator == ".")
+        {
+          // Ignore . or ..
+          continue;
+        }
         libtocc::Tag tag_expr(path_items_iterator->c_str());
         main_and.add(tag_expr);
       }
@@ -128,6 +133,12 @@ namespace toccfs
 
     for (; path_items_iterator != path_items.end(); path_items_iterator++)
     {
+      if (*path_items_iterator == ".." || *path_items_iterator == ".")
+      {
+        // Ignore . or ..
+        continue;
+      }
+
       libtocc::Tag tag_expr(path_items_iterator->c_str());
       third_main_and.add(tag_expr);
     }
