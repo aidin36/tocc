@@ -17,7 +17,6 @@
  */
 
 #include"libtocc/utilities/file_utils.h"
-#include "libtocc/common/database_exceptions.h"
 
 namespace libtocc
 {
