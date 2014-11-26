@@ -17,7 +17,7 @@
  */
 
 #include"libtocc/utilities/file_utils.h"
-
+#include "libtocc/common/database_exceptions.h"
 
 namespace libtocc
 {
@@ -44,4 +44,22 @@ namespace libtocc
     }
     return filename;
   }
+
+  bool check_db_path_existence(std::string database_path)
+  {
+    DIR* directoryPtr = NULL;
+    int pos = 0;
+
+    pos = database_path.rfind('/');
+    std::string base_path = database_path.substr(0, pos);
+    directoryPtr = opendir(base_path.c_str());
+    if(directoryPtr == NULL)
+    {   
+      return false;
+    }   
+    return true;
+  }
+
+    
+	
 }

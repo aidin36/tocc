@@ -27,6 +27,7 @@
 #include "libtocc/exprs/compiler.h"
 #include "libtocc/common/database_exceptions.h"
 #include "libtocc/utilities/file_info_converter.h"
+#include "libtocc/utilities/file_utils.h"
 
 extern "C"
 {
@@ -795,6 +796,12 @@ namespace libtocc
 
   void Database::initialize()
   {
+    std::string message("Invalid path detected, please specify a valid path");
+
+    if(check_db_path_existence(database_file) == false)
+    {
+      throw DatabaseInitializationError(message.c_str());
+    }
     // Checking if the database file already exists.
     std::ifstream db_file_stream(this->database_file.c_str());
     if (db_file_stream)

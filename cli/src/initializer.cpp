@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
   {
     // Initializing the path.
     libtocc::Manager libtocc_manager(base_path.c_str());
-    libtocc_manager.initialize(base_path.c_str());
+    libtocc_manager.initialize();
   }
   catch (std::exception& error)
   {

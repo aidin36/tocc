@@ -49,7 +49,7 @@ namespace libtocc
      * @throw DatabaseInitializationError: If path was already initialized,
      *   or there was something wrong with the path.
      */
-    void initialize(const char *path);
+    void initialize();
 
     /*
      * Gets information of a file.
@@ -229,7 +229,7 @@ namespace libtocc
      * Checks the existence of directory
      * @param path: Path of the directory to be checked.
      */
-	bool is_directory(const char *path);
+    bool is_directory(const char *path);
 
   private:
     /*

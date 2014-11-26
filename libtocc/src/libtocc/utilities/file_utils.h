@@ -20,10 +20,12 @@
 #define LIBTOCC_FILE_FILE_UTILS_H_INCLUDED
 
 #include<string>
+#include<dirent.h>
 
 namespace libtocc
 {
   std::string get_filename_from_path(std::string path);
+  bool check_db_path_existence(std::string path);
 }
 
 #endif
