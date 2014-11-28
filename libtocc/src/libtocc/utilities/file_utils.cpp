@@ -53,12 +53,10 @@ namespace libtocc
     std::string base_path = database_path.substr(0, pos);
     directoryPtr = opendir(base_path.c_str());
     if(directoryPtr == NULL)
-    {   
+    {
       return false;
-    }   
+    }
     return true;
   }
 
-    
-	
 }
