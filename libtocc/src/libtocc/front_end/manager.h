@@ -225,12 +225,6 @@ namespace libtocc
      */
     void set_title(const char* file_id, const char* new_title);
 
-    /*
-     * Checks the existence of directory
-     * @param path: Path of the directory to be checked.
-     */
-    bool is_directory(const char *path);
-
   private:
     /*
      * Keeps the private data, and hides it from the client.
