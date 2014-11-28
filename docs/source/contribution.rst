@@ -5,7 +5,7 @@ Contribution
 
 Tocc is a big project. Without the help of the community, it won't last long.
 
-Not just Tocc benefits from contribution, but the contributer itself also
+Not just Tocc benefits from contribution, but the contributor itself also
 gain more experience.
 
 You don't have to be a developer. There are other tasks that should be handled.
@@ -22,7 +22,7 @@ You don't have to be a professional. Any contribution is valuable.
  * **Tocc itself**: If you're a C++ developer, you can help with the Tocc project
    itself. Tocc project have three parts: main library (libtocc), official
    command line interface, and a file system (toccfs). Take a look at
-   `issues <https://www.github.com/aidin36/tocc/issues/>`_ to findout what
+   `issues <https://www.github.com/aidin36/tocc/issues/>`_ to find out what
    tasks are waiting to be done. Tasks that labeled *easy* are good points
    to start.
 
