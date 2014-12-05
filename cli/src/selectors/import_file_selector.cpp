@@ -52,7 +52,7 @@ namespace tocccli
   {
     if (cmd_arguments.size() != 1)
     {
-      throw InvalidParametersError("-i and --import must have an argument.");
+      throw InvalidParametersError("-i and --import accepts exactly one argument.");
     }
 
     libtocc::FileInfo new_file = this->libtocc_manager->import_file(cmd_arguments.front().c_str());
