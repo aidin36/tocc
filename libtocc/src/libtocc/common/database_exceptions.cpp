@@ -28,13 +28,17 @@ namespace libtocc
      * pointer which is invalidated during stack unwind when
      * the exception is thrown.
      */
-    this->message = new char[strlen (message) + 1];
-    strcpy (this->message, message);
+    this->message = new char[strlen(message) + 1];
+    strcpy(this->message, message);
   }
 
   BaseDatabaseException::~BaseDatabaseException() throw()
   {
-    delete[] this->message;
+    if (this->message != NULL)
+    {
+      delete[] this->message;
+      this->message = NULL;
+    }
   }
 
   const char* BaseDatabaseException::what() const throw()
