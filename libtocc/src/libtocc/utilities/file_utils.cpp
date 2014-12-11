@@ -23,8 +23,10 @@ namespace libtocc
   std::string get_filename_from_path(std::string path)
   {
     std::string filename;
+
     //extract the file from path
     int last_slash_index = path.rfind("/");
+
     if(last_slash_index != std::string::npos)
     {
       filename = path.substr(last_slash_index + 1, path.length());
@@ -33,29 +35,27 @@ namespace libtocc
     {
       if(path.length()!=0)
       {
-          filename=path;
+        filename = path;
       }
     }
-    int last_point_index = filename.rfind(".");
-    if(last_point_index != std::string::npos && last_point_index != 0)
-    {
-      filename = filename.substr(0, last_point_index);
-    }
+
     return filename;
   }
 
-  bool check_db_path_existence(std::string database_path)
+  bool is_path_parent_exists(std::string database_path)
   {
-    DIR* directoryPtr = NULL;
+    DIR* directory_ptr = NULL;
     int pos = 0;
 
     pos = database_path.rfind('/');
     std::string base_path = database_path.substr(0, pos);
-    directoryPtr = opendir(base_path.c_str());
-    if(directoryPtr == NULL)
+    directory_ptr = opendir(base_path.c_str());
+    if(directory_ptr == NULL)
     {
       return false;
     }
+
+    closedir(directory_ptr);
     return true;
   }
 

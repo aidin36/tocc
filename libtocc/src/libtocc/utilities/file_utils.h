@@ -24,8 +24,16 @@
 
 namespace libtocc
 {
+  /*
+   * Extract file name from the specified path, and returns it.
+   * It returns file name with its extension.
+   */
   std::string get_filename_from_path(std::string path);
-  bool check_db_path_existence(std::string path);
+
+  /*
+   * Checks if the parent directory of specified path exists.
+   */
+  bool is_path_parent_exists(std::string path);
 }
 
 #endif

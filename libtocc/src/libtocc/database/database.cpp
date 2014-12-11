@@ -798,7 +798,7 @@ namespace libtocc
   {
     std::string message("Invalid path detected, please specify a valid path");
 
-    if(check_db_path_existence(database_file) == false)
+    if(is_path_parent_exists(database_file) == false)
     {
       throw DatabaseInitializationError(message.c_str());
     }
