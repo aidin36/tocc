@@ -36,6 +36,10 @@ namespace libtocc
   public:
     BaseDatabaseException(const char* message) throw();
 
+    BaseDatabaseException(const BaseDatabaseException& source) throw();
+
+    BaseDatabaseException& operator=(const BaseDatabaseException& source) throw();
+
     virtual ~BaseDatabaseException() throw();
 
     virtual const char* what() const throw();
@@ -51,6 +55,8 @@ namespace libtocc
   {
   public:
     DatabaseInitializationError(const char* message) throw();
+
+    DatabaseInitializationError(const DatabaseInitializationError& source) throw();
   };
 
   /*
@@ -60,6 +66,8 @@ namespace libtocc
   {
   public:
     DatabaseScriptCompilationError(const char* message) throw();
+
+    DatabaseScriptCompilationError(const DatabaseScriptCompilationError& source) throw();
   };
 
   /*
@@ -69,6 +77,8 @@ namespace libtocc
   {
   public:
     DatabaseScriptExecutionError(const char* message) throw();
+
+    DatabaseScriptExecutionError(const DatabaseScriptExecutionError& source) throw();
   };
 
   /*
@@ -79,6 +89,8 @@ namespace libtocc
   {
   public:
     DatabaseScriptLogicalError(const char* message) throw();
+
+    DatabaseScriptLogicalError(const DatabaseScriptLogicalError& source) throw();
   };
 }
 
