@@ -273,4 +273,9 @@ namespace libtocc
     file_ids.push_back(std::string(file_id));
     this->private_data->files_engine->set_titles(file_ids , new_title);
   }
+  FileInfo get_file_by_traditional_path(const char* traditional_path)
+  {
+	  IntFileInfo info = this->private_data->database->get_using_traditional_path(traditional_path);
+	  return to_external_file_info(&info, this->private_data->file_manager);	}
+  }
 }
