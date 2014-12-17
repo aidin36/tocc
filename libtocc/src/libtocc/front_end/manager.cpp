@@ -105,6 +105,13 @@ namespace libtocc
 
     return to_external_file_info(&info, this->private_data->file_manager);
   }
+  
+    FileInfo Manager::get_file_by_traditional_path(const char* traditional_path)
+  {
+    IntFileInfo info = this->private_data->database->get_by_traditional_path(traditional_path);
+
+    return to_external_file_info(&info, this->private_data->file_manager);
+  }
 
   FileInfo Manager::import_file(const char* source_path,
                                 const char* title,
