@@ -937,6 +937,22 @@ namespace libtocc
 
     return extract_file_from_vm(vm, "result");
   }
+  IntFileInfo Database::get_using_traditional_path(std::string traditional_path)
+  {
+    unqlite_vm* vm;
+    // Auto release the pointer.
+    VMPointerHolder holder(&vm);
+
+    // Executing script.
+    compile_jx9(this->db_pointer, GET_FILE_SCRIPT, &vm);
+
+    std::string variable_traditional_path("traditional_path");
+    register_variable_in_vm(vm, variable_traditional_path, traditional_path);
+
+    execute_vm(vm);
+
+    return extract_file_from_vm(vm, "result");
+  }
 
   void Database::assign_tag(std::string file_id, std::string tag)
   {
