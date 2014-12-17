@@ -93,13 +93,25 @@ namespace libtocc
 
     /*
      * Gets a file by its ID.
-     * Raises exception if file not found.
      *
      * @param file_id: ID of the file to get.
      *
      * @return: Information of the founded file.
+     *
+     * @throw DatabaseScriptLogicalError: if file not found.
      */
     IntFileInfo get(std::string file_id);
+
+    /*
+     * Gets a file by its traditional path.
+     *
+     * @param traditional_path: Traditional path to search for.
+     *
+     * @return: Information of the founded file.
+     *
+     * @throw DatabaseScriptLogicalError: if file not found.
+     */
+    IntFileInfo get_by_traditional_path(std::string traditional_path);
 
     /*
      * Assigns specified tags to each specified file.

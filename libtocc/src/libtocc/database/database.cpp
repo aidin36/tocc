@@ -918,8 +918,8 @@ namespace libtocc
 
     return extract_file_from_vm(vm, "result");
   }
-  
-    IntFileInfo Database::get_by_traditional_path(std::string traditional_path)
+
+  IntFileInfo Database::get_by_traditional_path(std::string traditional_path)
   {
     unqlite* db_pointer = get_db_pointer();
 
@@ -931,7 +931,7 @@ namespace libtocc
     compile_jx9(db_pointer, GET_FILE_BY_TRADITIONAL_PATH_SCRIPT, &vm);
 
     std::string variable_traditional_path("traditional_path");
-    register_variable_in_vm(vm, variable_traditional_path, from_base23(traditional_path));
+    register_variable_in_vm(vm, variable_traditional_path, traditional_path);
 
     execute_vm(vm);
 

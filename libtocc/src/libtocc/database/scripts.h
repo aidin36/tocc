@@ -172,7 +172,7 @@ namespace libtocc
       "   $error = 'file '..$orig_file_id..' does not exist.'; "\
       "}";
 
-const std::string GET_FILE_BY_TRADITIONAL_PATH_SCRIPT = \
+  const std::string GET_FILE_BY_TRADITIONAL_PATH_SCRIPT = \
       "/* Manually looping over records, so we can break the loop"\
       " When the file is found. */ "\
       "$result = NULL; "\

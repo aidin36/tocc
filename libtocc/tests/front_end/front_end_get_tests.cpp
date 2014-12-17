@@ -19,11 +19,14 @@
 
 #include <catch.hpp>
 
+#include <fstream>
+#include <cstring>
+
 #include "libtocc/front_end/manager.h"
 #include "libtocc/common/database_exceptions.h"
 
 
-TEST_CASE("Manager::get tests")
+TEST_CASE("front_end: get tests")
 {
   libtocc::Manager manager("/tmp/tocctests/");
 
@@ -31,6 +34,40 @@ TEST_CASE("Manager::get tests")
   {
     REQUIRE_THROWS_AS(
         manager.get_file_info("e31b6da"),
+        libtocc::DatabaseScriptLogicalError);
+  }
+}
+
+TEST_CASE("front_end: get_by_traditional_path tests")
+{
+  libtocc::Manager manager("/tmp/tocctests/");
+
+  SECTION("existed file")
+  {
+    // Creating a file to import.
+    std::ofstream file_stream;
+    file_stream.open("/tmp/tocctests/axU87Ryds.txt");
+    file_stream << "some data...";
+    file_stream.close();
+
+    // Importing the file.
+    libtocc::FileInfo test_file =
+        manager.import_file("/tmp/tocctests/axU87Ryds.txt",
+                            "axU87Ryds.txt",
+                            "/old/path/of/test/file/axU87Ryds.txt");
+
+    libtocc::FileInfo got_test_file =
+        manager.get_file_by_traditional_path("/old/path/of/test/file/axU87Ryds.txt");
+
+    REQUIRE(strcmp(got_test_file.get_id(), test_file.get_id()) == 0);
+    REQUIRE(strcmp(got_test_file.get_title(), test_file.get_title()) == 0);
+    REQUIRE(strcmp(got_test_file.get_traditional_path(), test_file.get_traditional_path()) == 0);
+  }
+
+  SECTION("not existed file")
+  {
+    REQUIRE_THROWS_AS(
+        manager.get_file_by_traditional_path("/not/existed/traditional/path"),
         libtocc::DatabaseScriptLogicalError);
   }
 }

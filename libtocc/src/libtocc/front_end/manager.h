@@ -63,6 +63,18 @@ namespace libtocc
     FileInfo get_file_info(const char* file_id);
 
     /*
+     * Gets information of the file, that its traditional_path matches
+     * with the specified one.
+     *
+     * @param traditional_path: Path of the file to get.
+     *
+     * @return: Information of the file.
+     *
+     * @throw DatabaseScriptLogicalError: if file not found.
+     */
+    FileInfo get_file_by_traditional_path(const char* traditional_path);
+
+    /*
      * Imports a file from the path to the Tocc managed file system.
      *
      * @param source_path: Path to the source file.
