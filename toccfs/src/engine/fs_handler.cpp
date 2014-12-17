@@ -20,6 +20,7 @@
 
 #include "libtocc/exprs/connectives.h"
 #include "libtocc/exprs/query.h"
+#include "libtocc/common/database_exceptions.h"
 
 #include "utils/string_utils.h"
 
@@ -61,7 +62,17 @@ namespace toccfs
     /*
      * First try: Checking if path exactly matches a Traditional Path.
      */
-    // TODO: First, check the traditional path.
+    try
+    {
+      libtocc::FileInfo result =
+          this->libtocc_manager->get_file_by_traditional_path(path.c_str());
+
+      return result;
+    }
+    catch (libtocc::DatabaseScriptLogicalError& error)
+    {
+      // Nothing found.
+    }
 
     /*
      * Second try: Last element is the file title and others are tags.
