@@ -62,17 +62,19 @@ namespace toccfs
     /*
      * First try: Checking if path exactly matches a Traditional Path.
      */
-    try
-    {
-      libtocc::FileInfo result =
-          this->libtocc_manager->get_file_by_traditional_path(path.c_str());
-
-      return result;
-    }
-    catch (libtocc::DatabaseScriptLogicalError& error)
-    {
-      // Nothing found.
-    }
+    // FIXME: The following block is commented, because of a bug in Unqlite:
+    //        If database become big, this cause Segfault in UnQlite.
+//    try
+//    {
+//      libtocc::FileInfo result =
+//          this->libtocc_manager->get_file_by_traditional_path(path.c_str());
+//
+//      return result;
+//    }
+//    catch (libtocc::DatabaseScriptLogicalError& error)
+//    {
+//      // Nothing found.
+//    }
 
     /*
      * Second try: Last element is the file title and others are tags.
