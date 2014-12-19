@@ -4,7 +4,7 @@
 lib_LTLIBRARIES = libtocc.la
 # Refer to this chapter of Libtool Manual for understanding versioning rules:
 # http://www.gnu.org/software/libtool/manual/html_node/Versioning.html
-libtocc_la_LDFLAGS = -version-info 0:0:0
+libtocc_la_LDFLAGS = -version-info 1:1:0
 libtocc_la_SOURCES = libtocc/check_exists.cpp libtocc/common/database_exceptions.cpp libtocc/common/expr_exceptions.cpp libtocc/common/base_exception.cpp libtocc/common/file_system_exceptions.cpp libtocc/common/int_file_info.cpp libtocc/utilities/file_info_converter.cpp libtocc/utilities/file_utils.cpp libtocc/database/base23.cpp libtocc/database/funcs.cpp libtocc/database/database.cpp libtocc/exprs/compiled_expr.cpp libtocc/exprs/compiler.cpp libtocc/exprs/connectives.cpp libtocc/exprs/fields.cpp libtocc/exprs/functions.cpp libtocc/exprs/operations.cpp libtocc/exprs/query.cpp libtocc/file_system/file_manager.cpp libtocc/engine/files_engine.cpp libtocc/engine/tags_engine.cpp libtocc/front_end/file_info.cpp libtocc/front_end/tag_statistics.cpp libtocc/front_end/manager.cpp
 
 # Installing headers
