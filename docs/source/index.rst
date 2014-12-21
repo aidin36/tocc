@@ -20,7 +20,7 @@
 
 Tocc is a tag-based file management system. It also includes a tag-based file
 system called Toccfs. The goal of Tocc is to provide a better system for
-classifying files, more flexible than classic file systems that are based on a
+classifying files, which is more flexible than classic file systems that are based on a
 tree of files and directories.
 
 .. image:: _static/gplv3.png
@@ -31,10 +31,10 @@ License version 3.
 
 Who Needs Tocc?
 ===============
-Traditional file systems are very limit for classifying files.
-All you have is some directories.
-Imagine that you want to store your photos on your hard drive. How you're
-going to categorize them? By the date they taken? Then what if you want to
+Traditional file systems are very limited for classifying files.
+All you have are some directories.
+Imagine that you want to store your photos on your hard drive. How are you
+going to categorize them? By the date they were taken? What if you want to
 find photos taken on a specific location? Or photos of a specific person?
 Or if you're a photographer, you may also want to search your photos by
 the techniques you used.
@@ -54,8 +54,8 @@ Tocc is very powerful in searching files. You can create complex queries like
 ``photo and landscape and (b&w or abstract)``. You can use *wildcard* and
 *Regular Expression* in your queries.
 
-Tocc don't force any classification practice. You are free to categorize your
-files anyhow you want. For example, you can use prefixes for your tags,
+Tocc don't force any classification practices. You are free to categorize your
+files anyway you want. For example, you can use prefixes for your tags,
 like ``type:pdf`` or ``author:Richard Bach``. You can write your
 tags all in lower case, like ``read-later``, or in camel case like
 ``FreeSoftware``. It's all your choice!
@@ -68,11 +68,11 @@ Features
 
 These are the main features of Tocc.
 
- * It can manage any kind of file. It don't limited to specific type of file.
+ * It can manage any kind of file. It's not limited to specific type of file.
  * It stores files and their related database in a regular directory, so you
    can store them everywhere, from you local file system, to a network storage
    or back them up in a DVD.
- * It have a File System interface, that let's any application use Tocc without
+ * It has a File System interface, that lets any application use Tocc without
    any changes. In other words, other applications don't have to support Tocc
    specially. It's compatible with everyone, out of the box.
  * There can be different UIs that work with Tocc: Command line interface,
@@ -99,7 +99,7 @@ Documentation
 Contribution
 ============
 
-Tocc is a free software, and it relys on people contribution.
+Tocc is a free software, and it relies on people contribution.
 We need help in different parts of the project.
 See our :doc:`contribution` page for finding out how you can
 help the project.
