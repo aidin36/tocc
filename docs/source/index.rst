@@ -85,6 +85,10 @@ Download
 You can get the latest releases from
 `Tocc Releases on Github <https://www.github.com/aidin36/tocc/releases/>`_.
 
+Releases are signed with Aidin's key. You can get the key from public
+Keyservers. The ID of the Key is ``79B75433``. (e.g. run this command:
+``gpg --recv-keys 79B75433``)
+
 You can also get the latest under-develop source from Github::
 
   git clone https://www.github.com/aidin36/tocc.git
