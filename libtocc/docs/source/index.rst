@@ -48,8 +48,7 @@ A Minimal Example
 The following is a minimal example of an application that uses *libtocc*::
 
   #include <iostream>
-  #include "libtocc/manager.h"
-  #include "libtocc/file_info.h"
+  #include "libtocc.h"
 
   int main(int argc, char* argv[])
   {
