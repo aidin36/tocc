@@ -7,14 +7,15 @@
 
 Reference of *libtocc* API
 ==========================
-Header files of *libtocc* are in ``libtocc`` directory, which itself structured
-into the following directories.
+Header files of *libtocc* are structured in directories. But for the ease of use,
+there's a single header file called ``libtocc.h``, which included all the other
+header files.
 
-* **front_end**: This directory defines the the interface of *libtocc*.
-  :cpp:class:`libtocc::Manager` in ``manager.h`` defines the main
-  functionalities.
+Thus, You only need to include ``libtocc.h`` in your code.
 
-* **exprs**: Expresions for quering files.
+Just for you curiosity, this document told you which class is defined in which
+header file.
+
 
 libtocc::Manager
 ----------------
