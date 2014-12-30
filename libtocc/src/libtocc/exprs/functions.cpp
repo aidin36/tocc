@@ -19,7 +19,7 @@
 #include "libtocc/exprs/functions.h"
 #include "libtocc/common/expr_exceptions.h"
 #include <string>
-#include <stdio.h>
+#include <sstream>
 namespace libtocc
 {
   class FunctionExpr::ProtectedData
@@ -91,8 +91,6 @@ namespace libtocc
 
     : FunctionExpr(arg)
   {
-    this->protected_data = new ProtectedData();
-    this->protected_data->arg = arg;
     this->p_unqlite_vm = p_uniqlite_vm;
     int return_code = regcomp(&this->regex, arg, cflags);
     if (return_code != 0)
@@ -107,11 +105,10 @@ namespace libtocc
     return_code = unqlite_value_resource(p_unqlite_value, &regex);
     // check rc
     // Create unique regex name regex_name.
-    count_of_regexes_built++;
-    this->regex_number = count_of_regexes_built;
-    char buf[35];
-    snprintf(buf, sizeof buf, "regex_%lli", (long long int) this->regex_number);
-    return_code = unqlite_vm_config(p_unqlite_vm, UNQLITE_VM_CONFIG_CREATE_VAR, buf, p_unqlite_value);
+   std::ostringstream ostream;
+    ostream << "regex_" << count_of_regexes_built();
+    this->arg = ostream.str();
+    return_code = unqlite_vm_config(p_unqlite_vm, UNQLITE_VM_CONFIG_CREATE_VAR, this->arg.c_str(), p_unqlite_value);
     // check rc
   }
 
@@ -130,20 +127,18 @@ namespace libtocc
     return new RegexExpr(*this);
   }
 
+   static unsigned long long count_of_regexes_built()
+   {
+       static unsigned long long count = 0;
+       count++;
+       return count;
+   }
+
+
   const char* RegexExpr::get_func_name()
   {
     return "regular_expresion_compare";
   }
- /*
-  virtual const char* RegexExpr::compile(const char* second_arg)
-  {
-    std::string result(get_func_name());
-    // result += "('" + this->protected_data->arg + "', ";
-    result += second_arg;
-    result += ")";
 
-    return result.c_str();
-  }
-*/
 };
 

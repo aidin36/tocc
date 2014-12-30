@@ -117,9 +117,9 @@ namespace libtocc
 
   protected:
     virtual const char* get_func_name();
+    static unsigned long long count_of_regexes_built();
     regex_t regex;
-    static int64_t count_of_regexes_built;
-    int64_t regex_number;
+    std::string arg;
     unqlite_vm *p_unqlite_vm;
   };
 
