@@ -17,10 +17,9 @@
  */
 
 #include "libtocc/exprs/functions.h"
-
+#include "libtocc/common/expr_exceptions.h"
 #include <string>
-
-
+#include <stdio.h>
 namespace libtocc
 {
   class FunctionExpr::ProtectedData
@@ -87,4 +86,64 @@ namespace libtocc
   {
     return "wild_card_compare";
   }
+
+  RegexExpr::RegexExpr(unqlite_vm *p_uniqlite_vm, const char * const arg, const int cflags)
+
+    : FunctionExpr(arg)
+  {
+    this->protected_data = new ProtectedData();
+    this->protected_data->arg = arg;
+    this->p_unqlite_vm = p_uniqlite_vm;
+    int return_code = regcomp(&this->regex, arg, cflags);
+    if (return_code != 0)
+    {
+       char error_buffer[400];
+       size_t error_message_length = regerror(return_code, &this->regex,
+         error_buffer, sizeof error_buffer);
+       std::string error_message = std::string("Invalid regular expression: ") + error_buffer;
+       throw ExprCompilerError(error_message.c_str());
+    }
+    unqlite_value *p_unqlite_value;
+    return_code = unqlite_value_resource(p_unqlite_value, &regex);
+    // check rc
+    // Create unique regex name regex_name.
+    count_of_regexes_built++;
+    this->regex_number = count_of_regexes_built;
+    char buf[35];
+    snprintf(buf, sizeof buf, "regex_%lli", (long long int) this->regex_number);
+    return_code = unqlite_vm_config(p_unqlite_vm, UNQLITE_VM_CONFIG_CREATE_VAR, buf, p_unqlite_value);
+    // check rc
+  }
+
+  RegexExpr::RegexExpr(RegexExpr& source)
+    : FunctionExpr(source)
+  {
+  }
+
+  RegexExpr::~RegexExpr()
+  {
+    regfree(&this->regex);
+  }
+
+  Expr* RegexExpr::clone()
+  {
+    return new RegexExpr(*this);
+  }
+
+  const char* RegexExpr::get_func_name()
+  {
+    return "regular_expresion_compare";
+  }
+ /*
+  virtual const char* RegexExpr::compile(const char* second_arg)
+  {
+    std::string result(get_func_name());
+    // result += "('" + this->protected_data->arg + "', ";
+    result += second_arg;
+    result += ")";
+
+    return result.c_str();
+  }
+*/
 };
+

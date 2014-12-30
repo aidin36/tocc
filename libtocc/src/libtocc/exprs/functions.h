@@ -20,6 +20,11 @@
 #define LIBTOCC_FUNCTION_H_INCLUDED
 
 #include <string>
+extern "C"
+{
+#include <regex.h>
+#include <unqlite.h>
+}
 #include "libtocc/exprs/expr.h"
 
 namespace libtocc
@@ -88,6 +93,34 @@ namespace libtocc
 
   protected:
     virtual const char* get_func_name();
+  };
+
+  class RegexExpr: public FunctionExpr
+  {
+    public:
+    /*
+     * @param arg: Argument of this function. For example:
+     *   RegexExpr(".*book.*")
+     */
+      RegexExpr(unqlite_vm *p_unqlite_vm, const char * const arg, const int cflags);
+    /*
+     * Copy Constructor.
+     */
+     RegexExpr(RegexExpr& source);
+    /*
+     * Clones this instance.
+     */
+
+    ~RegexExpr();
+    virtual Expr* clone();
+    virtual const char* compile(const char* second_arg);
+
+  protected:
+    virtual const char* get_func_name();
+    regex_t regex;
+    static int64_t count_of_regexes_built;
+    int64_t regex_number;
+    unqlite_vm *p_unqlite_vm;
   };
 
 };
