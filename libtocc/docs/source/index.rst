@@ -56,6 +56,11 @@ The following is a minimal example of an application that uses *libtocc*::
     // kept. Replace it with an existing path.
     libtocc::Manager manager("/opt/tocc-managed/");
 
+    // Initializing the base-path.
+    // Note that it should be done once for each path. You will receive an
+    // exception if you call this method for an already-initialized path.
+    manager.initialize();
+
     // Importing a file from the file system to the tocc-managed file system.
     // The second argument is the title of this file.
     libtocc::FileInfo new_file_info =
