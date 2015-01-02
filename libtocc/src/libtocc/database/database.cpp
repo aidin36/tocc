@@ -61,6 +61,32 @@ namespace libtocc
   };
 
   /*
+   * Holds a pointer to Unqlite DB.
+   * It closes the DB at the destruction time. Thus, ensures the database
+   * is opened and closed safety.
+   */
+  class UnqliteDBHolder
+  {
+  public:
+    UnqliteDBHolder(unqlite* db_pointer)
+    {
+      this->db_pointer = db_pointer;
+    }
+
+    ~UnqliteDBHolder()
+    {
+      if (this->db_pointer != NULL)
+      {
+        unqlite_close(this->db_pointer);
+        this->db_pointer = NULL;
+      }
+    }
+
+  private:
+    unqlite* db_pointer;
+  };
+
+  /*
    * Holds a pointer to a Unqlite Value.
    * The purpose is to ensure that pointer is released properly.
    * When the instance of this class destroy, it will release
@@ -749,49 +775,50 @@ namespace libtocc
   Database::Database(std::string database_file)
   {
     this->database_file = database_file;
-    this->db_pointer = NULL;
   }
 
   Database::~Database()
   {
-    // Closing the database file.
-    if (this->db_pointer != NULL)
-    {
-      unqlite_close(this->db_pointer);
-    }
   }
 
-  unqlite* Database::get_db_pointer()
+  unqlite* Database::open_db(bool readonly)
   {
-    // Checking if we were initialized the DB pointer before.
-    if (this->db_pointer == NULL)
+    // Checking if the database file exists.
+    // Unqlite don't check if file really exists, in `unqlite_open' function.
+    std::ifstream db_file_stream(this->database_file.c_str());
+    if (!db_file_stream.good())
     {
-      // Checking if the database file exists.
-      std::ifstream db_file_stream(this->database_file.c_str());
-      if (!db_file_stream.good())
-      {
-        std::string message("No database found in the base path specified.");
-        message += " Make sure the path is correct, and it's initialized.";
-        throw DatabaseInitializationError(message.c_str());
-      }
       db_file_stream.close();
+      std::string message("No database found in the base path specified.");
+      message += " Make sure the path is correct, and it's initialized.";
+      throw DatabaseInitializationError(message.c_str());
+    }
+    db_file_stream.close();
 
-      // Opening the database.
-      int result;
-      result = unqlite_open(&this->db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
+    unqlite* db_pointer;
 
-      if (result != UNQLITE_OK)
-      {
-        std::stringstream message_stream;
-        message_stream << "Error opening database file: [";
-        message_stream << this->database_file;
-        message_stream << "] Error code: ";
-        message_stream << result;
-        throw DatabaseInitializationError(message_stream.str().c_str());
-      }
+    // Opening flags.
+    unsigned int opening_flags = UNQLITE_OPEN_READONLY;
+    if (!readonly)
+    {
+      opening_flags = UNQLITE_OPEN_READWRITE;
     }
 
-    return this->db_pointer;
+    // Opening the database file.
+    int result =
+      unqlite_open(&db_pointer, this->database_file.c_str(), opening_flags);
+
+    if (result != UNQLITE_OK)
+    {
+      std::stringstream message_stream;
+      message_stream << "Error opening database file: [";
+      message_stream << this->database_file;
+      message_stream << "] Error code: ";
+      message_stream << result;
+      throw DatabaseInitializationError(message_stream.str().c_str());
+    }
+
+    return db_pointer;
   }
 
   void Database::initialize()
@@ -814,7 +841,9 @@ namespace libtocc
     }
     // Opening the database.
     int result;
-    result = unqlite_open(&this->db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
+    unqlite* db_pointer;
+    result = unqlite_open(&db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
+    UnqliteDBHolder db_holder(db_pointer);
 
     if (result != UNQLITE_OK)
     {
@@ -832,7 +861,7 @@ namespace libtocc
     VMPointerHolder holder(&vm);
 
     // Compiling and executing the Jx9 script.
-    compile_jx9(this->db_pointer, COLLECTION_CREATION_SCRIPT, &vm);
+    compile_jx9(db_pointer, COLLECTION_CREATION_SCRIPT, &vm);
     execute_vm(vm);
   }
 
@@ -850,7 +879,9 @@ namespace libtocc
                                     std::string title,
                                     std::string traditional_path)
   {
-    unqlite* db_pointer = get_db_pointer();
+    // Opening database in write mode.
+    unqlite* db_pointer = open_db(false);
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -872,7 +903,9 @@ namespace libtocc
 
   void Database::remove_files(const std::vector<std::string>& file_ids, std::vector<IntFileInfo>& founded_files)
   {
-    unqlite* db_pointer = get_db_pointer();
+    // Openning database in write mode.
+    unqlite* db_pointer = open_db(false);
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     VMPointerHolder vm_holder(&vm);
@@ -900,7 +933,8 @@ namespace libtocc
 
   IntFileInfo Database::get(std::string file_id)
   {
-    unqlite* db_pointer = get_db_pointer();
+    unqlite* db_pointer = open_db();
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -921,7 +955,8 @@ namespace libtocc
 
   IntFileInfo Database::get_by_traditional_path(std::string traditional_path)
   {
-    unqlite* db_pointer = get_db_pointer();
+    unqlite* db_pointer = open_db();
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -960,7 +995,9 @@ namespace libtocc
   void Database::assign_tag(std::vector<std::string> file_ids,
                             std::vector<std::string> tags)
   {
-    unqlite* db_pointer = get_db_pointer();
+    // Opening database in write mode.
+    unqlite* db_pointer = open_db(false);
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -1008,7 +1045,9 @@ namespace libtocc
 
   void Database::unassign_tags(const std::vector<std::string>& file_ids, const std::vector<std::string>& tags)
   {
-    unqlite* db_pointer = get_db_pointer();
+    // Opening database in write mode.
+    unqlite* db_pointer = open_db(false);
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -1038,7 +1077,8 @@ namespace libtocc
     QueryCompiler compiler;
     std::string jx9_script = compiler.compile(query, result_variable_name);
 
-    unqlite* db_pointer = get_db_pointer();
+    unqlite* db_pointer = open_db();
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -1064,7 +1104,8 @@ namespace libtocc
 
   TagStatisticsCollection Database::get_tags_statistics(const std::vector<std::string>& file_ids)
   {
-    unqlite* db_pointer = get_db_pointer();
+    unqlite* db_pointer = open_db();
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     // Auto release the pointer.
@@ -1095,7 +1136,9 @@ namespace libtocc
 
   void Database::set_titles(const std::vector<std::string>& file_ids, const std::string& new_title)
   {
-    unqlite* db_pointer = get_db_pointer();
+    // Opening database in write mode.
+    unqlite* db_pointer = open_db(false);
+    UnqliteDBHolder db_holder(db_pointer);
 
     unqlite_vm* vm;
     VMPointerHolder vm_holder(&vm);

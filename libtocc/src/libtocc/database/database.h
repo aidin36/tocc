@@ -173,18 +173,15 @@ namespace libtocc
     void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
 
   private:
-    /*
-     * Database handler.
-     * Note: Don't use this directly. Instead, use `get_db_pointer' method.
-     */
-    unqlite* db_pointer;
-
     std::string database_file;
 
     /*
      * Returns handler of opened UnQlite DB.
+     *
+     * @param readonly: If set to true, it opens the database in
+     *   read-only mode (default).
      */
-    unqlite* get_db_pointer();
+    unqlite* open_db(bool readonly=true);
   };
 
 };
