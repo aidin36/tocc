@@ -79,11 +79,14 @@ Put it in ``sample.cpp`` file, and then simply compile it::
 against the ``libunqlite.so``. Because *libtocc* depends on it.
 
 Here's an explanation of what happened. First, you need to include
-``libtocc/manager.h`` which defines :cpp:class:`libtocc::Manager`, the
+``libtocc.h`` which defines :cpp:class:`libtocc::Manager`, the
 interface of the *libtocc*. All of the Tocc functionalities
 are accessible through Manager class. In its constructor, it gets a path to a
 directory that it should keeps its files and database. After that, we invoked
-the :cpp:func:`libtocc::Manager::import_file` method in order to copy a file from
+the :cpp:func:`libtocc::Manager::initialize` method. It will initialized the
+path we passed to the *Manager* constructor.
+Now, we can import files using :cpp:func:`libtocc::Manager::import_file` method.
+It will copy a file from
 the traditional file system to the tocc-managed file system. It's a photo, and
 its title is "A Beautiful Portrate".
 
