@@ -1,4 +1,8 @@
 
+v1.0.1
+  * Bug fixed: Two process couldn't use libtocc::Manager at the same time.
+  * Documentations improved.
+
 v1.0.0
   * API of libtocc's expressions cleaned up.
   * Not and WildCard added to expressions.
