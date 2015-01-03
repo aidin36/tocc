@@ -178,7 +178,8 @@ namespace libtocc
   void Manager::remove_files(FileInfoCollection& files_to_remove)
   {
     //Converting the FileInfoCollection to a vector of file ids
-    std::vector<std::string> file_ids = file_info_collection_to_vector_ids(files_to_remove);
+    std::vector<std::string> file_ids =
+        file_info_collection_to_vector_ids(files_to_remove);
 
     //Remove the files
     this->private_data->files_engine->remove_files(file_ids);
@@ -199,6 +200,20 @@ namespace libtocc
     {
       file_ids_vector.push_back(file_ids[i]);
     }
+
+    // Converting tags to vector.
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+
+    // Calling the engine to do the job.
+    this->private_data->tags_engine->assign_tags(file_ids_vector, tags_vector);
+  }
+
+  void Manager::assign_tags(FileInfoCollection& files,
+                            const TagsCollection* tags)
+  {
+    //Converting the FileInfoCollection to a vector of file ids
+    std::vector<std::string> file_ids_vector =
+        file_info_collection_to_vector_ids(files);
 
     // Converting tags to vector.
     std::vector<std::string> tags_vector = tags_to_vector(tags);
@@ -235,6 +250,14 @@ namespace libtocc
   {
     std::vector<std::string> tags_vector = tags_to_vector(tags);
     std::vector<std::string> file_ids_vector = const_char_array_to_vector(file_ids, file_ids_size);
+    this->private_data->tags_engine->unassign_tags(file_ids_vector, tags_vector);
+  }
+
+  void Manager::unassign_tags(FileInfoCollection& files, const TagsCollection* tags)
+  {
+    std::vector<std::string> file_ids_vector = file_info_collection_to_vector_ids(files);
+    std::vector<std::string> tags_vector = tags_to_vector(tags);
+
     this->private_data->tags_engine->unassign_tags(file_ids_vector, tags_vector);
   }
 

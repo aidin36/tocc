@@ -153,6 +153,17 @@ namespace libtocc
                      const TagsCollection* tags);
 
     /*
+     * Assigns specified tags to all files in the specified list of files.
+     *
+     * @param files: Files to assign tags to.
+     * @param tags: Tags to assign to file.
+     *
+     * @note: It won't throw any exception if no file found with these IDs.
+     */
+    void assign_tags(FileInfoCollection& files,
+                     const TagsCollection* tags);
+
+    /*
      * Assigns tags to a file.
      *
      * @param file_id: File to assign tags to.
@@ -187,6 +198,14 @@ namespace libtocc
      * @param tags: A list of tags to unassign
      */
     void unassign_tags(const char* file_ids[], int file_ids_size, const TagsCollection* tags);
+
+    /*
+     * Unassign a collection of tags from the specified files
+     *
+     * @param files: Collection of files to unassign tags from.
+     * @param tags: A list of tags to unassign
+     */
+    void unassign_tags(FileInfoCollection& files, const TagsCollection* tags);
 
     /*
      * Unassign a collection of tags from the specified file
