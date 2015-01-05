@@ -18,8 +18,13 @@
 
 #include "libtocc/exprs/functions.h"
 #include "libtocc/common/expr_exceptions.h"
+#include "libtocc/common/runtime_exceptions.h"
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <stdio.h>
+#include <cstring>
+
 namespace libtocc
 {
   class FunctionExpr::ProtectedData
@@ -53,8 +58,9 @@ namespace libtocc
     result += "('" + this->protected_data->arg + "', ";
     result += second_arg;
     result += ")";
-
-    return result.c_str();
+    static char buf[200];
+    strncpy(buf, result.c_str(), sizeof buf);
+    return buf;
   }
 
   Expr* FunctionExpr::clone()
@@ -87,12 +93,31 @@ namespace libtocc
     return "wild_card_compare";
   }
 
-  RegexExpr::RegexExpr(unqlite_vm *p_uniqlite_vm, const char * const arg, const int cflags)
+  static regex_t *string_to_regex_pointer(const char *string)
+   {
+      regex_t *regex_pointer;
+      sscanf(string, "%p", &regex_pointer);
+      return regex_pointer;
+   }
+
+   static void  regex_pointer_to_string(regex_t *regex_pointer, char *string, size_t string_length)
+   {
+       if (string_length < 25)
+       {
+         throw InvalidArgumentError("string less than 25 characters long passed to RegexExpr::regex_pointer_to_string");
+       }
+       snprintf (string, string_length, "%p", regex_pointer);
+   }
+
+  RegexExpr::RegexExpr(const char * const arg, const int cflags)
 
     : FunctionExpr(arg)
   {
-    this->p_unqlite_vm = p_uniqlite_vm;
-    int return_code = regcomp(&this->regex, arg, cflags);
+    this->protected_data = new ProtectedData();
+    char buf[30];
+    regex_pointer_to_string (&this->regex, buf, sizeof buf);
+    this->protected_data->arg = std::string(buf);
+    int return_code = regcomp(&this->regex, arg, cflags | REG_EXTENDED);
     if (return_code != 0)
     {
        char error_buffer[400];
@@ -101,16 +126,7 @@ namespace libtocc
        std::string error_message = std::string("Invalid regular expression: ") + error_buffer;
        throw ExprCompilerError(error_message.c_str());
     }
-    unqlite_value *p_unqlite_value;
-    return_code = unqlite_value_resource(p_unqlite_value, &regex);
-    // check rc
-    // Create unique regex name regex_name.
-   std::ostringstream ostream;
-    ostream << "regex_" << count_of_regexes_built();
-    this->arg = ostream.str();
-    return_code = unqlite_vm_config(p_unqlite_vm, UNQLITE_VM_CONFIG_CREATE_VAR, this->arg.c_str(), p_unqlite_value);
-    // check rc
-  }
+ }
 
   RegexExpr::RegexExpr(RegexExpr& source)
     : FunctionExpr(source)
@@ -127,18 +143,87 @@ namespace libtocc
     return new RegexExpr(*this);
   }
 
-   static unsigned long long count_of_regexes_built()
-   {
-       static unsigned long long count = 0;
-       count++;
-       return count;
-   }
 
+   //static bool check_regex_match(const char * regex_string, const char *
 
   const char* RegexExpr::get_func_name()
   {
     return "regular_expresion_compare";
   }
 
-};
+  static int regex_match(unqlite_context *pCtx, int argc, unqlite_value **argv)
+{
+  int i;
+  if( argc != 2 )
+  {
+    /*
+     * Missing arguments, throw a notice and return NULL.
+     * Note that you do not need to log the function name, UnQLite will
+     * automatically append the function name for you.
+     */
+    unqlite_context_throw_error(pCtx, UNQLITE_CTX_NOTICE, "Wrong number of arguments ..");
+    /* Return null */
+    unqlite_result_null(pCtx);
+    return UNQLITE_OK;
+  }
 
+   /* If argv[0] is not a string, throw a notice and continue */
+   if( !unqlite_value_is_string(argv[0]) )
+  {
+    unqlite_context_throw_error(pCtx, UNQLITE_CTX_NOTICE,
+      "Arg[0]: Expecting a string value");
+    unqlite_result_null(pCtx);
+    return UNQLITE_OK;
+  }
+  int string_length;
+  const char* regex_address_string = unqlite_value_to_string(argv[0], &string_length);
+  regex_t *regex = string_to_regex_pointer(regex_address_string);
+
+  if( !unqlite_value_is_string(argv[1]))
+  {
+     unqlite_context_throw_error(pCtx, UNQLITE_CTX_NOTICE,
+        "argv[1]: Expecting a string value");
+    unqlite_result_null(pCtx);
+    return UNQLITE_OK;
+  }
+  const char *string_to_compare = unqlite_value_to_string(argv[1], &string_length);
+  const int regex_flags = REG_EXTENDED;
+  int match_result = regexec(regex, string_to_compare, 0, NULL, regex_flags);
+  bool matched;
+  if (match_result == 0)
+  {
+    matched = true;
+  }
+  else
+  {
+    if (match_result == REG_NOMATCH)
+    {
+       matched = false;
+    }
+    else
+    {
+      size_t strcnt;
+      std::stringstream out_errmsg;
+      char errbuf[400];
+      strcnt = regerror(match_result, regex, errbuf, sizeof errbuf);
+      out_errmsg << "Error " << match_result << " on regexec in libtocc::RegexExpr::regex_match: " << errbuf;
+      RuntimeLogicError errx(out_errmsg.str().c_str());
+      throw errx;
+    }
+  }
+  unqlite_result_bool(pCtx, matched);
+  return UNQLITE_OK;
+}
+
+  void RegexExpr::create_Jx9_regex_match_function(unqlite_vm* pVm)
+  {
+    int rc = unqlite_create_function(pVm, get_func_name(), regex_match, 0 /* NULL: No private data */);
+    if( rc != UNQLITE_OK )
+    {
+       std::stringstream str1;
+       str1 << "Error " << rc << " creating regex_match function in Unqlite";
+       RuntimeLogicError err1(str1.str().c_str());
+       throw err1;
+    }
+  };
+}

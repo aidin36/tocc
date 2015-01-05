@@ -22,8 +22,8 @@
 #include <string>
 extern "C"
 {
-#include <regex.h>
 #include <unqlite.h>
+#include <regex.h>
 }
 #include "libtocc/exprs/expr.h"
 
@@ -56,7 +56,7 @@ namespace libtocc
      *  For example:
      *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
      */
-    virtual const char* compile(const char* second_arg);
+    const char* compile(const char* second_arg);
 
     /*
      * Clones this instance.
@@ -102,7 +102,7 @@ namespace libtocc
      * @param arg: Argument of this function. For example:
      *   RegexExpr(".*book.*")
      */
-      RegexExpr(unqlite_vm *p_unqlite_vm, const char * const arg, const int cflags);
+      RegexExpr(const char * const arg, const int cflags);
     /*
      * Copy Constructor.
      */
@@ -113,16 +113,13 @@ namespace libtocc
 
     ~RegexExpr();
     virtual Expr* clone();
-    virtual const char* compile(const char* second_arg);
-
-  protected:
-    virtual const char* get_func_name();
-    static unsigned long long count_of_regexes_built();
+    //static regex_t *string_to_regex_pointer(const char *string);
+    //static void  regex_pointer_to_string(regex_t *regex_pointer, char *string, size_t string_length);
+    void create_Jx9_regex_match_function(unqlite_vm* pVm);
     regex_t regex;
-    std::string arg;
-    unqlite_vm *p_unqlite_vm;
-  };
-
+ protected:
+    virtual const char* get_func_name();
+ };
 };
 
 #endif /* LIBTOCC_FUNCTION_H_INCLUDED */

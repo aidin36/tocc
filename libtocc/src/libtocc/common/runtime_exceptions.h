@@ -44,6 +44,27 @@ namespace libtocc
     const char* message;
   };
 
+   class RuntimeLogicError : public BaseException
+   {
+   public:
+      RuntimeLogicError(const char* message) throw()
+      {
+         this->message = message;
+      }
+
+      virtual ~RuntimeLogicError() throw()
+      {
+      }
+
+      virtual const char* what() const throw()
+      {
+         return this->message;
+      }
+
+   private:
+      const char* message;
+   };
+
 }
 
 
