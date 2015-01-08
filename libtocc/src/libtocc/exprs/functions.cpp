@@ -93,14 +93,14 @@ namespace libtocc
     return "wild_card_compare";
   }
 
-  static regex_t *string_to_regex_pointer(const char *string)
+  static pcre *string_to_regex_pointer(const char *string)
    {
-      regex_t *regex_pointer;
+      pcre *regex_pointer;
       sscanf(string, "%p", &regex_pointer);
       return regex_pointer;
    }
 
-   static void  regex_pointer_to_string(regex_t *regex_pointer, char *string, size_t string_length)
+   static void  regex_pointer_to_string(pcre *regex_pointer, char *string, size_t string_length)
    {
        if (string_length < 25)
        {
@@ -114,19 +114,25 @@ namespace libtocc
     : FunctionExpr(arg)
   {
     this->protected_data = new ProtectedData();
-    char buf[30];
-    regex_pointer_to_string (&this->regex, buf, sizeof buf);
-    this->protected_data->arg = std::string(buf);
-    int return_code = regcomp(&this->regex, arg, cflags | REG_EXTENDED);
-    if (return_code != 0)
+   // int return_code = regcomp(&this->regex, arg, cflags | REG_EXTENDED);
+    const char* pcre_error_string;
+    int pcre_error_offset;
+    this->regex = NULL;
+    this->regex = pcre_compile(arg, 0, &pcre_error_string, &pcre_error_offset, NULL);
+
+    if (this->regex == NULL)
     {
-       char error_buffer[400];
-       size_t error_message_length = regerror(return_code, &this->regex,
-         error_buffer, sizeof error_buffer);
-       std::string error_message = std::string("Invalid regular expression: ") + error_buffer;
+      // char error_buffer[400];
+      // size_t error_message_length = regerror(return_code, &this->regex,
+      //   error_buffer, sizeof error_buffer);
+       std::string error_message = std::string("Invalid regular expression: ") + pcre_error_string;
        throw ExprCompilerError(error_message.c_str());
     }
- }
+    char buf[30];
+    regex_pointer_to_string (this->regex, buf, sizeof buf);
+    this->protected_data->arg = std::string(buf);
+  }
+
 
   RegexExpr::RegexExpr(RegexExpr& source)
     : FunctionExpr(source)
@@ -135,8 +141,37 @@ namespace libtocc
 
   RegexExpr::~RegexExpr()
   {
-    regfree(&this->regex);
+//    regfree(this->regex);
+     if (this->regex != NULL)
+     {
+        pcre_free(this->regex);
+     }
   }
+
+  static void replace_string_in_place(std::string& subject, const std::string& search,
+                          const std::string& replace) {
+     size_t pos = 0;
+     while((pos = subject.find(search, pos)) != std::string::npos) {
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
+     }
+   }
+
+  const char* RegexExpr::compile(const char* second_arg)
+  {
+     static char buf[300];
+     std::string second_arg_s = second_arg;
+     replace_string_in_place(second_arg_s, "\\", "\\\\");
+     std::string out_str = get_func_name();
+     out_str += "('";
+     out_str += this->protected_data->arg;
+     out_str += "', '";
+     out_str += second_arg_s;
+     out_str += "')";
+     strncpy(buf, out_str.c_str(), sizeof buf);
+     return buf;
+  }
+
 
   Expr* RegexExpr::clone()
   {
@@ -177,7 +212,7 @@ namespace libtocc
   }
   int string_length;
   const char* regex_address_string = unqlite_value_to_string(argv[0], &string_length);
-  regex_t *regex = string_to_regex_pointer(regex_address_string);
+  pcre *regex = string_to_regex_pointer(regex_address_string);
 
   if( !unqlite_value_is_string(argv[1]))
   {
@@ -187,9 +222,13 @@ namespace libtocc
     return UNQLITE_OK;
   }
   const char *string_to_compare = unqlite_value_to_string(argv[1], &string_length);
-  const int regex_flags = REG_EXTENDED;
-  int match_result = regexec(regex, string_to_compare, 0, NULL, regex_flags);
+  //const int regex_flags = REG_EXTENDED;
+  // int match_result = regexec(regex, string_to_compare, 0, NULL, regex_flags);
+  int match_result = pcre_exec(regex, 0, string_to_compare,
+     strlen(string_to_compare), 0, 0, 0, 0);
+
   bool matched;
+  /*
   if (match_result == 0)
   {
     matched = true;
@@ -211,7 +250,29 @@ namespace libtocc
       throw errx;
     }
   }
+  */
+  if (match_result >= 0)
+  {
+      matched = true;
+  }
+  else
+  {
+     if (match_result ==  PCRE_ERROR_NOMATCH)
+     {
+        matched = false;
+     }
+     else
+     {
+        std::stringstream out_errmsg;
+      //out_errmsg << "Error " << match_result << " on regexec in libtocc::RegexExpr::regex_match: " << errbuf;
+        out_errmsg << "Error " << match_result << " on pcre_exec in libtocc::RegexExpr::regex_match";
+        RuntimeLogicError errx(out_errmsg.str().c_str());
+      throw errx;
+     }
+
+  }
   unqlite_result_bool(pCtx, matched);
+
   return UNQLITE_OK;
 }
 
@@ -225,5 +286,5 @@ namespace libtocc
        RuntimeLogicError err1(str1.str().c_str());
        throw err1;
     }
-  };
+  }
 }

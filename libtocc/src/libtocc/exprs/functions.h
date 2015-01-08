@@ -23,8 +23,9 @@
 extern "C"
 {
 #include <unqlite.h>
-#include <regex.h>
+// #include <regex.h>
 }
+#include <pcre.h>
 #include "libtocc/exprs/expr.h"
 
 namespace libtocc
@@ -56,7 +57,7 @@ namespace libtocc
      *  For example:
      *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
      */
-    const char* compile(const char* second_arg);
+    virtual const char* compile(const char* second_arg);
 
     /*
      * Clones this instance.
@@ -113,10 +114,11 @@ namespace libtocc
 
     ~RegexExpr();
     virtual Expr* clone();
+    virtual const char* compile (const char* second_arg);
     //static regex_t *string_to_regex_pointer(const char *string);
     //static void  regex_pointer_to_string(regex_t *regex_pointer, char *string, size_t string_length);
     void create_Jx9_regex_match_function(unqlite_vm* pVm);
-    regex_t regex;
+    pcre* regex;
  protected:
     virtual const char* get_func_name();
  };
