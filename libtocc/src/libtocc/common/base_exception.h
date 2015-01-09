@@ -21,7 +21,6 @@
 #define LIBTOCC_BASE_EXCEPTION_H_INCLUDED
 
 #include <exception>
-#include <string>
 
 
 namespace libtocc

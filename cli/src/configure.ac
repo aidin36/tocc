@@ -9,7 +9,6 @@ AC_CONFIG_SRCDIR([main.cpp])
 # Initializing Automake.
 # [foreign] added, so automake won't check for missing NEWS, README, etc.
 AM_INIT_AUTOMAKE([foreign])
-
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
