@@ -32,94 +32,94 @@ namespace libtocc
 {
 
   /*
-   * Defines base class of all function expressions.
-   */
+  * Defines base class of all function expressions.
+  */
   class FunctionExpr : public Expr
   {
   public:
-    /*
-     * @param arg: Argument of this function. For example:
-     *   WildCard("*book*")
-     */
-    FunctionExpr(const char* arg);
+   /*
+    * @param arg: Argument of this function. For example:
+    *   WildCard("*book*")
+    */
+   FunctionExpr(const char* arg);
 
-    /*
-     * Copy Constructor.
-     */
-    FunctionExpr(FunctionExpr& source);
+   /*
+    * Copy Constructor.
+    */
+   FunctionExpr(FunctionExpr& source);
 
-    virtual expr_type::ExprType get_type();
+   virtual expr_type::ExprType get_type();
 
-    /*
-     * Compiles the function.
-     *
-     * @param base_arg: Second argument of the function.
-     *  For example:
-     *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
-     */
-    virtual const char* compile(const char* second_arg);
+   /*
+    * Compiles the function.
+    *
+    * @param base_arg: Second argument of the function.
+    *  For example:
+    *    Regex.compile("record.tag") -> regex_compare("pattern", record.tag)
+    */
+   virtual const char* compile(const char* second_arg);
 
-    /*
-     * Clones this instance.
-     */
-    virtual Expr* clone();
+   /*
+    * Clones this instance.
+    */
+   virtual Expr* clone();
 
   protected:
-    /*
-     * Returns the function name as string.
-     */
-    virtual const char* get_func_name();
+   /*
+    * Returns the function name as string.
+    */
+   virtual const char* get_func_name();
 
-    class ProtectedData;
-    ProtectedData* protected_data;
+   class ProtectedData;
+   ProtectedData* protected_data;
   };
 
   class WildCardExpr : public FunctionExpr
   {
   public:
-    /*
-     * @param arg: Argument of this function. For example:
-     *   WildCard("*book*")
-     */
-    WildCardExpr(const char* arg);
+   /*
+    * @param arg: Argument of this function. For example:
+    *   WildCard("*book*")
+    */
+   WildCardExpr(const char* arg);
 
+   /*
+    * Copy Constructor.
+    */
+   WildCardExpr(WildCardExpr& source);
+   /*
+    * Clones this instance.
+    */
+   virtual Expr* clone();
+
+  protected:
+   virtual const char* get_func_name();
+  };
+
+  class RegexExpr: public FunctionExpr
+  {
+  public:
     /*
-     * Copy Constructor.
-     */
-    WildCardExpr(WildCardExpr& source);
+    * @param arg: Argument of this function. For example:
+    *   RegexExpr(".*book.*")
+    */
+    RegexExpr(const char * const arg, const int cflags);
     /*
-     * Clones this instance.
-     */
+    * Copy Constructor.
+    */
+    RegexExpr(RegexExpr& source);
+    /*
+    * Clones this instance.
+    */
+
+    ~RegexExpr();
     virtual Expr* clone();
-
+    virtual const char* compile (const char* second_arg);
+    void create_Jx9_regex_match_function(unqlite_vm* pVm);
+    pcre* regex;
   protected:
     virtual const char* get_func_name();
   };
-
-   class RegexExpr: public FunctionExpr
-   {
-   public:
-     /*
-      * @param arg: Argument of this function. For example:
-      *   RegexExpr(".*book.*")
-      */
-      RegexExpr(const char * const arg, const int cflags);
-     /*
-      * Copy Constructor.
-      */
-      RegexExpr(RegexExpr& source);
-     /*
-      * Clones this instance.
-      */
-
-      ~RegexExpr();
-      virtual Expr* clone();
-      virtual const char* compile (const char* second_arg);
-      void create_Jx9_regex_match_function(unqlite_vm* pVm);
-      pcre* regex;
-   protected:
-      virtual const char* get_func_name();
-   };
 };
 
 #endif /* LIBTOCC_FUNCTION_H_INCLUDED */
