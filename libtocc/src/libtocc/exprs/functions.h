@@ -24,8 +24,8 @@ extern "C"
 {
 #include <unqlite.h>
 // #include <regex.h>
-}
 #include <pcre.h>
+}
 #include "libtocc/exprs/expr.h"
 
 namespace libtocc
@@ -96,32 +96,30 @@ namespace libtocc
     virtual const char* get_func_name();
   };
 
-  class RegexExpr: public FunctionExpr
-  {
-    public:
-    /*
-     * @param arg: Argument of this function. For example:
-     *   RegexExpr(".*book.*")
-     */
+   class RegexExpr: public FunctionExpr
+   {
+   public:
+     /*
+      * @param arg: Argument of this function. For example:
+      *   RegexExpr(".*book.*")
+      */
       RegexExpr(const char * const arg, const int cflags);
-    /*
-     * Copy Constructor.
-     */
-     RegexExpr(RegexExpr& source);
-    /*
-     * Clones this instance.
-     */
+     /*
+      * Copy Constructor.
+      */
+      RegexExpr(RegexExpr& source);
+     /*
+      * Clones this instance.
+      */
 
-    ~RegexExpr();
-    virtual Expr* clone();
-    virtual const char* compile (const char* second_arg);
-    //static regex_t *string_to_regex_pointer(const char *string);
-    //static void  regex_pointer_to_string(regex_t *regex_pointer, char *string, size_t string_length);
-    void create_Jx9_regex_match_function(unqlite_vm* pVm);
-    pcre* regex;
- protected:
-    virtual const char* get_func_name();
- };
+      ~RegexExpr();
+      virtual Expr* clone();
+      virtual const char* compile (const char* second_arg);
+      void create_Jx9_regex_match_function(unqlite_vm* pVm);
+      pcre* regex;
+   protected:
+      virtual const char* get_func_name();
+   };
 };
 
 #endif /* LIBTOCC_FUNCTION_H_INCLUDED */

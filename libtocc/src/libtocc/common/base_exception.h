@@ -21,6 +21,7 @@
 #define LIBTOCC_BASE_EXCEPTION_H_INCLUDED
 
 #include <exception>
+#include <string>
 
 
 namespace libtocc
@@ -34,5 +35,4 @@ namespace libtocc
     virtual ~BaseException() throw();
   };
 }
-
 #endif /* LIBTOCC_BASE_EXCEPTION_H_INCLUDED */
