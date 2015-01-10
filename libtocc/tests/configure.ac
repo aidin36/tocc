@@ -9,7 +9,6 @@ AC_CONFIG_SRCDIR([main.cpp])
 # Initializing Automake
 # [foreign] added, so automake won't check for missing NEWS, README, etc.
 AM_INIT_AUTOMAKE([foreign])
-
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -19,6 +18,16 @@ AC_CHECK_HEADERS([unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
+
+# Checks for UnQlite
+# Since it's a C header, we need to set lang to C
+AC_LANG_PUSH(C)
+AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to documents for more info.])])
+AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to documentations for more info.])])
+
+# Checks for PCRE
+AC_CHECK_HEADER([pcre.h], [], [AC_MSG_ERROR([Could not find pcre.h header. Please make sure you have this header in your include path. Refer to documents for more info.])])
+AC_SEARCH_LIBS([pcre_compile], [pcre], [], [AC_MSG_ERROR([Could not find pcre library. Please make sure you have this library in your libs path. Refer to documentations for more info.])])
 
 # Checks for UnQlite
 # Since it's a C header, we need to set lang to C
