@@ -95,8 +95,6 @@ namespace libtocc
     virtual const char* get_func_name();
   };
 
-};
-
   class RegexExpr: public FunctionExpr
   {
   public:

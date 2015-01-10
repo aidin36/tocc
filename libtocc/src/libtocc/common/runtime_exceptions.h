@@ -44,8 +44,6 @@ namespace libtocc
     const char* message;
   };
 
-}
-
   class RuntimeLogicError : public BaseException
   {
   public:
