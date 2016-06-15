@@ -1,7 +1,0 @@
-#!/bin/sh
-
-set -e
-
-aclocal
-autoconf -Wall
-automake -Wall --add-missing
