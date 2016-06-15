@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tocc, a Tool for Obsessive Compulsive Classifiers &mdash; Tocc</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Tocc" href="#" />
+    <link rel="next" title="Tocc Users Manual" href="manual/index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manual/index.html" title="Tocc Users Manual"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Tocc</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tocc-a-tool-for-obsessive-compulsive-classifiers">
+<h1><em>tocc</em>, a Tool for Obsessive Compulsive Classifiers<a class="headerlink" href="#tocc-a-tool-for-obsessive-compulsive-classifiers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>Tocc is a tag-based file management system. It also includes a tag-based file
+system called Toccfs. The goal of Tocc is to provide a better system for
+classifying files, which is more flexible than classic file systems that are based on a
+tree of files and directories.</p>
+<img alt="Gnu General Public License, version 3" src="_images/gplv3.png" />
+<p>Tocc is free software. It publishes under the terms of Gnu General Public
+License version 3.</p>
+</div>
+<div class="section" id="who-needs-tocc">
+<h1>Who Needs Tocc?<a class="headerlink" href="#who-needs-tocc" title="Permalink to this headline">¶</a></h1>
+<p>Traditional file systems are very limited for classifying files.
+All you have are some directories.
+Imagine that you want to store your photos on your hard drive. How are you
+going to categorize them? By the date they were taken? What if you want to
+find photos taken on a specific location? Or photos of a specific person?
+Or if you&#8217;re a photographer, you may also want to search your photos by
+the techniques you used.</p>
+<p>You can use photo management applications. But what about your collection of
+books or music?</p>
+<p>Tocc is here to help you! Using Tocc, you tag your stored files.
+In the previous example, you can add these tags to a photo: <code class="docutils literal"><span class="pre">2014-01-07</span></code>,
+<code class="docutils literal"><span class="pre">portraite</span></code>, <code class="docutils literal"><span class="pre">maria</span></code>. And another one with: <code class="docutils literal"><span class="pre">2014-01-07</span></code>, <code class="docutils literal"><span class="pre">landscape</span></code>,
+<code class="docutils literal"><span class="pre">abstract</span></code>. Then you can simply search your photos with these tags.</p>
+<p>In this way, you have a graph of tags and files instead of a tree.
+It&#8217;s much more flexible.</p>
+<p>Tocc is very powerful in searching files. You can create complex queries like
+<code class="docutils literal"><span class="pre">photo</span> <span class="pre">and</span> <span class="pre">landscape</span> <span class="pre">and</span> <span class="pre">(b&amp;w</span> <span class="pre">or</span> <span class="pre">abstract)</span></code>. You can use <em>wildcard</em> and
+<em>Regular Expression</em> in your queries.</p>
+<p>Tocc don&#8217;t force any classification practices. You are free to categorize your
+files anyway you want. For example, you can use prefixes for your tags,
+like <code class="docutils literal"><span class="pre">type:pdf</span></code> or <code class="docutils literal"><span class="pre">author:Richard</span> <span class="pre">Bach</span></code>. You can write your
+tags all in lower case, like <code class="docutils literal"><span class="pre">read-later</span></code>, or in camel case like
+<code class="docutils literal"><span class="pre">FreeSoftware</span></code>. It&#8217;s all your choice!</p>
+<p>Tocc also have different UIs, so you can work with whichever you feel comfortable
+with.</p>
+</div>
+<div class="section" id="features">
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<p>These are the main features of Tocc.</p>
+<blockquote>
+<div><ul class="simple">
+<li>It can manage any kind of file. It&#8217;s not limited to specific type of file.</li>
+<li>It stores files and their related database in a regular directory, so you
+can store them everywhere, from you local file system, to a network storage
+or back them up in a DVD.</li>
+<li>It has a File System interface, that lets any application use Tocc without
+any changes. In other words, other applications don&#8217;t have to support Tocc
+specially. It&#8217;s compatible with everyone, out of the box.</li>
+<li>There can be different UIs that work with Tocc: Command line interface,
+plugin for different launcher or different file browsers, etc.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="download">
+<h1>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h1>
+<p>You can get the latest releases from
+<a class="reference external" href="https://www.github.com/aidin36/tocc/releases/">Tocc Releases on Github</a>.</p>
+<p>Releases are signed with Aidin&#8217;s key. You can get the key from public
+Keyservers. The ID of the Key is <code class="docutils literal"><span class="pre">79B75433</span></code>. (e.g. run this command:
+<code class="docutils literal"><span class="pre">gpg</span> <span class="pre">--recv-keys</span> <span class="pre">79B75433</span></code>)</p>
+<p>You can also get the latest under-develop source from Github:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="nl">https</span><span class="p">:</span><span class="c1">//www.github.com/aidin36/tocc.git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="manual/index.html"><span class="doc">Tocc Users Manual</span></a></li>
+<li><a class="reference external" href="libtocc/index.html">libtocc (API)</a></li>
+<li><a class="reference internal" href="developers/index.html"><span class="doc">Developers Documentation</span></a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="contribution">
+<h1>Contribution<a class="headerlink" href="#contribution" title="Permalink to this headline">¶</a></h1>
+<p>Tocc is a free software, and it relies on people contribution.
+We need help in different parts of the project.
+See our <a class="reference internal" href="contribution.html"><span class="doc">Contribution</span></a> page for finding out how you can
+help the project.</p>
+</div>
+<div class="section" id="about">
+<h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">tocc</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=aidin36&repo=tocc&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<p><a href="https://twitter.com/t_o_c_c_"><img src="_static/bird_black_32_0.png"><b>Follow @t_o_c_c_</b></a></p>
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual/index.html">Tocc Users Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers/coding_style.html">Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers/workflow.html">Workflow of Tocc Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers/index.html">Developers Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uis.html">Third party UIs</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2013, 2014, Aidin Gharibnavaz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

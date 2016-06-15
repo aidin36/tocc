@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Coding Style Guide &mdash; Tocc</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Tocc" href="../index.html" />
+    <link rel="up" title="Developers Documentation" href="index.html" />
+    <link rel="next" title="Workflow of Tocc Development" href="workflow.html" />
+    <link rel="prev" title="Developers Documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="workflow.html" title="Workflow of Tocc Development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Developers Documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Tocc</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Developers Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<div class="section" id="coding-style-guide">
+<h1>Coding Style Guide<a class="headerlink" href="#coding-style-guide" title="Permalink to this headline">¶</a></h1>
+<p>There are some rules that must be followed by developers of Tocc, in order to
+keep a cleaner and more maintainable code.</p>
+<p>And remember: Special cases are not special enough to break the rules.</p>
+<div class="section" id="appearance">
+<h2>Appearance<a class="headerlink" href="#appearance" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Indents are two spaces.</p>
+</li>
+<li><p class="first">Braces should be open in the next line. Example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;test&quot;</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// Do some stuff.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Never write a <code class="docutils literal"><span class="pre">if</span></code>, <code class="docutils literal"><span class="pre">for</span></code>, etc without braces:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="c1">// Illegal! Don&#39;t write like this.</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">title</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Put spaces around operators, assignments, commas, etc:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">24</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+<span class="n">Point</span> <span class="nf">point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">There shouldn&#8217;t be any trailing space in the source file. You can
+use <code class="docutils literal"><span class="pre">git</span> <span class="pre">diff</span> <span class="pre">--check</span></code> before any commit to check that.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="naming">
+<h2>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Never use abbreviation. Always use clear and meaningful name for variables,
+functions, classes, and everything else.</li>
+<li>Name of classes must be in Camel Case. Like <code class="docutils literal"><span class="pre">InvalidArgumentsError</span></code>.</li>
+<li>Name of constants must be all in captal letters, and each word separated
+by underscore. Example: <code class="docutils literal"><span class="pre">MAXIMUM_ALLOWED_TAGS</span> <span class="pre">=</span> <span class="pre">100</span></code>.</li>
+<li>Everything else (methods, variables, name spaces, file names, etc) must be
+all in lower case. Examples: <code class="docutils literal"><span class="pre">tags_list</span></code>, <code class="docutils literal"><span class="pre">get_absolute_path</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="unit-tests">
+<h2>Unit Tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Developers must write a Unit Test for every functionality they add.</li>
+</ul>
+</div>
+<div class="section" id="commit-messages">
+<h2>Commit Messages<a class="headerlink" href="#commit-messages" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Include related issue number (if any) in the commit message. In the form
+<code class="docutils literal"><span class="pre">issue</span> <span class="pre">#52</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="headers">
+<h2>Headers<a class="headerlink" href="#headers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>First header that includes in a <code class="docutils literal"><span class="pre">.cpp</span></code> file, should be its header. For
+example, in <code class="docutils literal"><span class="pre">expr.cpp</span></code>, the first include must be <code class="docutils literal"><span class="pre">expr.h</span></code>. Then other
+headers. It will help us see dependency problems earlier.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">tocc</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=aidin36&repo=tocc&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<p><a href="https://twitter.com/t_o_c_c_"><img src="../_static/bird_black_32_0.png"><b>Follow @t_o_c_c_</b></a></p>
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">Tocc Users Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Coding Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#appearance">Appearance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming">Naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commit-messages">Commit Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#headers">Headers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">Workflow of Tocc Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Developers Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uis.html">Third party UIs</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2013, 2014, Aidin Gharibnavaz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
