@@ -33,6 +33,10 @@ AC_CHECK_FUNCS([mkdir pow strerror sendfile])
 AC_CHECK_HEADER([unqlite.h], [], [AC_MSG_ERROR([Could not find unqlite.h header. Please make sure you have this header in your include path. Refer to documentation for more info.])])
 AC_SEARCH_LIBS([unqlite_open], [unqlite], [], [AC_MSG_ERROR([Could not find unqlite library. Please make sure you have this library in your libs path. Refer to documentation for more info.])])
 
+# Checking for PCRE
+AC_CHECK_HEADER([pcre.h], [], [AC_MSG_ERROR([Could not find pcre.h header. Please make sure you have this header in your include path. Refer to documentation for more info.])])
+AC_SEARCH_LIBS([pcre], [], [AC_MSG_ERROR([Could not find pcre library. Please make sure you have this library in your libs path. Refer to documentation for more info.])])
+
 # Option and variable for pkgconfig directory.
 AC_ARG_WITH(pkgconfigdir,
             [  --with-pkgconfigdir=DIR    Where to install pkgconfig file. @<:@DIR/pkgconfig@:>@],
