@@ -154,7 +154,7 @@ run *libtocctests* like this::
 
   $ ./libtocctests 2>&1 > tests.log
 
-Then send ``tests.log`` file to *aidin@t-o-c-c.com*, and provide your platform
+Then send ``tests.log`` file to *tocc@aidinhut.com*, and provide your platform
 information, such as your OS and its version.
 
 
