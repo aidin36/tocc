@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([tocc-fs], [1.0.1], [aidin@t-o-c-c.com], [File System Interface for Tocc], [http://t-o-c-c.com])
+AC_INIT([tocc-fs], [1.0.1], [aidin@t-o-c-c.com], [File System Interface for Tocc], [https://tocc.aidinhut.com])
 AC_CONFIG_SRCDIR([main.cpp])
 
 # Initializing Automake.

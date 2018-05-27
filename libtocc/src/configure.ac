@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libtocc], [1.0.1], [aidin@t-o-c-c.com], [libtocc], [http://t-o-c-c.com])
+AC_INIT([libtocc], [1.0.1], [aidin@t-o-c-c.com], [libtocc], [https://tocc.aidinhut.com])
 AC_CONFIG_SRCDIR([libtocc/front_end/manager.h])
 #AC_CONFIG_HEADERS([config.h])
 

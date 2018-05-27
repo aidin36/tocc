@@ -12,7 +12,7 @@ tree of files and directories.
 For more information about why Tocc was created, whether you need it, its vision, and
 what it can be used for, take a look at its web page:
 
-   http://t-o-c-c.com
+   https://tocc.aidinhut.com
 
 Copyright
 ---------

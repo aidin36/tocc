@@ -1,5 +1,5 @@
 /*
- * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * This file is part of Tocc. (see <https://tocc.aidinhut.com>)
  * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify

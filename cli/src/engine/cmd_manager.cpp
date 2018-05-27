@@ -1,5 +1,5 @@
 /*
- * This file is part of Tocc. (see <http://t-o-c-c.com>)
+ * This file is part of Tocc. (see <https://tocc.aidinhut.com>)
  * Copyright (C) 2013, 2014, Aidin Gharibnavaz <aidin@t-o-c-c.com>
  *
  * Tocc is free software: you can redistribute it and/or modify
@@ -242,6 +242,6 @@ namespace tocccli
     std::cout << "Tocc comes with ABSOLUTELY NO WARRANTY." << std::endl;
     std::cout << "Tocc is free software and you are welcome to redistribute it" << std::endl;
     std::cout << "under certain conditions. See COPYING file in the distributed" << std::endl;
-    std::cout << "package, or <http://t-o-c-c.com> for more info." << std::endl;
+    std::cout << "package, or <https://tocc.aidinhut.com> for more info." << std::endl;
   }
 }
