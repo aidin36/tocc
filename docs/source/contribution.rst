@@ -1,5 +1,3 @@
-
-
 Contribution
 ============
 
@@ -11,7 +9,7 @@ gain more experience.
 You don't have to be a developer. There are other tasks that should be handled.
 This page lists things you can help with.
 
-If you decided to contribute, contact Aidin at *aidin (AT) t-o-c-c.com*
+If you decided to contribute, contact Aidin at *aidin (AT) aidinhut.com*
 
 Development
 -----------
@@ -67,4 +65,3 @@ a new version.
 
 If you have some free time every three or four months, you can be the Release
 Technician of you favorite OS.
-

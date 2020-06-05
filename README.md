@@ -21,17 +21,15 @@ License version 3. Refer to COPYING file for the full license.
 
 Building Source
 ---------------
-Tocc consist of three components: ``libtocc``, ``cli`` and ``toccfs``. Each of
-them have their own dependencies. For full build instructions for each component,
-refer to the documentation inside each directory.
+Tocc consist of three components: ``libtocc``, ``cli`` and ``toccfs``.
+``libtocc`` is the heart of the system. ``cli`` and ``toccfs`` are two
+interfaces for the Tocc system.
 
-But if you want a quick start, here you go:
+[How to compile libtocc](https://tocc.aidinhut.com/libtocc/compile.html)
 
-Inside ``libtocc`` directory, there's a script called ``bootstrap``. Run it
-(If you have one of the released source package, this step is already done).
-Now run ``configure`` script, then ``make`` and ``make install``.
+[How to compile cli](https://tocc.aidinhut.com/cli/compile.html)
 
-Now, repeat these steps on the ``cli`` and ``toccfs`` directories.
+[How to compile toccfs](https://tocc.aidinhut.com/toccfs/compile.html)
 
 Building Documents
 ------------------
@@ -50,9 +48,8 @@ Contact
 Currently, Tocc is maintain by Aidin Gharibnavaz. You can contact him at the
 following e-mail address:
 
-   aidin (at) t-o-c-c.com
+   aidin (at) aidinhut (dot) com
 
 You can find the development team by visiting Tocc's Github page:
 
    https://github.com/aidin36/tocc/
-

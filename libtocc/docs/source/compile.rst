@@ -1,4 +1,3 @@
-
 How to Compile And Use libtocc
 ==============================
 
@@ -7,20 +6,14 @@ Installing UnQlite
 *libtocc* depends on `UnQlite <http://unqlite.org>`_. So, first you need to
 compile and install it on your system.
 
-To do so, first get UnQlite from its website. un-compress it, and compile it
-using your *C* compiler, as a shared object. If you use *gcc*, invoke the
-following command::
+You need to pay for recent versions of Unqlite. However, older versions were
+free. You can obtain the free version from the `Tocc's Releases <https://github.com/aidin36/tocc/releases>`_.
 
-  $ gcc -fPIC -shared -o libunqlite.so unqlite.c
+Un-compress the package, then run::
 
-Then, install it on you system libraries. (i.e. copy it to ``/usr/lib/``.)
-
-**Note:** In current release of UnQlite (1.6.6) there's a bug that cause
-compilation fail when linking it to a ``C++`` application. You need to apply
-`this patch <http://bugs.symisc.net/index.php?do=details&task_id=111>`_ (which
-also mentioned in `their forum
-<http://unqlite.org/forum/compiler-error-when-building-for-c-g-v4-2-1>`_)
-first.
+  $ ./configure
+  $ make
+  $ make install
 
 
 Compiling libtocc
@@ -98,6 +91,15 @@ Test Units
 
 *libtocc* comes with some Unit Tests. They're placed in ``libtocc/tests``
 directory. This section explains how to build and run these Unit Tests.
+
+Installing Catch.hpp
+^^^^^^^^^^^^^^^^^^^^
+Tests are using `Catch <https://github.com/catchorg/Catch2>`_ library. The Tocc's
+source code hadn't updated and it depends on the version 1 of Catch.
+
+Download ``catch.hpp`` from `Catch 1.10.0 <https://github.com/catchorg/Catch2/releases/tag/v1.10.0>`_
+and copy it to ``/usr/local/include``. Or alternatevly, copy it to another directory
+and add a ``-I`` flag to the ``./configure`` command below to point to that directory.
 
 1. Bootstraping
 ^^^^^^^^^^^^^^^
@@ -177,5 +179,3 @@ in itself called ``libtocc_exists``, which is a ``C`` function. So, you can
 simply use it like this::
 
   AC_SEARCH_LIBS([libtocc_exists], [tocc])
-
-
