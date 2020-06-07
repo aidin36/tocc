@@ -87,16 +87,16 @@ Now, what if we want to edit a file?::
 `{physical_path}` will replace with the full path to the file stored in file system. I just passed this path to *vim*. As simple as that!
 
 
-How Tocc Works?
----------------
+How Tocc Works
+--------------
 
-Tocc keeps two kind of data: Your actual files, and their metadata (mainly, tags that are assigned to them).
+Tocc keeps two kinds of data: Your actual files, and their metadata (mainly, tags that are assigned to them).
 
-Tocc keeps your files in a directory on the file system. We call this directory *Tocc Managed File System*. Files rename to some meaningless names, kept under meaningless directory structure (meaningless for humans, I mean!). For example, if *Tocc Managed File System* is ``/home/tocc-managed/``, you will some files like ``/opt/tocc-managed/00/00/01/3`` or ``/opt/tocc-managed/00/0c/6a/e``. These are the files that you're imported in Tocc.
+Tocc keeps your files in a directory on the file system. We call this directory *Tocc Managed File System*. In this directory, files have meaningless names, and are kept under a meaningless directory structure (meaningless for humans, I mean!). For example, if the *Tocc Managed File System* is at ``/home/tocc-managed/``, you might have files like ``/opt/tocc-managed/00/00/01/3`` or ``/opt/tocc-managed/00/0c/6a/e``. These are the files that you've imported in Tocc.
 
-In order to search these files, we need the metadata. Tocc creates a database file in the root of *Tocc Managed File System*, and keep metdata of files inside it: Title of each file, tags that assigned to it, etc.
+In order to search these files, we need the metadata. Tocc creates a database file in the root of the *Tocc Managed File System*, and keeps the metadata of files inside it: the title of each file, tags that are assigned to it, etc.
 
-Note that you can have more than one *Tocc Managed File System*. Each of them have their own database and separate set of files.
+Note that you can have more than one *Tocc Managed File System*. Each of them has their own database and an independent set of files.
 
 
 Where to go from here
