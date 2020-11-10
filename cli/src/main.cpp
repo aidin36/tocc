@@ -28,6 +28,7 @@
 #include "utilities/cmd_parser.h"
 #include "utilities/errno_translator.h"
 #include "engine/cmd_manager.h"
+#include "engine/singletons.h"
 #include "common/exceptions/cmd_usage_exceptions.h"
 
 
@@ -83,6 +84,7 @@ int main(int argc, char* argv[])
 
   // Executing.
   CmdManager cmd_manager(base_path);
+  Singletons singletons;
   try
   {
     cmd_manager.execute(cmd_parameters);
