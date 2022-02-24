@@ -17,6 +17,8 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <fstream>
 #include <cstring>
 
@@ -30,18 +32,18 @@ TEST_CASE("front_end: file import")
 {
   // Creating a file to import.
   std::ofstream file_stream;
-  file_stream.open("/tmp/tocctests/tocc_test_file_to_import_2");
+  file_stream.open(testdb_path("tocc_test_file_to_import_2").c_str());
   file_stream << "some data...";
   file_stream.close();
 
   // Creating an instance of the manager.
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("Importing a file with no property")
   {
     // Importing the file with no property.
     libtocc::FileInfo test_file =
-        manager.import_file("/tmp/tocctests/tocc_test_file_to_import_2");
+        manager.import_file(testdb_path("tocc_test_file_to_import_2").c_str());
     // Checking if it's OK.
     REQUIRE(strcmp(test_file.get_title(), "tocc_test_file_to_import_2") == 0);
     REQUIRE(strcmp(test_file.get_traditional_path(), "") == 0);
@@ -58,7 +60,7 @@ TEST_CASE("front_end: file import")
   SECTION("Importing the file with Title and Traditional Path")
   {
     libtocc::FileInfo test_file_2 =
-        manager.import_file("/tmp/tocctests/tocc_test_file_to_import_2",
+        manager.import_file(testdb_path("tocc_test_file_to_import_2").c_str(),
                             "Title of the test file",
                             "/home/not_well_organized/test");
     // Checking if it's OK.
@@ -80,7 +82,7 @@ TEST_CASE("front_end: file import")
     tags.add_tag("test");
     tags.add_tag("safe-to-remove");
     libtocc::FileInfo test_file_3 =
-        manager.import_file("/tmp/tocctests/tocc_test_file_to_import_2",
+        manager.import_file(testdb_path("tocc_test_file_to_import_2").c_str(),
                             "Third import",
                             "/home/not_well_organized/test3",
                             &tags);
@@ -119,7 +121,7 @@ TEST_CASE("front_end: file import")
 TEST_CASE("Importing a not-existed file")
 {
   // Creating an instance of the manager.
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   REQUIRE_THROWS_AS(
       manager.import_file("/path/to/a/not/existed/file/fly364bouqc"),

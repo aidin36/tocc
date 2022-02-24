@@ -19,7 +19,11 @@
 #include <string>
 #include <vector>
 #include <utility>
+#ifdef _MSC_VER
+#include "unistdx.h"
+#else
 #include <unistd.h> // getcwd
+#endif
 #include <cstdio> // FILENAME_MAX
 #include <iostream>
 #include <errno.h>
@@ -50,6 +54,9 @@ int main(int argc, char* argv[])
 
   // Finding the current directory (default of Base Path).
   char path_buffer[FILENAME_MAX];
+#ifdef _MSC_VER
+#define getcwd _getcwd
+#endif
   if (!getcwd(path_buffer, FILENAME_MAX))
   {
     std::cout << translate_errno(errno) << std::endl;

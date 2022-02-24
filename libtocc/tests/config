@@ -1,0 +1,2 @@
+set -x
+./configure CPPFLAGS="-I../src/ -I../tests" LDFLAGS="-L/usr/local/lib" CXXFLAGS="-I../src/ -I../tests" LIBS="-lcatch_amalgamated" 

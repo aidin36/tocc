@@ -56,7 +56,8 @@ namespace tocccli
     }
 
     // Converting files vector to array.
-    const char* files_array[files.size()];
+    const char* sizevar;
+    const char** files_array = (const char**) malloc(files.size() * sizeof sizevar);
     for (int i = 0; i < files.size(); i++)
     {
       files_array[i] = files[i].get_id();
@@ -71,5 +72,6 @@ namespace tocccli
     }
 
     this->libtocc_manager->assign_tags(files_array, files.size(), &tags_collection);
+    free(files_array);
   }
 }

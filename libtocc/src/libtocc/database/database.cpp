@@ -20,6 +20,7 @@
 
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 #include "libtocc/database/base23.h"
 #include "libtocc/database/scripts.h"
@@ -36,7 +37,6 @@ extern "C"
 
 namespace libtocc
 {
-
   /*
    * Holds a pointer of Unqlite VM.
    * The purpose is to ensure that pointer is released properly.
@@ -771,11 +771,11 @@ namespace libtocc
       throw DatabaseScriptCompilationError(error_message.str().c_str());
     }
   }
-
+#include <iostream>
   Database::Database(std::string database_file)
   {
     this->database_file = database_file;
-  }
+ }
 
   Database::~Database()
   {
@@ -789,7 +789,7 @@ namespace libtocc
     if (!db_file_stream.good())
     {
       db_file_stream.close();
-      std::string message("No database found in the base path specified.");
+      std::string message(std::string("No database found in the base path specified: [") + this->database_file + std::string ("]"));
       message += " Make sure the path is correct, and it's initialized.";
       throw DatabaseInitializationError(message.c_str());
     }
@@ -831,7 +831,7 @@ namespace libtocc
     }
     // Checking if the database file already exists.
     std::ifstream db_file_stream(this->database_file.c_str());
-    if (db_file_stream)
+   if (db_file_stream)
     {
       db_file_stream.close();
 
@@ -844,7 +844,6 @@ namespace libtocc
     unqlite* db_pointer;
     result = unqlite_open(&db_pointer, this->database_file.c_str(), UNQLITE_OPEN_CREATE);
     UnqliteDBHolder db_holder(db_pointer);
-
     if (result != UNQLITE_OK)
     {
       std::stringstream message_stream;
@@ -878,6 +877,7 @@ namespace libtocc
   IntFileInfo Database::create_file(std::vector<std::string> tags,
                                     std::string title,
                                     std::string traditional_path)
+
   {
     // Opening database in write mode.
     unqlite* db_pointer = open_db(false);

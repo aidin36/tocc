@@ -16,9 +16,11 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "testdb_path.hpp"
 #include "catch.hpp"
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/common/database_exceptions.h"
@@ -28,8 +30,7 @@
 TEST_CASE("database: duplicated traditional path tests")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
-
+   libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
   // Creating two files without traditional path
   libtocc::IntFileInfo new_file_1 = db.create_file("Title 1");
   libtocc::IntFileInfo new_file_2 = db.create_file("Title 2");
@@ -37,6 +38,7 @@ TEST_CASE("database: duplicated traditional path tests")
   // Should pass
   REQUIRE(new_file_1.get_title() == "Title 1");
   REQUIRE(new_file_1.get_traditional_path() == "");
+
   REQUIRE(new_file_2.get_title() == "Title 2");
   REQUIRE(new_file_2.get_traditional_path() == "");
 

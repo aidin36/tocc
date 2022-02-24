@@ -22,6 +22,7 @@
 
 // The following define causes the Catch to generate a main fucntion here.
 #define CATCH_CONFIG_MAIN
+#include "testdb_path.hpp"
 #include "catch.hpp"
 
 #include <iostream>
@@ -32,21 +33,28 @@
 class TestInitialiser
 {
   public:
-    TestInitialiser()
-    {
-      // clean previous test files
-      if (int status = system("rm -rf /tmp/tocctests"))
-      {
-        std::cout << "Test initialisation failed -\
+	  TestInitialiser()
+	  {
+		  // clean previous test files
+
+#ifdef _MSC_VER
+		  std::string cmd_string = std::string("cmd.exe /c rmdir /s /q ") + testdb_path("");
+#else
+		  std::string cmd_string = std::string("rm -rf ") + testdb_path("");
+#endif
+		  if (int status = system(cmd_string.c_str()))
+		  {
+			  std::cout << "Test initialisation failed -\
           Unable to delete files" << std::endl;
-        exit(status);
-      }
-      else if (int status = system("mkdir /tmp/tocctests"))
-      {
-        std::cout << "Test initialisation failed -\
-          Unable to create base directory" << std::endl;
-        exit(status);
-      }
+			  exit(status);
+		  }
+		  std::string mkdir_cmd = (std::string("mkdir ") + testdb_path("")).c_str();
+		  if (int status = system(mkdir_cmd.c_str()))
+          {
+              std::cout << "Test initialisation failed -\
+              Unable to create base directory" << std::endl;
+             exit(status);
+          }
     };
 };
 

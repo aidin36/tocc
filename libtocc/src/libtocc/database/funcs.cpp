@@ -44,7 +44,7 @@ namespace libtocc
           return true;
         }
         // We reached end of the string.
-        if (*pattern == '*' and !*(pattern + 1))
+        if (*pattern == '*'&& !*(pattern + 1))
         {
           // If last character of pattern was wild card, they're matched
           // successfully.

@@ -70,7 +70,8 @@ namespace tocccli
     else
     {
       // Converting files vector to array of IDs.
-      const char* files_array[files.size()];
+      const char* sizevar;
+      const char** files_array = (const char**)malloc(files.size() * sizeof sizevar);
       for (int i = 0; i < files.size(); i++)
       {
         files_array[i] = files[i].get_id();
@@ -78,6 +79,7 @@ namespace tocccli
 
       statistics_collection =
           this->libtocc_manager->get_tags_statistics(files_array, files.size());
+      free(files_array);
     }
 
     // Print statistics in a pretty format.

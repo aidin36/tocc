@@ -18,6 +18,7 @@
 
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
 
 #include <fstream>
 #include <cstring>
@@ -28,7 +29,7 @@
 
 TEST_CASE("front_end: get tests")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("file not found error")
   {
@@ -40,19 +41,19 @@ TEST_CASE("front_end: get tests")
 
 TEST_CASE("front_end: get_by_traditional_path tests")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("existed file")
   {
     // Creating a file to import.
     std::ofstream file_stream;
-    file_stream.open("/tmp/tocctests/axU87Ryds.txt");
+    file_stream.open(testdb_path("axU87Ryds.txt").c_str());
     file_stream << "some data...";
     file_stream.close();
 
     // Importing the file.
     libtocc::FileInfo test_file =
-        manager.import_file("/tmp/tocctests/axU87Ryds.txt",
+        manager.import_file(testdb_path("axU87Ryds.txt").c_str(),
                             "axU87Ryds.txt",
                             "/old/path/of/test/file/axU87Ryds.txt");
 

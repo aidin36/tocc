@@ -22,7 +22,11 @@
  */
 
 #include <iostream>
+#ifdef _MSC_VER
+#include "unistdx.h"
+#else
 #include <unistd.h> // getcwd
+#endif
 #include <cstdio> // FILENAME_MAX
 #include <errno.h>
 
@@ -55,6 +59,9 @@ int main(int argc, char* argv[])
   {
     // Using current directory as the base path.
     char path_buffer[FILENAME_MAX];
+#ifdef _MSC_VER
+#define getcwd _getcwd
+#endif
     if (!getcwd(path_buffer, FILENAME_MAX))
     {
       std::cout << tocccli::translate_errno(errno) << std::endl;

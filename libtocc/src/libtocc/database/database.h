@@ -18,9 +18,10 @@
 
 #ifndef LIBTOCC_DATABASE_H_INCLUDED
 #define LIBTOCC_DATABASE_H_INCLUDED
-
+//#define DATABASE_FILE "TOCCFILE"
 #include <string>
 #include <vector>
+static const std::string DATABASE_FILE = "TOCCFILE";
 
 #include "libtocc/exprs/query.h"
 #include "libtocc/common/int_file_info.h"
@@ -29,6 +30,8 @@
 // Forward declaration of unqlite. So I don't have to include the
 // unqlite.h in my header, so it will be hidden from the others
 // who include this header.
+
+
 struct unqlite;
 
 namespace libtocc
@@ -171,6 +174,7 @@ namespace libtocc
     * @param new_title : the new file's title
     */
     void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
+   
 
   private:
     std::string database_file;

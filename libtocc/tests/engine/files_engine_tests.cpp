@@ -17,7 +17,10 @@
  */
 
 #include <fstream>
+#define CATCH_CONFIG_MAIN
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/database/database.h"
@@ -31,8 +34,8 @@ TEST_CASE("engine: files engine tests")
   /*
    * Creating instance of files engine.
    */
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
-  libtocc::FileManager file_manager("/tmp/tocctests/");
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
+  libtocc::FileManager file_manager(testdb_path("").c_str());
   libtocc::TagsEngine tags_engine(&db);
   libtocc::FilesEngine files_engine(&db, &file_manager, &tags_engine);
 
@@ -41,12 +44,12 @@ TEST_CASE("engine: files engine tests")
    */
   // Creating a test file to import.
   std::ofstream file_stream;
-  file_stream.open("/tmp/tocctests/tocc_a_file_to_import");
+  file_stream.open(testdb_path("tocc_a_file_to_import").c_str());
   file_stream << "some data...";
   file_stream.close();
 
   // Copying the file.
-  libtocc::IntFileInfo first_file = files_engine.import_file("/tmp/tocctests/tocc_a_file_to_import");
+  libtocc::IntFileInfo first_file = files_engine.import_file(testdb_path("tocc_a_file_to_import").c_str());
   // Checking if it's OK.
   REQUIRE(first_file.get_title() == "tocc_a_file_to_import");
   REQUIRE(first_file.get_traditional_path() == "");

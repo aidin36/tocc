@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{D2D62C07-48E2-4B7C-AAE2-A0B0519CDA72}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>C:\src\tocc\msvc\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\src\tocc\Catch2-devel\extras;C:\src\unq;C:\src\tocc\libtocc\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\src\tocc\msvc\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>unqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\unqlite;..\..\libtocc\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\unqlite;..\..\libtocc\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libtocc\src\libtocc\check_exists.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\common\base_exception.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\common\database_exceptions.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\common\expr_exceptions.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\common\file_system_exceptions.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\common\int_file_info.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\database\base23.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\database\database.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\database\funcs.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\engine\files_engine.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\engine\tags_engine.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\compiled_expr.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\compiler.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\connectives.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\fields.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\functions.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\operations.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\exprs\query.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\file_system\file_manager.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\file_system\helpers.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\front_end\file_info.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\front_end\manager.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\front_end\tag_statistics.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\utilities\file_info_converter.cpp" />
+    <ClCompile Include="..\..\libtocc\src\libtocc\utilities\file_utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libtocc\src\libtocc.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\base_exception.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\database_exceptions.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\expr_exceptions.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\file_system_exceptions.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\int_file_info.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\common\runtime_exceptions.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\database\base23.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\database\database.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\database\funcs.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\database\scripts.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\engine\files_engine.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\engine\tags_engine.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\compiled_expr.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\compiled_expr_types.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\compiler.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\connectives.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\expr.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\fields.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\functions.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\operations.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\exprs\query.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\file_system\file_manager.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\file_system\helpers.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\front_end\file_info.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\front_end\manager.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\front_end\tag_statistics.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\utilities\file_info_converter.h" />
+    <ClInclude Include="..\..\libtocc\src\libtocc\utilities\file_utils.h" />
+    <ClInclude Include="..\..\libtocc\src\unistd.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

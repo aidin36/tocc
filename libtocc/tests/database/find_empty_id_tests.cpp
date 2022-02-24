@@ -16,6 +16,7 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "testdb_path.hpp"
 #include "catch.hpp"
 #include <string>
 #include <vector>
@@ -28,7 +29,7 @@
 TEST_CASE("database: find empty ID")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
 
   // Creating files
   libtocc::IntFileInfo new_file_1 = db.create_file("file__1", "/old/path/file__1");
