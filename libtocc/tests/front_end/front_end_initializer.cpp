@@ -18,7 +18,6 @@
 
 #include <catch.hpp>
 #include "testdb_path.hpp"
-#include <iostream>
 
 
 #include "libtocc/front_end/manager.h"

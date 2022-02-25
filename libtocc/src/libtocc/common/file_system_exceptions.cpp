@@ -17,9 +17,9 @@
  */
 
 #include "libtocc/common/file_system_exceptions.h"
-//#ifdef _MSC_VER
+#ifdef _MSC_VER
 #pragma warning(disable: 4996)
-//#endif
+#endif
 
 #include <string>
 #include <string.h> // For `strerror'.
@@ -28,177 +28,177 @@
 
 namespace libtocc
 {
-	BaseFileSystemException::BaseFileSystemException(int err_no) throw()
-	{
-		this->err_no = err_no;
-	}
+  BaseFileSystemException::BaseFileSystemException(int err_no) throw()
+  {
+    this->err_no = err_no;
+  }
 
-	BaseFileSystemException::~BaseFileSystemException() throw()
-	{
-	}
+  BaseFileSystemException::~BaseFileSystemException() throw()
+  {
+  }
 
-	const char* BaseFileSystemException::what() const throw()
-	{
-		return strerror(this->err_no);
-	}
+  const char* BaseFileSystemException::what() const throw()
+  {
+    return strerror(this->err_no);
+  }
 
-	int BaseFileSystemException::get_errno()
-	{
-		return this->err_no;
-	}
+  int BaseFileSystemException::get_errno()
+  {
+    return this->err_no;
+  }
 
-	InsufficientSpaceError::InsufficientSpaceError() throw()
-		: BaseFileSystemException(ENOSPC)
-	{
-	}
+  InsufficientSpaceError::InsufficientSpaceError() throw()
+    : BaseFileSystemException(ENOSPC)
+  {
+  }
 
-	XAttrsAreNotSupportedError::XAttrsAreNotSupportedError() throw()
-		: BaseFileSystemException(ENOTSUP)
-	{
-	}
+  XAttrsAreNotSupportedError::XAttrsAreNotSupportedError() throw()
+    : BaseFileSystemException(ENOTSUP)
+  {
+  }
 
-	AccessDeniedError::AccessDeniedError(const char* file_path) throw()
-		: BaseFileSystemException(EACCES)
-	{
-		this->file_path = file_path;
-	}
+  AccessDeniedError::AccessDeniedError(const char* file_path) throw()
+    : BaseFileSystemException(EACCES)
+  {
+    this->file_path = file_path;
+  }
 
-	AccessDeniedError::~AccessDeniedError() throw()
-	{
-	}
+  AccessDeniedError::~AccessDeniedError() throw()
+  {
+  }
 
-	const char* AccessDeniedError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* AccessDeniedError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	BadFDError::BadFDError(const char* file_path) throw()
-		: BaseFileSystemException(EBADF)
-	{
-		this->file_path = file_path;
-	}
+  BadFDError::BadFDError(const char* file_path) throw()
+    : BaseFileSystemException(EBADF)
+  {
+    this->file_path = file_path;
+  }
 
-	BadFDError::~BadFDError() throw()
-	{
-	}
+  BadFDError::~BadFDError() throw()
+  {
+  }
 
-	const char* BadFDError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* BadFDError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	BadAddressError::BadAddressError(const char* file_path) throw()
-		: BaseFileSystemException(EFAULT)
-	{
-		this->file_path = file_path;
-	}
+  BadAddressError::BadAddressError(const char* file_path) throw()
+    : BaseFileSystemException(EFAULT)
+  {
+    this->file_path = file_path;
+  }
 
-	BadAddressError::~BadAddressError() throw()
-	{
-	}
+  BadAddressError::~BadAddressError() throw()
+  {
+  }
 
-	const char* BadAddressError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* BadAddressError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	InfinitLinkLoopError::InfinitLinkLoopError(const char* file_path) throw()
-		: BaseFileSystemException(ELOOP)
-	{
-		this->file_path = file_path;
-	}
+  InfinitLinkLoopError::InfinitLinkLoopError(const char* file_path) throw()
+    : BaseFileSystemException(ELOOP)
+  {
+    this->file_path = file_path;
+  }
 
-	InfinitLinkLoopError::~InfinitLinkLoopError() throw()
-	{
-	}
+  InfinitLinkLoopError::~InfinitLinkLoopError() throw()
+  {
+  }
 
-	const char* InfinitLinkLoopError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* InfinitLinkLoopError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	TooLongPathError::TooLongPathError() throw()
-		: BaseFileSystemException(ENAMETOOLONG)
-	{
-	}
+  TooLongPathError::TooLongPathError() throw()
+    : BaseFileSystemException(ENAMETOOLONG)
+  {
+  }
 
-	BadPathError::BadPathError(const char* file_path) throw()
-		: BaseFileSystemException(ENOENT)
-	{
-		this->file_path = file_path;
-	}
+  BadPathError::BadPathError(const char* file_path) throw()
+    : BaseFileSystemException(ENOENT)
+  {
+    this->file_path = file_path;
+  }
 
-	BadPathError::~BadPathError() throw()
-	{
-	}
+  BadPathError::~BadPathError() throw()
+  {
+  }
 
-	const char* BadPathError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* BadPathError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	OutOfMemoryError::OutOfMemoryError() throw()
-		: BaseFileSystemException(ENOMEM)
-	{
-	}
+  OutOfMemoryError::OutOfMemoryError() throw()
+    : BaseFileSystemException(ENOMEM)
+  {
+  }
 
-	NotADirectoryError::NotADirectoryError() throw()
-		: BaseFileSystemException(ENOTDIR)
-	{
-	}
+  NotADirectoryError::NotADirectoryError() throw()
+    : BaseFileSystemException(ENOTDIR)
+  {
+  }
 
-	MaxOpenFilesReachedError::MaxOpenFilesReachedError() throw()
-		: BaseFileSystemException(EMFILE)
-	{
-	}
+  MaxOpenFilesReachedError::MaxOpenFilesReachedError() throw()
+    : BaseFileSystemException(EMFILE)
+  {
+  }
 
-	SizeOfBufferIsTooSmallError::SizeOfBufferIsTooSmallError(const char* file_path) throw()
-		: BaseFileSystemException(ERANGE)
-	{
-		this->file_path = file_path;
-	}
+  SizeOfBufferIsTooSmallError::SizeOfBufferIsTooSmallError(const char* file_path) throw()
+    : BaseFileSystemException(ERANGE)
+  {
+    this->file_path = file_path;
+  }
 
-	SizeOfBufferIsTooSmallError::~SizeOfBufferIsTooSmallError() throw()
-	{
-	}
+  SizeOfBufferIsTooSmallError::~SizeOfBufferIsTooSmallError() throw()
+  {
+  }
 
-	const char* SizeOfBufferIsTooSmallError::what() const throw()
-	{
-		std::string result(strerror(this->err_no));
-		result += " [";
-		result += this->file_path;
-		result += "]";
-		return result.c_str();
-	}
+  const char* SizeOfBufferIsTooSmallError::what() const throw()
+  {
+    std::string result(strerror(this->err_no));
+    result += " [";
+    result += this->file_path;
+    result += "]";
+    return result.c_str();
+  }
 
-	ReadOnlyFileSystemError::ReadOnlyFileSystemError() throw()
-		: BaseFileSystemException(EROFS)
-	{
-	}
+  ReadOnlyFileSystemError::ReadOnlyFileSystemError() throw()
+    : BaseFileSystemException(EROFS)
+  {
+  }
 
-	OtherFileSystemError::OtherFileSystemError(int err_no) throw()
-		: BaseFileSystemException(err_no)
-	{
-	}
+  OtherFileSystemError::OtherFileSystemError(int err_no) throw()
+    : BaseFileSystemException(err_no)
+  {
+  }
 
 };

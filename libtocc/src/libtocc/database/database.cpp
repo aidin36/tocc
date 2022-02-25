@@ -20,7 +20,6 @@
 
 #include <sstream>
 #include <fstream>
-#include <iostream>
 
 #include "libtocc/database/base23.h"
 #include "libtocc/database/scripts.h"

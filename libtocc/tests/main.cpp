@@ -33,28 +33,28 @@
 class TestInitialiser
 {
   public:
-	  TestInitialiser()
-	  {
-		  // clean previous test files
+    TestInitialiser()
+    {
+      // clean previous test files
 
 #ifdef _MSC_VER
-		  std::string cmd_string = std::string("cmd.exe /c rmdir /s /q ") + testdb_path("");
+      std::string cmd_string = std::string("cmd.exe /c rmdir /s /q ") + testdb_path("");
 #else
-		  std::string cmd_string = std::string("rm -rf ") + testdb_path("");
+      std::string cmd_string = std::string("rm -rf ") + testdb_path("");
 #endif
-		  if (int status = system(cmd_string.c_str()))
-		  {
-			  std::cout << "Test initialisation failed -\
+      if (int status = system(cmd_string.c_str()))
+      {
+        std::cout << "Test initialisation failed -\
           Unable to delete files" << std::endl;
-			  exit(status);
-		  }
-		  std::string mkdir_cmd = (std::string("mkdir ") + testdb_path("")).c_str();
-		  if (int status = system(mkdir_cmd.c_str()))
-          {
-              std::cout << "Test initialisation failed -\
-              Unable to create base directory" << std::endl;
-             exit(status);
-          }
+        exit(status);
+      }
+      std::string mkdir_cmd = (std::string("mkdir ") + testdb_path("")).c_str();
+      if (int status = system(mkdir_cmd.c_str()))
+      {
+        std::cout << "Test initialisation failed -\
+        Unable to create base directory" << std::endl;
+        exit(status);
+      }
     };
 };
 

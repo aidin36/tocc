@@ -16,12 +16,13 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include"libtocc/utilities/file_utils.h"
+
 #ifdef _MSC_VER
 #include <windows.h>
 #endif
 
 #include <algorithm>
-#include"libtocc/utilities/file_utils.h"
 
 namespace libtocc
 {

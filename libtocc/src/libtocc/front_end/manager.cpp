@@ -20,7 +20,6 @@
 
 #include <string>
 #include <cassert>
-#include <iostream>
 
 #include "libtocc/database/database.h"
 #include "libtocc/file_system/file_manager.h"

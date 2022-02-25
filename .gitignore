@@ -11,13 +11,17 @@
 *.lai
 *.la
 *.a
+*.lib
 
 # Build directories
 build/
 bin/
+debug/
+release/
 
 # Backup files
 *~
+*.bak
 
 # Auto tools generated files.
 .deps/
@@ -40,3 +44,6 @@ compile
 libtocc/src/libtocc.pc
 libtocc/tests/libtocctests
 
+# Catch2 files
+catch_amalgamated.cpp
+catch_amalgamated.hpp
