@@ -27,7 +27,7 @@ TEST_CASE("File Info in Vector")
   // Once upon a time, there was a Segfaul bug putting a FileInfo in a vector.
 
   std::vector<libtocc::FileInfo> v;
-  
+
   {
     libtocc::FileInfo f("");
     v.push_back(f);

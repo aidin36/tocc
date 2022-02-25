@@ -218,7 +218,7 @@ namespace libtocc
             handle_errno(errno, source_path);
           }
       }
-    #else      
+    #else
       off_t offset = 0;
       struct stat stat_buf;
       // Stat the source file to obtain its size.

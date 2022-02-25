@@ -198,7 +198,7 @@ extern "C" {
 
 #ifndef S_IALLUGO
 #define S_IALLUGO 0777
-#endif /* S_IALLUGO */	
+#endif /* S_IALLUGO */
 
 #ifndef S_IRUGO
 #define S_IRUGO 0444

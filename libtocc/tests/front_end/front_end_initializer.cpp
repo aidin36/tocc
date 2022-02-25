@@ -28,7 +28,7 @@
 // environment for them.
 TEST_CASE("Front End Initializer")
 {
-  std::string path = testdb_path("frontend").c_str(); 	
+  std::string path = testdb_path("frontend").c_str();
   libtocc::Manager manager(path.c_str());
   manager.initialize();
 }

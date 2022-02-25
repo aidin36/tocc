@@ -27,8 +27,8 @@
 #include "libtocc/database/database.h"
 
 /* The database initializer test was moved to here because, under Windows,
- * it is not executed before the database basic tests if it is in a 
- * different file. 
+ * it is not executed before the database basic tests if it is in a
+ * different file.
 */
 
  // This should be run before all the other database tests, since it's
