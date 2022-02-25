@@ -6,6 +6,9 @@
 Compiling Toccfs from Source
 ============================
 
+Note: *toccfs* in only supported for Unix-like OS's (Linux, BSD, etc). It
+is not supported for Microsoft Windows.
+
 Requirements
 ------------
 *toccfs* wrote using FUSE (File System in User Environment) library. So, you

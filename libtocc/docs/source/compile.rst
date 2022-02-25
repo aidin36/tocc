@@ -1,28 +1,14 @@
 How to Compile And Use libtocc
 ==============================
 
-Installing UnQlite
-------------------
-*libtocc* depends on `UnQlite <http://unqlite.org>`_. So, first you need to
-compile and install it on your system.
 
-You need to pay for recent versions of Unqlite. However, older versions were
-free. You can obtain the free version from the `Tocc's Releases <https://github.com/aidin36/tocc/releases>`_.
+Compiling libtocc for Unix-like OS's (Linux, BSD, etc)
+------------------------------------------------------
 
-Un-compress the package, then run::
-
-  $ ./configure
-  $ make
-  $ make install
-
-
-Compiling libtocc
------------------
-
-1. Bootstraiping
+1. Bootstrapping
 ^^^^^^^^^^^^^^^^
 
-First step is bootstraping configure scripts. (You only need to do this if
+First step is bootstrapping configure scripts. (You only need to do this if
 you get the latest source from the repository. If you have one of the released
 source packages, this step is already done for you.)
 
@@ -52,7 +38,7 @@ want to install it somewhere else, you can pass ``--prefix`` option to the
 
   $ ./configure --prefix=/opt/libtocc/
 
-In the above example, builded libraries will be placed in ``/opt/libtocc/lib/``
+In the above example, built libraries will be placed in ``/opt/libtocc/lib/``
 and public headers in ``/opt/libtocc/include``.
 
 **Optimized/Debug Build**: By default, *libtocc* mades with ``-g`` and ``-O2``.
@@ -86,6 +72,22 @@ prefix. For example, if prefix is ``/usr/local/``, libraries will be copied
 to ``/usr/local/lib/`` and headers to ``/usr/local/include``.
 
 
+Compiling libtocc for Windows with Microsoft Visual C++
+-------------------------------------------------------
+
+Note: libtocc does not compile correctly with MSVC 2019 but it does with
+MSVC 2017 or MSVC 2021.
+
+1. Open solution file ``tocc\msvc\libtocctests.sln`` in MSVC.
+
+2. Select project ``libtocc`` and do a build.
+
+3. The library file will be produced in ``tocc\msvc\x64\release\libtocc.lib`` or ``tocc\msvc\x64\debug\libtocc.lib``
+
+
+
+
+
 Test Units
 ----------
 
@@ -94,16 +96,18 @@ directory. This section explains how to build and run these Unit Tests.
 
 Installing Catch.hpp
 ^^^^^^^^^^^^^^^^^^^^
-Tests are using `Catch <https://github.com/catchorg/Catch2>`_ library. The Tocc's
-source code hadn't updated and it depends on the version 1 of Catch.
+Tests are using `Catch2 <https://github.com/catchorg/Catch2>`_ library.
 
-Download ``catch.hpp`` from `Catch 1.10.0 <https://github.com/catchorg/Catch2/releases/tag/v1.10.0>`_
-and copy it to ``/usr/local/include``. Or alternatevly, copy it to another directory
-and add a ``-I`` flag to the ``./configure`` command below to point to that directory.
+Download Catch2 <https://github.com/catchorg/Catch2>
+Make sure you have the ``devel`` branch. From the ``extras`` directory, copy
+``catch_amalgamated.hpp`` and ``catch_amalgamated.cpp`` to ``tocc/libtocc/tests``.
 
-1. Bootstraping
-^^^^^^^^^^^^^^^
-Just like the bootstraping step of *libtocc* itself, you need Gnu Auto Tools.
+Building and running test units for Unix-like OS's (Linux, BSD, etc.)
+---------------------------------------------------------------------
+
+1. Bootstrapping
+^^^^^^^^^^^^^^^^
+Just like the bootstrapping step of *libtocc* itself, you need Gnu Auto Tools.
 Then invoke::
 
   $ cd /path/to/libtocc/tests
@@ -160,8 +164,18 @@ Then send ``tests.log`` file to *tocc@aidinhut.com*, and provide your platform
 information, such as your OS and its version.
 
 
-Linking Your Software with *libtocc*
-------------------------------------
+Building and running test units for Windows with Microsoft Visual C++
+---------------------------------------------------------------------
+
+1. Open solution file ``tocc\msvc\libtocctests.sln`` in MSVC.
+2. Select project ``libtocctests``.
+3. Build this project.
+4. The program will be in ``tocc\msvc\x64\release\libtocctests.exe`` or ``tocc\msvc\x64\debug\libtocctests.exe``. Execute the program from a command prompt.
+
+
+
+Linking Your Software with *libtocc* for Unix-like OS's (Linux, BSD, etc)
+-------------------------------------------------------------------------
 
 Using Autotools
 ^^^^^^^^^^^^^^^
