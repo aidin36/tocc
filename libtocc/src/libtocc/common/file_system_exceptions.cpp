@@ -17,9 +17,9 @@
  */
 
 #include "libtocc/common/file_system_exceptions.h"
-#ifdef _MSC_VER
+//#ifdef _MSC_VER
 #pragma warning(disable: 4996)
-#endif
+//#endif
 
 #include <string>
 #include <string.h> // For `strerror'.

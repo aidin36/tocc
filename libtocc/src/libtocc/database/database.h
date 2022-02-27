@@ -174,7 +174,7 @@ namespace libtocc
     * @param new_title : the new file's title
     */
     void set_titles(const std::vector<std::string>& file_ids, const std::string& new_title);
-
+   
 
   private:
     std::string database_file;

@@ -20,13 +20,15 @@
 #include "testdb_path.hpp"
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/database/database.h"
 
 /* The database initializer test was moved to here because, under Windows,
- * it is not executed before the database basic tests if it is in a
- * different file.
+ * it is not executed before the database basic tests if it is in a 
+ * different file. 
 */
 
  // This should be run before all the other database tests, since it's
@@ -53,7 +55,6 @@ TEST_CASE("database: basic tests")
   // Creating a file with title and traditional path.
   libtocc::IntFileInfo new_file_2 =
       db.create_file("Title of the second file", "/old/path");
-  // Checking if it's OK.
   REQUIRE(new_file_2.get_title() == "Title of the second file");
   REQUIRE(new_file_2.get_traditional_path() == "/old/path");
   REQUIRE(new_file_2.get_tags().size() == 0);

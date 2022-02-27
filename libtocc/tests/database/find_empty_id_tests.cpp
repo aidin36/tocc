@@ -39,21 +39,21 @@ TEST_CASE("database: find empty ID")
   std::vector<std::string> ids_to_delete;
   ids_to_delete.push_back(new_file_1.get_id());
   std::vector<libtocc::IntFileInfo> founded_files;
-
+  
   db.remove_files(ids_to_delete, founded_files);
 
   //create a new file
   libtocc::IntFileInfo new_file_3 = db.create_file("file__3", "/old/path/file__3");
-
+  
   REQUIRE(atoi(new_file_1.get_id().c_str()) == atoi(new_file_3.get_id().c_str()));
 
   //Delete a bunch of files
   ids_to_delete.clear();
   ids_to_delete.push_back(new_file_2.get_id());
   ids_to_delete.push_back(new_file_3.get_id());
-
+  
   db.remove_files(ids_to_delete, founded_files);
-
+ 
   //create new files
   // Note file__4 has the file__1 first id
   libtocc::IntFileInfo new_file_4 = db.create_file("file__4", "/old/path/file__4");

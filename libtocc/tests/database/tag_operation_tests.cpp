@@ -59,12 +59,12 @@ TEST_CASE("database: tag operation tests")
   tags.push_back("linux");
 
   db.assign_tag("0000001", tags);
-
+  
   file_info = db.get("0000001");
   file_tags = file_info.get_tags();
 
   REQUIRE(std::find(file_tags.begin(), file_tags.end(), "programming_book") != file_tags.end());
-
+  
   REQUIRE(std::find(file_tags.begin(), file_tags.end(), "language_C") != file_tags.end());
 
   REQUIRE(std::find(file_tags.begin(), file_tags.end(), "linux") != file_tags.end());
@@ -89,16 +89,16 @@ TEST_CASE("database: tag operation tests")
   //Note that file 1 has already a tag "language_C"
 
   libtocc::IntFileInfo file_info2 = db.get("0000002");
-
+  
   db.assign_tag("0000002", "language_C");
-
+  
   std::vector<std::string> file_ids;
   file_ids.push_back("0000001");
   file_ids.push_back("0000002");
 
   tags_to_unassign.clear();
   tags_to_unassign.push_back("language_C");
-
+  
   //Unassign tag "language_C" from both file 1 and file 2
   db.unassign_tags(file_ids, tags_to_unassign);
 

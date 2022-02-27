@@ -74,7 +74,7 @@ namespace libtocc
   private:
     const char* file_path;
   };
-
+ 
   class BadFDError : public BaseFileSystemException
   {
   public:

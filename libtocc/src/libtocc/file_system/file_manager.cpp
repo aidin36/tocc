@@ -16,6 +16,9 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include "libtocc/file_system/file_manager.h"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4996)
 #include "unistdx.h"
@@ -37,7 +40,6 @@
 #include "libtocc/common/runtime_exceptions.h"
 #include "libtocc/file_system/helpers.h"
 #include "libtocc/common/file_system_exceptions.h"
-#include "libtocc/file_system/file_manager.h"
 
 namespace libtocc
 {
@@ -48,67 +50,67 @@ namespace libtocc
  * @param file_path: (optional) path of the file that this
  *   error is happened for.
  */
-    void handle_errno(int err_no, std::string file_path = "")
-    {
+  void handle_errno(int err_no, std::string file_path = "")
+  {
 #ifdef _MSC_VER
-        if (err_no == ENOSPC)
+    if (err_no == ENOSPC)
 #else
-        if (err_no == ENOSPC || err_no == EDQUOT)
+    if (err_no == ENOSPC || err_no == EDQUOT)
 #endif
-        {
-            throw InsufficientSpaceError();
-        }
-        if (err_no == ENOTSUP)
-        {
-            throw XAttrsAreNotSupportedError();
-        }
-        if (err_no == EACCES)
-        {
-            throw AccessDeniedError(file_path.c_str());
-        }
-        if (err_no == EBADF)
-        {
-            throw BadFDError(file_path.c_str());
-        }
-        if (err_no == EFAULT)
-        {
-            throw BadAddressError(file_path.c_str());
-        }
-        if (err_no == ELOOP)
-        {
-            throw InfinitLinkLoopError(file_path.c_str());
-        }
-        if (err_no == ENAMETOOLONG)
-        {
-            throw TooLongPathError();
-        }
-        if (err_no == ENOENT)
-        {
-            throw BadPathError(file_path.c_str());
-        }
-        if (err_no == ENOMEM)
-        {
-            throw OutOfMemoryError();
-        }
-        if (err_no == ENOTDIR)
-        {
-            throw NotADirectoryError();
-        }
-        if (err_no == ERANGE)
-        {
-            throw SizeOfBufferIsTooSmallError(file_path.c_str());
-        }
-        if (err_no == EROFS)
-        {
-            throw ReadOnlyFileSystemError();
-        }
-        if (err_no == EMFILE)
-        {
-            throw MaxOpenFilesReachedError();
-        }
-        // If it was none of the above.
-        throw OtherFileSystemError(err_no);
+    {
+      throw InsufficientSpaceError();
     }
+    if (err_no == ENOTSUP)
+    {
+      throw XAttrsAreNotSupportedError();
+    }
+    if (err_no == EACCES)
+    {
+      throw AccessDeniedError(file_path.c_str());
+    }
+    if (err_no == EBADF)
+    {
+      throw BadFDError(file_path.c_str());
+    }
+    if (err_no == EFAULT)
+    {
+      throw BadAddressError(file_path.c_str());
+    }
+    if (err_no == ELOOP)
+    {
+      throw InfinitLinkLoopError(file_path.c_str());
+    }
+    if (err_no == ENAMETOOLONG)
+    {
+      throw TooLongPathError();
+    }
+    if (err_no == ENOENT)
+    {
+      throw BadPathError(file_path.c_str());
+    }
+    if (err_no == ENOMEM)
+    {
+      throw OutOfMemoryError();
+    }
+    if (err_no == ENOTDIR)
+    {
+      throw NotADirectoryError();
+    }
+    if (err_no == ERANGE)
+    {
+      throw SizeOfBufferIsTooSmallError(file_path.c_str());
+    }
+    if (err_no == EROFS)
+    {
+      throw ReadOnlyFileSystemError();
+    }
+    if (err_no == EMFILE)
+    {
+      throw MaxOpenFilesReachedError();
+    }
+    // If it was none of the above.
+    throw OtherFileSystemError(err_no);
+  }
 
   /*
    * Mode for creating files and directories.
@@ -210,15 +212,15 @@ namespace libtocc
       // we don't have sendfile, so we'll use read and write
       while ((size = read(source, buf, BUFSIZ)) > 0)
       {
-          long int write_result = write(dest, buf, size);
+        long int write_result = write(dest, buf, size);
 
-          if (write_result < 0)
-          {
+        if (write_result < 0)
+        {
             // An error occurred while writing to file.
-            handle_errno(errno, source_path);
-          }
+          handle_errno(errno, source_path);
+        }
       }
-    #else
+    #else      
       off_t offset = 0;
       struct stat stat_buf;
       // Stat the source file to obtain its size.

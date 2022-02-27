@@ -80,7 +80,7 @@ TEST_CASE("front_end: set files title tests")
   //Setting the title of a group of files where some files don't exist in the database
   const char* file_ids2[] = { new_file2.get_id(), new_file1.get_id(), "0000012" };
   manager.set_titles(file_ids2, 3, "new title 3");
-
+  
   //Test
   new_file2 = manager.get_file_info(new_file2.get_id());
   REQUIRE(strcmp(new_file2.get_title(), "new title 3") == 0);

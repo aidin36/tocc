@@ -100,7 +100,7 @@ namespace libtocc
     }
 
     const size_t sz = vector->size();
-
+    
     char c;
     TagsCollection tc = TagsCollection();
     int size1 = sizeof &c;

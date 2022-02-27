@@ -20,10 +20,10 @@
  * Defines some helper functions for the file system layer.
  */
 
-include "libtocc/file_system/helpers.h"
+#include <errno.h>
+#include "libtocc/file_system/helpers.h"
 #include "libtocc/common/file_system_exceptions.h"
 #include <string>
-#include <errno.h>
-#
+
 //namespace libtocc
 

@@ -54,7 +54,7 @@ namespace tocccli
     }
 
     /* id must be 7 characters long and all 0-9 or A-M (base-23 digit) */
-
+  
     std::string id = cmd_arguments[0];
     bool valid_id = true;
     if (id.size() == 7)
@@ -78,7 +78,7 @@ namespace tocccli
     {
       throw InvalidParametersError("ID must be seven characters, and only contain 0-9 and a-m");
     }
-
+  
     libtocc::FileInfo selected_file =
         this->libtocc_manager->get_file_info(cmd_arguments.front().c_str());
 

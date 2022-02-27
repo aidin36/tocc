@@ -55,7 +55,7 @@ class TestInitialiser
         Unable to create base directory" << std::endl;
         exit(status);
       }
-    };
+   };
 };
 
 TestInitialiser now;

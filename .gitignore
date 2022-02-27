@@ -2,10 +2,12 @@
 *.slo
 *.lo
 *.o
+*.obj
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
@@ -13,11 +15,15 @@
 *.a
 *.lib
 
+# Compiled executables
+*.exe
+
 # Build directories
 build/
 bin/
 debug/
 release/
+.vs/
 
 # Backup files
 *~

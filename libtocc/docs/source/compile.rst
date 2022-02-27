@@ -1,6 +1,19 @@
 How to Compile And Use libtocc
 ==============================
 
+Installing UnQlite
+------------------
+*libtocc* depends on `UnQlite <http://unqlite.org>`_. So, first you need to
+compile and install it on your system.
+
+You need to pay for recent versions of Unqlite. However, older versions were
+free. You can obtain the free version from the `Tocc's Releases <https://github.com/aidin36/tocc/releases>`_.
+
+Un-compress the package, then run::
+
+  $ ./configure
+  $ make
+  $ make install
 
 Compiling libtocc for Unix-like OS's (Linux, BSD, etc)
 ------------------------------------------------------
@@ -94,13 +107,21 @@ Test Units
 *libtocc* comes with some Unit Tests. They're placed in ``libtocc/tests``
 directory. This section explains how to build and run these Unit Tests.
 
-Installing Catch.hpp
-^^^^^^^^^^^^^^^^^^^^
-Tests are using `Catch2 <https://github.com/catchorg/Catch2>`_ library.
+Installing Catch2 for Unix-like OS's (Linux, BSD, etc)
+------------------------------------------------------
 
-Download Catch2 <https://github.com/catchorg/Catch2>
-Make sure you have the ``devel`` branch. From the ``extras`` directory, copy
-``catch_amalgamated.hpp`` and ``catch_amalgamated.cpp`` to ``tocc/libtocc/tests``.
+1. Download Catch2 <https://github.com/catchorg/Catch2> to a temporary directory. Make sure you have the ``devel`` branch.
+2. cd to the ``extras`` suddirectory of the temporary directory.
+3. Invoke:
+
+  $ gcc cache_amalgamated.cpp -o cache_amalgamated.o
+
+  $ ar rcs libcache_amalgamated.a cache_amalgamatd.o
+
+  $ sudo cp libcache_amalgamated.a /usr/local/lib
+
+  $ sudo cp cache_amalgamated.hpp /usr/local/include
+
 
 Building and running test units for Unix-like OS's (Linux, BSD, etc.)
 ---------------------------------------------------------------------
@@ -110,9 +131,11 @@ Building and running test units for Unix-like OS's (Linux, BSD, etc.)
 Just like the bootstrapping step of *libtocc* itself, you need Gnu Auto Tools.
 Then invoke::
 
+  '
   $ cd /path/to/libtocc/tests
   $ ./bootstrap
-
+  
+'
 
 2. Configuring
 ^^^^^^^^^^^^^^
@@ -120,7 +143,11 @@ Previous step creates a ``configure`` script. To run it, you need to add
 ``libtocc/src/`` directory to the includes path. The following command should
 do it::
 
-  $ ./configure CPPFLAGS="-I../src/" CXXFLAGS="-I../src/"
+  $ ./configure CPPFLAGS="-I../src/ -I../tests" LDFLAGS="-L/usr/local/lib" CXXFLAGS="-I../src/ -I../tests" LIBS="-lcatch_amalgamated" 
+  
+You can do this by typing:
+
+  $ ./config
 
 Also, if you installed *libtocc* library in a non-standard path (where ``ld``
 can't find it by default, say ``/opt/libtocc/lib/``) you need to add that to
@@ -162,6 +189,15 @@ run *libtocctests* like this::
 
 Then send ``tests.log`` file to *tocc@aidinhut.com*, and provide your platform
 information, such as your OS and its version.
+
+
+Installing Catch2 for Windows
+------------------------------------------------------
+
+1. Download Catch2 <https://github.com/catchorg/Catch2> to a temporary directory. Make sure you have the ``devel`` branch.
+2. cd to the ``extras`` suddirectory of the temporary directory.
+3. Copy ``libcache_amalgamated.cpp`` and ``cache_amalgamated.hpp`` to ``tocc/libtocc/tests`` 
+
 
 
 Building and running test units for Windows with Microsoft Visual C++
