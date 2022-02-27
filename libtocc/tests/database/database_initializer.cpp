@@ -16,15 +16,24 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <catch.hpp>
+#include "testdb_path.hpp"
+#define CATCH_CONFIG_MAIN
 
 #include "libtocc/database/database.h"
 
-
-// This should be run before all the other database tests, since it's
-// initialize an environment for tests.
-TEST_CASE("Database Initializer")
+std::string testdb_path(const std::string &filename)
 {
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
-  db.initialize();
+#ifdef _MSC_VER
+    return std::string("c:\\temp\\tocctests\\") + std::string(filename);
+#else
+    return std::string("/tmp/tocctests/") + std::string(filename);
+#endif
 }
+
+/* Database initializer test moved to database_basic_tests.cpp by
+ * Dick Thiebaud on 2/8/22 because it has to be in the same file
+ * as other database tests or, under Windows, it is not executed
+ * before the other tests.
+*/

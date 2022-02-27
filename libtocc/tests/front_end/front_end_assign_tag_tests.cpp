@@ -18,13 +18,16 @@
 
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
 
 #include "libtocc/front_end/manager.h"
+#include "libtocc/common/database_exceptions.h"
 
 TEST_CASE("front_end: assign tag")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   manager.assign_tags("0000001", "author:Unknown");
 
 }
+

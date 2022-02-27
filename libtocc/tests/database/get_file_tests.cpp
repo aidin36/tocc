@@ -17,13 +17,15 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 
 #include "libtocc/database/database.h"
 
 TEST_CASE("database: get file tests")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
 
   // Getting a not-existed file.
   REQUIRE_THROWS(db.get("ffr98a0"));

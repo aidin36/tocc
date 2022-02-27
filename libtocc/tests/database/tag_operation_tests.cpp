@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "testdb_path.hpp"
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -27,7 +27,7 @@
 
 TEST_CASE("database: tag operation tests")
 {
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
 
   SECTION("Assigning a single tag")
   {

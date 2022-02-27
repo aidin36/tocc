@@ -17,6 +17,8 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <fstream>
 #include <cstring>
 
@@ -32,22 +34,22 @@ TEST_CASE("front_end: set files title tests")
   //Creating files
 
   std::ofstream file_stream1;
-  file_stream1.open("/tmp/tocctests/tocc_test_random_file_1");
+  file_stream1.open(testdb_path("tocc_test_random_file_1").c_str());
   file_stream1 << "I'm file 1";
   file_stream1.close();
 
   // Creating a file to import.
   std::ofstream file_stream2;
-  file_stream1.open("/tmp/tocctests/tocc_test_random_file_2");
+  file_stream1.open(testdb_path("tocc_test_random_file_2").c_str());
   file_stream1 << "I'm file 2";
   file_stream1.close();
 
   // Creating an instance of the manager.
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   // Creating 2 files with a title and a traditional path.
-  libtocc::FileInfo new_file1 = manager.import_file("/tmp/tocctests/tocc_test_random_file_1");
-  libtocc::FileInfo new_file2 = manager.import_file("/tmp/tocctests/tocc_test_random_file_2");
+  libtocc::FileInfo new_file1 = manager.import_file(testdb_path("tocc_test_random_file_1").c_str());
+  libtocc::FileInfo new_file2 = manager.import_file(testdb_path("tocc_test_random_file_2").c_str());
 
   //Setting the title of the first file
   manager.set_title(new_file1.get_id(), "new title 1");

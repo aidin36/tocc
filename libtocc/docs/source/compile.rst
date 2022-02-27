@@ -15,14 +15,13 @@ Un-compress the package, then run::
   $ make
   $ make install
 
+Compiling libtocc for Unix-like OS's (Linux, BSD, etc)
+------------------------------------------------------
 
-Compiling libtocc
------------------
-
-1. Bootstraiping
+1. Bootstrapping
 ^^^^^^^^^^^^^^^^
 
-First step is bootstraping configure scripts. (You only need to do this if
+First step is bootstrapping configure scripts. (You only need to do this if
 you get the latest source from the repository. If you have one of the released
 source packages, this step is already done for you.)
 
@@ -52,7 +51,7 @@ want to install it somewhere else, you can pass ``--prefix`` option to the
 
   $ ./configure --prefix=/opt/libtocc/
 
-In the above example, builded libraries will be placed in ``/opt/libtocc/lib/``
+In the above example, built libraries will be placed in ``/opt/libtocc/lib/``
 and public headers in ``/opt/libtocc/include``.
 
 **Optimized/Debug Build**: By default, *libtocc* mades with ``-g`` and ``-O2``.
@@ -86,29 +85,57 @@ prefix. For example, if prefix is ``/usr/local/``, libraries will be copied
 to ``/usr/local/lib/`` and headers to ``/usr/local/include``.
 
 
+Compiling libtocc for Windows with Microsoft Visual C++
+-------------------------------------------------------
+
+Note: libtocc does not compile correctly with MSVC 2019 but it does with
+MSVC 2017 or MSVC 2021.
+
+1. Open solution file ``tocc\msvc\libtocctests.sln`` in MSVC.
+
+2. Select project ``libtocc`` and do a build.
+
+3. The library file will be produced in ``tocc\msvc\x64\release\libtocc.lib`` or ``tocc\msvc\x64\debug\libtocc.lib``
+
+
+
+
+
 Test Units
 ----------
 
 *libtocc* comes with some Unit Tests. They're placed in ``libtocc/tests``
 directory. This section explains how to build and run these Unit Tests.
 
-Installing Catch.hpp
-^^^^^^^^^^^^^^^^^^^^
-Tests are using `Catch <https://github.com/catchorg/Catch2>`_ library. The Tocc's
-source code hadn't updated and it depends on the version 1 of Catch.
+Installing Catch2 for Unix-like OS's (Linux, BSD, etc)
+------------------------------------------------------
 
-Download ``catch.hpp`` from `Catch 1.10.0 <https://github.com/catchorg/Catch2/releases/tag/v1.10.0>`_
-and copy it to ``/usr/local/include``. Or alternatevly, copy it to another directory
-and add a ``-I`` flag to the ``./configure`` command below to point to that directory.
+1. Download Catch2 <https://github.com/catchorg/Catch2> to a temporary directory. Make sure you have the ``devel`` branch.
+2. cd to the ``extras`` suddirectory of the temporary directory.
+3. Invoke:
 
-1. Bootstraping
-^^^^^^^^^^^^^^^
-Just like the bootstraping step of *libtocc* itself, you need Gnu Auto Tools.
+  $ gcc cache_amalgamated.cpp -o cache_amalgamated.o
+
+  $ ar rcs libcache_amalgamated.a cache_amalgamatd.o
+
+  $ sudo cp libcache_amalgamated.a /usr/local/lib
+
+  $ sudo cp cache_amalgamated.hpp /usr/local/include
+
+
+Building and running test units for Unix-like OS's (Linux, BSD, etc.)
+---------------------------------------------------------------------
+
+1. Bootstrapping
+^^^^^^^^^^^^^^^^
+Just like the bootstrapping step of *libtocc* itself, you need Gnu Auto Tools.
 Then invoke::
 
+  '
   $ cd /path/to/libtocc/tests
   $ ./bootstrap
-
+  
+'
 
 2. Configuring
 ^^^^^^^^^^^^^^
@@ -116,7 +143,11 @@ Previous step creates a ``configure`` script. To run it, you need to add
 ``libtocc/src/`` directory to the includes path. The following command should
 do it::
 
-  $ ./configure CPPFLAGS="-I../src/" CXXFLAGS="-I../src/"
+  $ ./configure CPPFLAGS="-I../src/ -I../tests" LDFLAGS="-L/usr/local/lib" CXXFLAGS="-I../src/ -I../tests" LIBS="-lcatch_amalgamated" 
+  
+You can do this by typing:
+
+  $ ./config
 
 Also, if you installed *libtocc* library in a non-standard path (where ``ld``
 can't find it by default, say ``/opt/libtocc/lib/``) you need to add that to
@@ -160,8 +191,27 @@ Then send ``tests.log`` file to *tocc@aidinhut.com*, and provide your platform
 information, such as your OS and its version.
 
 
-Linking Your Software with *libtocc*
-------------------------------------
+Installing Catch2 for Windows
+------------------------------------------------------
+
+1. Download Catch2 <https://github.com/catchorg/Catch2> to a temporary directory. Make sure you have the ``devel`` branch.
+2. cd to the ``extras`` suddirectory of the temporary directory.
+3. Copy ``libcache_amalgamated.cpp`` and ``cache_amalgamated.hpp`` to ``tocc/libtocc/tests`` 
+
+
+
+Building and running test units for Windows with Microsoft Visual C++
+---------------------------------------------------------------------
+
+1. Open solution file ``tocc\msvc\libtocctests.sln`` in MSVC.
+2. Select project ``libtocctests``.
+3. Build this project.
+4. The program will be in ``tocc\msvc\x64\release\libtocctests.exe`` or ``tocc\msvc\x64\debug\libtocctests.exe``. Execute the program from a command prompt.
+
+
+
+Linking Your Software with *libtocc* for Unix-like OS's (Linux, BSD, etc)
+-------------------------------------------------------------------------
 
 Using Autotools
 ^^^^^^^^^^^^^^^

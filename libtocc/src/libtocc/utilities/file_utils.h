@@ -20,8 +20,10 @@
 #define LIBTOCC_FILE_FILE_UTILS_H_INCLUDED
 
 #include<string>
+#ifdef _MSC_VER
+#else
 #include<dirent.h>
-
+#endif
 namespace libtocc
 {
   /*

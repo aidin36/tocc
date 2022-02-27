@@ -21,76 +21,9 @@
  */
 
 #include <errno.h>
-
+#include "libtocc/file_system/helpers.h"
 #include "libtocc/common/file_system_exceptions.h"
 #include <string>
 
-namespace libtocc
-{
+//namespace libtocc
 
-  /*
-   * Throws and exception according to the errno.
-   *
-   * @param errno: System's errno.
-   * @param file_path: (optional) path of the file that this
-   *   error is happened for.
-   */
-  void handle_errno(int err_no, std::string file_path="")
-  {
-    if (err_no == ENOSPC || err_no == EDQUOT)
-    {
-      throw InsufficientSpaceError();
-    }
-    if (err_no == ENOTSUP)
-    {
-      throw XAttrsAreNotSupportedError();
-    }
-    if (err_no == EACCES)
-    {
-      throw AccessDeniedError(file_path.c_str());
-    }
-    if (err_no == EBADF)
-    {
-      throw BadFDError(file_path.c_str());
-    }
-    if (err_no == EFAULT)
-    {
-      throw BadAddressError(file_path.c_str());
-    }
-    if (err_no == ELOOP)
-    {
-      throw InfinitLinkLoopError(file_path.c_str());
-    }
-    if (err_no == ENAMETOOLONG)
-    {
-      throw TooLongPathError();
-    }
-    if (err_no == ENOENT)
-    {
-      throw BadPathError(file_path.c_str());
-    }
-    if (err_no == ENOMEM)
-    {
-      throw OutOfMemoryError();
-    }
-    if (err_no == ENOTDIR)
-    {
-      throw NotADirectoryError();
-    }
-    if (err_no == ERANGE)
-    {
-      throw SizeOfBufferIsTooSmallError(file_path.c_str());
-    }
-    if (err_no == EROFS)
-    {
-      throw ReadOnlyFileSystemError();
-    }
-    if (err_no == EMFILE)
-    {
-      throw MaxOpenFilesReachedError();
-    }
-    // If it was none of the above.
-    throw OtherFileSystemError(err_no);
-  }
-
-}

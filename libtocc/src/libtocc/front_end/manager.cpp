@@ -20,6 +20,7 @@
 
 #include <string>
 #include <cassert>
+#include <iostream>
 
 #include "libtocc/database/database.h"
 #include "libtocc/file_system/file_manager.h"
@@ -34,7 +35,7 @@ namespace libtocc
    * Name of the database file, which should be existed in the root
    * of the path.
    */
-  const std::string DATABASE_FILE = "TOCCFILES.DB";
+  //const std::string DATABASE_FILE = "TOCCFILE";
 
   class Manager::PrivateData
   {
@@ -71,7 +72,7 @@ namespace libtocc
   Manager::Manager(const char* base_path)
   {
     std::string database_path(base_path);
-    database_path += "/";
+    // database_path += "/";
     database_path += DATABASE_FILE;
 
     Database* database = new Database(database_path);

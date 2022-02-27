@@ -17,6 +17,8 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <string>
 
 #include "libtocc/exprs/query.h"

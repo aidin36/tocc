@@ -67,7 +67,7 @@ namespace libtocc
     }
 
     // File info collection with reserved size.
-    FileInfoCollection result(internal_file_infos.size());
+    FileInfoCollection result((int) internal_file_infos.size());
 
     std::vector<IntFileInfo>::iterator iterator = internal_file_infos.begin();
     for (; iterator != internal_file_infos.end(); ++iterator)
@@ -92,20 +92,27 @@ namespace libtocc
     return tags_vector;
   }
 
-  TagsCollection vector_to_tags(const std::vector<std::string>* vector)
+  TagsCollection vector_to_tags(const std::vector<std::string>* const vector)
   {
     if (vector->empty())
     {
       return TagsCollection();
     }
 
-    const char* tags[vector->size()];
+    const size_t sz = vector->size();
+    
+    char c;
+    TagsCollection tc = TagsCollection();
+    int size1 = sizeof &c;
+    char** tags = (char**) malloc(size1 * sz);
     for (unsigned int i = 0; i < vector->size(); ++i)
     {
-      tags[i] = (*vector)[i].c_str();
+        tags[i] = (char *)(*vector)[i].c_str();
     }
 
-    return TagsCollection(tags, vector->size());
+    tc = TagsCollection((const char **)tags, (int) vector->size());
+    free(tags);
+    return tc;
   }
 
   std::vector<std::string> file_info_collection_to_vector_ids(const FileInfoCollection& file_info_collection)

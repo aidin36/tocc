@@ -18,6 +18,8 @@
 
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <fstream>
 #include <cstring>
 
@@ -28,20 +30,20 @@
 
 TEST_CASE("Tag Statistics: All Tags")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("Single File")
   {
     /*
      * Preparing test data.
      */
-    const char* file_path = "/tmp/tocctests/tocc_statistics_test_file.tmp";
+    std::string file_path = testdb_path("tocc_statistics_test_file.tmp");
 
     std::ofstream file_to_import(file_path);
     file_to_import << "some data...";
     file_to_import.close();
 
-    libtocc::FileInfo test_file = manager.import_file(file_path);
+    libtocc::FileInfo test_file = manager.import_file(file_path.c_str());
 
     libtocc::TagsCollection tags;
     tags.add_tag("tag_statistics_test_01");
@@ -75,8 +77,8 @@ TEST_CASE("Tag Statistics: All Tags")
     /*
      * Creating test file.
      */
-    const char* file_path = "/tmp/tocctests/tocc_statistics_test_file_ufHf89.tmp";
-    std::ofstream file_to_import(file_path);
+    std::string file_path = testdb_path("tocc_statistics_test_file_ufHf89.tmp");
+    std::ofstream file_to_import(file_path.c_str());
     file_to_import << "some data...";
     file_to_import.close();
 
@@ -93,18 +95,18 @@ TEST_CASE("Tag Statistics: All Tags")
      * Importing and assigning tags.
      */
     libtocc::FileInfo test_file_01 =
-        manager.import_file(file_path);
+        manager.import_file(file_path.c_str());
 
     manager.assign_tags(test_file_01.get_id(), &tags_1);
 
     libtocc::FileInfo test_file_02 =
-        manager.import_file(file_path);
+        manager.import_file(file_path.c_str());
 
     manager.assign_tags(test_file_02.get_id(), &tags_1);
     manager.assign_tags(test_file_02.get_id(), &tags_2);
 
     libtocc::FileInfo test_file_03 =
-        manager.import_file(file_path);
+        manager.import_file(file_path.c_str());
 
     manager.assign_tags(test_file_03.get_id(), &tags_1);
 
@@ -135,13 +137,13 @@ TEST_CASE("Tag Statistics: All Tags")
 
 TEST_CASE("Tag Statistics: Tags of Files")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   /*
    * Creating test file.
    */
-  const char* file_path = "/tmp/tocctests/tocc_statistics_test_file_yu78NBq.tmp";
-  std::ofstream file_to_import(file_path);
+  std::string file_path = testdb_path("tocc_statistics_test_file_yu78NBq.tmp").c_str();
+  std::ofstream file_to_import(file_path.c_str());
   file_to_import << "some data...";
   file_to_import.close();
 
@@ -158,12 +160,12 @@ TEST_CASE("Tag Statistics: Tags of Files")
    * Importing and assigning tags.
    */
   libtocc::FileInfo test_file_01 =
-      manager.import_file(file_path);
+      manager.import_file(file_path.c_str());
 
   manager.assign_tags(test_file_01.get_id(), &tags_1);
 
   libtocc::FileInfo test_file_02 =
-      manager.import_file(file_path);
+      manager.import_file(file_path.c_str());
 
   manager.assign_tags(test_file_02.get_id(), &tags_1);
   manager.assign_tags(test_file_02.get_id(), &tags_2);

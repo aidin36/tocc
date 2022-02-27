@@ -17,19 +17,35 @@
  */
 
 #include "catch.hpp"
+#include "testdb_path.hpp"
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "libtocc/common/int_file_info.h"
 #include "libtocc/database/database.h"
+
+/* The database initializer test was moved to here because, under Windows,
+ * it is not executed before the database basic tests if it is in a 
+ * different file. 
+*/
+
+ // This should be run before all the other database tests, since it's
+ // initialize an environment for tests.
+TEST_CASE("Database_Initializer:init")
+{
+	std::string path = testdb_path(DATABASE_FILE);
+	libtocc::Database db(path.c_str());
+	db.initialize();
+}
 
 
 TEST_CASE("database: basic tests")
 {
   // Creating the database.
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
-
-  // Creating a file with no property.
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
+   // Creating a file with no property.
   libtocc::IntFileInfo new_file_1 = db.create_file();
   // Checking if it's OK.
   REQUIRE(new_file_1.get_title() == "");
@@ -38,10 +54,9 @@ TEST_CASE("database: basic tests")
 
   // Creating a file with title and traditional path.
   libtocc::IntFileInfo new_file_2 =
-      db.create_file("Title of the second file", "/old/path/");
-  // Checking if it's OK.
+      db.create_file("Title of the second file", "/old/path");
   REQUIRE(new_file_2.get_title() == "Title of the second file");
-  REQUIRE(new_file_2.get_traditional_path() == "/old/path/");
+  REQUIRE(new_file_2.get_traditional_path() == "/old/path");
   REQUIRE(new_file_2.get_tags().size() == 0);
 
   // Creating a file with tags.
@@ -53,7 +68,6 @@ TEST_CASE("database: basic tests")
   // Checking if it's OK.
   REQUIRE(new_file_3.get_title() == "First Photo");
   REQUIRE(new_file_3.get_traditional_path() == "");
-
   std::vector<std::string> file_3_tags = new_file_3.get_tags();
   REQUIRE(file_3_tags.size() == 3);
   std::vector<std::string>::iterator file_3_tags_iterator = file_3_tags.begin();
@@ -74,7 +88,7 @@ TEST_CASE("database: basic tests")
   libtocc::IntFileInfo fetched_file_2 = db.get(new_file_2.get_id());
   // Checking if it's OK.
   REQUIRE(fetched_file_2.get_title() == "Title of the second file");
-  REQUIRE(fetched_file_2.get_traditional_path() == "/old/path/");
+  REQUIRE(fetched_file_2.get_traditional_path() == "/old/path");
   REQUIRE(fetched_file_2.get_tags().size() == 0);
 
   // Fetching third file.
@@ -91,5 +105,4 @@ TEST_CASE("database: basic tests")
   REQUIRE((*fetched_tags_iterator) == "abstract");
   ++fetched_tags_iterator;
   REQUIRE((*fetched_tags_iterator) == "b&w");
-
 }

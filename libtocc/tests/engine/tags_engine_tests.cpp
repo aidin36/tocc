@@ -17,6 +17,8 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <vector>
 #include <string>
 
@@ -26,7 +28,7 @@
 TEST_CASE("engine: tags engine tests")
 {
   // Creating instance of engine.
-  libtocc::Database db("/tmp/tocctests/tocc.test.db");
+  libtocc::Database db(testdb_path(DATABASE_FILE).c_str());
   libtocc::TagsEngine tags_engine(&db);
 
   // Assigning some tags.

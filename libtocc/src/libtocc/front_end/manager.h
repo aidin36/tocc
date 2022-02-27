@@ -23,7 +23,6 @@
 #include "libtocc/front_end/tag_statistics.h"
 #include "libtocc/exprs/query.h"
 
-
 namespace libtocc
 {
   /*
@@ -256,7 +255,7 @@ namespace libtocc
      */
     void set_title(const char* file_id, const char* new_title);
 
-  private:
+//  private:
     /*
      * Keeps the private data, and hides it from the client.
      */

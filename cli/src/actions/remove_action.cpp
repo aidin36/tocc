@@ -55,7 +55,8 @@ namespace tocccli
     }
 
     //Extracting files ids into an array
-    const char* file_ids[files.size()];
+    const char* sizevar;
+    const char** file_ids = (const char**)malloc(files.size() * sizeof sizevar);
     for(int i = 0; i < files.size(); i++)
     {
       file_ids[i] = files[i].get_id();
@@ -66,5 +67,6 @@ namespace tocccli
     {
       this->libtocc_manager->remove_files(file_ids, files.size());
     }
+    free(file_ids);
   }
 }

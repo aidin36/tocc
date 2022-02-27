@@ -54,9 +54,9 @@ namespace tocccli
     {
       throw InvalidParametersError("-u, --unassign, must have at least one argument.");
     }
-
-    // Converting files vector to array.
-    const char* files_array[files.size()];
+   // Converting files vector to array.
+    const char* sizevar;
+    const char** files_array = (const char**)malloc(files.size() * sizeof sizevar);
     for (int i = 0; i < files.size(); i++)
     {
       files_array[i] = files[i].get_id();
@@ -71,5 +71,6 @@ namespace tocccli
     }
 
     this->libtocc_manager->unassign_tags(files_array, files.size(), &tags_collection);
+    free(files_array);
   }
 }

@@ -16,29 +16,106 @@
  *  along with Tocc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "libtocc/file_system/file_manager.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4996)
+#include "unistdx.h"
+#else
 #include <unistd.h>
+#endif
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cstdio>
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 #ifdef HAVE_SENDFILE // check if sendfile is available
  #include <sys/sendfile.h>
 #endif
 
 #include "libtocc/common/runtime_exceptions.h"
-#include "libtocc/file_system/helpers.cpp"
-
+#include "libtocc/file_system/helpers.h"
+#include "libtocc/common/file_system_exceptions.h"
 
 namespace libtocc
 {
+    /*
+ * Throws and exception according to the errno.
+ *
+ * @param errno: System's errno.
+ * @param file_path: (optional) path of the file that this
+ *   error is happened for.
+ */
+  void handle_errno(int err_no, std::string file_path = "")
+  {
+#ifdef _MSC_VER
+    if (err_no == ENOSPC)
+#else
+    if (err_no == ENOSPC || err_no == EDQUOT)
+#endif
+    {
+      throw InsufficientSpaceError();
+    }
+    if (err_no == ENOTSUP)
+    {
+      throw XAttrsAreNotSupportedError();
+    }
+    if (err_no == EACCES)
+    {
+      throw AccessDeniedError(file_path.c_str());
+    }
+    if (err_no == EBADF)
+    {
+      throw BadFDError(file_path.c_str());
+    }
+    if (err_no == EFAULT)
+    {
+      throw BadAddressError(file_path.c_str());
+    }
+    if (err_no == ELOOP)
+    {
+      throw InfinitLinkLoopError(file_path.c_str());
+    }
+    if (err_no == ENAMETOOLONG)
+    {
+      throw TooLongPathError();
+    }
+    if (err_no == ENOENT)
+    {
+      throw BadPathError(file_path.c_str());
+    }
+    if (err_no == ENOMEM)
+    {
+      throw OutOfMemoryError();
+    }
+    if (err_no == ENOTDIR)
+    {
+      throw NotADirectoryError();
+    }
+    if (err_no == ERANGE)
+    {
+      throw SizeOfBufferIsTooSmallError(file_path.c_str());
+    }
+    if (err_no == EROFS)
+    {
+      throw ReadOnlyFileSystemError();
+    }
+    if (err_no == EMFILE)
+    {
+      throw MaxOpenFilesReachedError();
+    }
+    // If it was none of the above.
+    throw OtherFileSystemError(err_no);
+  }
 
   /*
    * Mode for creating files and directories.
    */
-  const mode_t NORMAL_MODE = S_IRWXU | S_IRGRP | S_IROTH;
+  const int NORMAL_MODE = S_IRWXU | S_IRGRP | S_IROTH;
 
   FileManager::FileManager(std::string base_path)
   {
@@ -51,7 +128,11 @@ namespace libtocc
     ensure_path_exists(id);
 
     // Creating the file.
+#ifdef _MSC_VER
+    int creat_result = _creat(id_to_file_path(id).c_str(), _S_IREAD | _S_IWRITE);
+#else
     int creat_result = creat(id_to_file_path(id).c_str(), NORMAL_MODE);
+#endif
     if (creat_result < 0)
     {
       handle_errno(errno, id);
@@ -131,13 +212,13 @@ namespace libtocc
       // we don't have sendfile, so we'll use read and write
       while ((size = read(source, buf, BUFSIZ)) > 0)
       {
-          ssize_t write_result = write(dest, buf, size);
+        long int write_result = write(dest, buf, size);
 
-          if (write_result < 0)
-          {
+        if (write_result < 0)
+        {
             // An error occurred while writing to file.
-            handle_errno(errno, source_path);
-          }
+          handle_errno(errno, source_path);
+        }
       }
     #else      
       off_t offset = 0;
@@ -163,8 +244,11 @@ namespace libtocc
     // only the last directory should be created. So, first
     // we try that.
     std::string dir_path = id_to_dir_path(id);
+#ifdef _MSC_VER
+    int mkdir_result = _mkdir(dir_path.c_str());
+#else
     int mkdir_result = mkdir(dir_path.c_str(), NORMAL_MODE);
-
+#endif
     if (mkdir_result >= 0)
     {
       // Path created sucessfully. No need to do anything else.
@@ -201,7 +285,11 @@ namespace libtocc
 
   void FileManager::create_dir(std::string path)
   {
+#ifdef _MSC_VER
+    int mkdir_result = _mkdir(path.c_str());
+#else
     int mkdir_result = mkdir(path.c_str(), NORMAL_MODE);
+#endif
     if (mkdir_result < 0)
     {
       if (errno != EEXIST && errno != ENOENT)

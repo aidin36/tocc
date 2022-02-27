@@ -17,6 +17,8 @@
  */
 
 #include <catch.hpp>
+#include "testdb_path.hpp"
+
 #include <fstream>
 #include <string.h>
 
@@ -30,7 +32,7 @@
 
 TEST_CASE("query_files_tests: simple tag search")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("Assign and search 'test_tag_0xUi7'")
   {
@@ -92,16 +94,17 @@ TEST_CASE("query_files_tests: simple tag search")
 
 TEST_CASE("query_files_tests: simple title search")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   SECTION("Import and query `IMG007'")
   {
     std::ofstream file_stream;
-    file_stream.open("/tmp/tocctests/XlfYru129384PxQ");
+    file_stream.open(testdb_path("XlfYru129384PxQ").c_str());
     file_stream << "Not a real photo!";
     file_stream.close();
 
-    libtocc::FileInfo original_file = manager.import_file("/tmp/tocctests/XlfYru129384PxQ", "IMG007");
+    libtocc::FileInfo original_file = manager.import_file(testdb_path("XlfYru129384PxQ").c_str(),
+        "IMG007");
 
     libtocc::Title title_expr("IMG007");
     libtocc::And main_and(title_expr);
@@ -123,9 +126,9 @@ TEST_CASE("query_files_tests: simple title search")
 
 TEST_CASE("query_files_tests: long query test")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
-  std::string test_file = "/tmp/tocctests/iU83FpdAdjcAppfkdj";
+  std::string test_file = testdb_path("iU83FpdAdjcAppfkdj");
 
   std::ofstream file_stream;
   file_stream.open(test_file.c_str());
@@ -169,11 +172,11 @@ TEST_CASE("query_files_tests: long query test")
 
 TEST_CASE("query_files_tests: Not Equal tests")
 {
-  libtocc::Manager manager("/tmp/tocctests/");
+  libtocc::Manager manager(testdb_path("").c_str());
 
   // Creating two test files.
-  std::string test_file_1 = "/tmp/tocctests/libtocctests_Unx12Pfiedkc";
-  std::string test_file_2 = "/tmp/tocctests/libtocctests_fPe98ncloEqs";
+  std::string test_file_1 = testdb_path("libtocctests_Unx12Pfiedkc");
+  std::string test_file_2 = testdb_path("libtocctests_fPe98ncloEqs");
 
   std::ofstream file_stream;
   file_stream.open(test_file_1.c_str());
